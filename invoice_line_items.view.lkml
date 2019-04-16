@@ -3,111 +3,80 @@ view: invoice_line_items {
 
   dimension: id {
     primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
 
-  dimension_group: _sdc_batched {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._sdc_batched_at ;;
-  }
 
-  dimension_group: _sdc_extracted {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._sdc_extracted_at ;;
-  }
 
-  dimension_group: _sdc_received {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._sdc_received_at ;;
-  }
-
-  dimension: _sdc_sequence {
+  dimension: project_invoice_line_item_amount {
     type: number
-    sql: ${TABLE}._sdc_sequence ;;
-  }
-
-  dimension: _sdc_table_version {
-    type: number
-    sql: ${TABLE}._sdc_table_version ;;
-  }
-
-  dimension: amount {
-    type: number
+    hidden: yes
     sql: ${TABLE}.amount ;;
   }
 
-  dimension: description {
+  measure: total_project_invoice_line_item_amount {
+    type: sum
+    sql: ${TABLE}.amount ;;
+  }
+
+  dimension: project_invoice_line_item_description {
     type: string
     sql: ${TABLE}.description ;;
   }
 
   dimension: invoice_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.invoice_id ;;
   }
 
-  dimension: kind {
+  dimension: project_invoice_line_item_kind {
     type: string
     sql: ${TABLE}.kind ;;
   }
 
   dimension: project_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.project_id ;;
   }
 
-  dimension: quantity {
+  dimension: project_invoice_line_item_quantity {
     type: number
+    hidden: yes
+
     sql: ${TABLE}.quantity ;;
   }
 
-  dimension: taxed {
+  measure: total_project_invoice_line_item_quantity {
+    type: sum
+    sql: ${TABLE}.quantity ;;
+  }
+
+  dimension: project_invoice_taxed {
     type: yesno
     sql: ${TABLE}.taxed ;;
   }
 
-  dimension: taxed2 {
-    type: yesno
-    sql: ${TABLE}.taxed2 ;;
-  }
 
-  dimension: unit_price {
+
+  dimension: project_invoice_line_item_unit_price {
     type: number
+    hidden: yes
     sql: ${TABLE}.unit_price ;;
   }
 
-  measure: count {
+  measure: avg_project_invoice_line_item_unit_price {
+    type: average
+    sql: ${TABLE}.unit_price ;;
+  }
+
+
+
+  measure: count_project_invoice_line_item {
     type: count
-    drill_fields: [id, projects.id, projects.name, invoices.id]
+
   }
 }

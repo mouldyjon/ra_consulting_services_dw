@@ -1,176 +1,143 @@
 view: time_entries {
   sql_table_name: rittman_analytics.time_entries ;;
 
-  dimension: id {
+  dimension: timesheet_id {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
 
-  dimension_group: _sdc_batched {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._sdc_batched_at ;;
-  }
 
-  dimension_group: _sdc_extracted {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._sdc_extracted_at ;;
-  }
 
-  dimension_group: _sdc_received {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}._sdc_received_at ;;
-  }
 
-  dimension: _sdc_sequence {
-    type: number
-    sql: ${TABLE}._sdc_sequence ;;
-  }
-
-  dimension: _sdc_table_version {
-    type: number
-    sql: ${TABLE}._sdc_table_version ;;
-  }
-
-  dimension: billable {
+  dimension: project_time_entry_billable {
     type: yesno
     sql: ${TABLE}.billable ;;
   }
 
-  dimension: billable_rate {
+  dimension: project_time_entry_billable_rate {
     type: number
     sql: ${TABLE}.billable_rate ;;
   }
 
-  dimension: budgeted {
+  measure: avg_hourly_project_time_entry_billable_rate {
+    type: average_distinct
+    sql_distinct_key: ${project_id} ;;
+    sql: ${TABLE}.billable_rate ;;
+  }
+
+  dimension: project_time_entry_budgeted {
     type: number
     sql: ${TABLE}.budgeted ;;
   }
 
-  dimension: client_id {
+  dimension: timesheet_client_id {
+    hidden: yes
     type: number
     sql: ${TABLE}.client_id ;;
   }
 
-  dimension: cost_rate {
+  dimension: project_time_entry_cost_rate {
     type: number
     sql: ${TABLE}.cost_rate ;;
   }
 
-  dimension_group: created {
+  measure: avg_project_time_entry_cost_rate {
+    type: average_distinct
+    sql_distinct_key: ${project_id} ;;
+    sql: ${TABLE}.cost_rate ;;
+  }
+
+  dimension_group: project_time_entry_created {
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: ${TABLE}.created_at ;;
   }
 
   dimension: hours {
     type: number
+    hidden: yes
     sql: ${TABLE}.hours ;;
   }
 
-  dimension: invoice_id {
+  measure: total_billed_project_time_entry_hours {
+    type: sum
+    sql: ${TABLE}.hours ;;
+  }
+
+  measure: total_project_time_entry_billed_days {
+    type: sum
+    sql: ${TABLE}.hours/8 ;;
+  }
+
+  dimension: timesheet_invoice_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.invoice_id ;;
   }
 
-  dimension: is_billed {
+  dimension: project_time_entry_is_billed {
     type: yesno
     sql: ${TABLE}.is_billed ;;
   }
 
-  dimension: is_closed {
+  dimension: project_time_entry_is_closed {
     type: yesno
     sql: ${TABLE}.is_closed ;;
   }
 
-  dimension: is_locked {
+  dimension: project_time_entry_is_locked {
     type: yesno
     sql: ${TABLE}.is_locked ;;
   }
 
-  dimension: is_running {
+  dimension: project_time_entry_is_running {
     type: yesno
     sql: ${TABLE}.is_running ;;
   }
 
-  dimension: locked_reason {
+  dimension: project_time_entry_locked_reason {
     type: string
     sql: ${TABLE}.locked_reason ;;
   }
 
-  dimension: notes {
+  dimension: project_time_entry_notes {
     type: string
     sql: ${TABLE}.notes ;;
   }
 
   dimension: project_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.project_id ;;
   }
 
-  dimension_group: spent {
+  dimension_group: project_time_entry_billed {
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: ${TABLE}.spent_date ;;
   }
 
   dimension: task_assignment_id {
+    hidden: yes
     type: number
     sql: ${TABLE}.task_assignment_id ;;
   }
 
-  dimension: task_id {
+  dimension: project_time_entry_task_id {
+
     type: number
-    # hidden: yes
+    hidden: no
     sql: ${TABLE}.task_id ;;
   }
 
   dimension_group: updated {
+    hidden: yes
+
     type: time
     timeframes: [
       raw,
@@ -185,35 +152,24 @@ view: time_entries {
   }
 
   dimension: user_assignment_id {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.user_assignment_id ;;
   }
 
   dimension: user_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.user_id ;;
   }
 
   measure: count {
+    hidden: yes
+
     type: count
-    drill_fields: [detail*]
   }
 
   # ----- Sets of fields for drilling ------
-  set: detail {
-    fields: [
-      id,
-      tasks.name,
-      tasks.id,
-      projects.id,
-      projects.name,
-      invoices.id,
-      users.firstname,
-      users.lastname,
-      users.id,
-      users.first_name,
-      users.last_name
-    ]
-  }
+
 }

@@ -1,12 +1,11 @@
 view: customer_master {
+  view_label: "Companies"
   sql_table_name: ra_data_warehouse.customer_master ;;
 
-  dimension: c_r {
-    type: number
-    sql: ${TABLE}.c_r ;;
-  }
+
 
   dimension: customer_id {
+    hidden: yes
     type: number
     sql: ${TABLE}.customer_id ;;
   }
@@ -24,13 +23,9 @@ view: customer_master {
   dimension_group: harvest_customer_created {
     type: time
     timeframes: [
-      raw,
-      time,
       date,
       week,
-      month,
-      quarter,
-      year
+      month
     ]
     sql: ${TABLE}.harvest_customer_created_at ;;
   }
@@ -41,6 +36,8 @@ view: customer_master {
   }
 
   dimension: harvest_customer_id {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.harvest_customer_id ;;
   }
@@ -61,6 +58,8 @@ view: customer_master {
   }
 
   dimension: hubspot_company_id {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.hubspot_company_id ;;
   }
@@ -73,13 +72,9 @@ view: customer_master {
   dimension_group: hubspot_created {
     type: time
     timeframes: [
-      raw,
-      time,
       date,
       week,
-      month,
-      quarter,
-      year
+      month
     ]
     sql: ${TABLE}.hubspot_created_date ;;
   }
@@ -97,13 +92,9 @@ view: customer_master {
   dimension_group: hubspot_first_deal_created {
     type: time
     timeframes: [
-      raw,
-      time,
       date,
       week,
-      month,
-      quarter,
-      year
+      month
     ]
     sql: ${TABLE}.hubspot_first_deal_created_date ;;
   }
@@ -130,6 +121,8 @@ view: customer_master {
 
   dimension: hubspot_owner_id {
     type: string
+    hidden: yes
+
     sql: ${TABLE}.hubspot_owner_id ;;
   }
 
@@ -180,6 +173,8 @@ view: customer_master {
 
   dimension: xero_contact_id {
     type: string
+    hidden: yes
+
     sql: ${TABLE}.xero_contact_id ;;
   }
 
@@ -198,8 +193,10 @@ view: customer_master {
     sql: ${TABLE}.xero_is_supplier ;;
   }
 
-  measure: count {
-    type: count
+  measure: count_companies {
+
+    type: count_distinct
+    sql_distinct_key: ${customer_id} ;;
     drill_fields: [customer_name]
   }
 }

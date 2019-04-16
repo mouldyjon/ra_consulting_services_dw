@@ -1,308 +1,186 @@
 view: invoices {
-  sql_table_name: xero.invoices ;;
+  sql_table_name: rittman_analytics.invoices ;;
 
   dimension: id {
     primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
 
 
 
-
-
-
-
-
-
   dimension: amount {
     type: number
+    hidden: yes
+
     sql: ${TABLE}.amount ;;
   }
 
-  dimension: amountcredited {
+  measure: total_project_invoice_amount {
     type: number
-    sql: ${TABLE}.amountcredited ;;
-  }
+    hidden: yes
 
-  dimension: amountdue {
-    type: number
-    sql: ${TABLE}.amountdue ;;
-  }
-
-  dimension: amountpaid {
-    type: number
-    value_format_name: id
-    sql: ${TABLE}.amountpaid ;;
+    sql: ${TABLE}.amount ;;
   }
 
   dimension: client_id {
     type: number
+    hidden: yes
+
     sql: ${TABLE}.client_id ;;
   }
 
   dimension: client_key {
     type: string
+    hidden: yes
+
     sql: ${TABLE}.client_key ;;
   }
 
-  dimension: contact {
-    hidden: yes
-    sql: ${TABLE}.contact ;;
-  }
-
-  dimension_group: created {
+  dimension_group: project_invoice_created {
     type: time
     timeframes: [
+      date,
       week,
-      month,
-      quarter,
-      year
+      month
     ]
     sql: ${TABLE}.created_at ;;
   }
 
   dimension: creator_id {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.creator_id ;;
   }
 
-  dimension: creditnotes {
-    hidden: yes
-    sql: ${TABLE}.creditnotes ;;
-  }
-
-  dimension: currency {
+  dimension: project_invoice_currency {
     type: string
     sql: ${TABLE}.currency ;;
   }
 
-  dimension: currencycode {
-    type: string
-    sql: ${TABLE}.currencycode ;;
-  }
-
-  dimension: currencyrate {
-    type: number
-    sql: ${TABLE}.currencyrate ;;
-  }
-
-  dimension_group: date {
-    type: time
-    timeframes: [
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.date ;;
-  }
-
-
-
   dimension: discount_amount {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.discount_amount ;;
   }
 
+  measure: total_project_invoice_discount_amount {
+    hidden: no
+
+    type: sum
+    sql: ${TABLE}.discount_amount ;;
+  }
+
   dimension: due_amount {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.due_amount ;;
   }
 
-  dimension_group: due {
+  measure: total_project_invoice_due_amount {
+    hidden: no
+
+    type: sum
+    sql: ${TABLE}.due_amount ;;
+  }
+
+  dimension_group: project_invoice_due {
     type: time
     timeframes: [
       date,
       week,
-      month,
-      quarter,
-      year
+      month
     ]
     sql: ${TABLE}.due_date ;;
   }
 
-  dimension_group: duedate {
+  dimension_group: project_invoice_issue {
     type: time
     timeframes: [
       date,
       week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.duedate ;;
-  }
-
-
-
-  dimension_group: fullypaidondate {
-    type: time
-    timeframes: [
-      date
-    ]
-    sql: ${TABLE}.fullypaidondate ;;
-  }
-
-  dimension: hasattachments {
-    type: yesno
-    sql: ${TABLE}.hasattachments ;;
-  }
-
-  dimension: haserrors {
-    type: yesno
-    sql: ${TABLE}.haserrors ;;
-  }
-
-  dimension: invoiceid {
-    type: string
-    # hidden: yes
-    sql: ${TABLE}.invoiceid ;;
-  }
-
-  dimension: invoicenumber {
-    type: string
-    sql: ${TABLE}.invoicenumber ;;
-  }
-
-  dimension: isdiscounted {
-    type: yesno
-    sql: ${TABLE}.isdiscounted ;;
-  }
-
-  dimension_group: issue {
-    type: time
-    timeframes: [
-      date
+      month
     ]
     sql: ${TABLE}.issue_date ;;
   }
 
-  dimension: lineamounttypes {
-    type: string
-    sql: ${TABLE}.lineamounttypes ;;
-  }
-
-  dimension: lineitems {
-    hidden: yes
-    sql: ${TABLE}.lineitems ;;
-  }
-
-  dimension: notes {
+  dimension: project_invoice_notes {
     type: string
     sql: ${TABLE}.notes ;;
   }
 
-  dimension: number {
+  dimension: project_invoice_number {
     type: string
     sql: ${TABLE}.number ;;
   }
 
 
 
-  dimension_group: paid {
+  dimension_group: project_invoice_paid {
     type: time
     timeframes: [
-      date
+      date,
+      week,
+      month
     ]
     sql: ${TABLE}.paid_date ;;
   }
 
-  dimension: payment_term {
+  dimension: project_invoice_payment_term {
     type: string
     sql: ${TABLE}.payment_term ;;
   }
 
-  dimension: payments {
-    hidden: yes
-    sql: ${TABLE}.payments ;;
-  }
 
 
 
 
-
-  dimension: purchase_order {
+  dimension: project_invoice_purchase_order {
     type: string
     sql: ${TABLE}.purchase_order ;;
   }
 
-  dimension: reference {
-    type: string
-    sql: ${TABLE}.reference ;;
-  }
-
-  dimension_group: sent {
+  dimension_group: project_invoice_sent {
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: ${TABLE}.sent_at ;;
   }
 
-  dimension: senttocontact {
-    type: yesno
-    sql: ${TABLE}.senttocontact ;;
-  }
 
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
 
-  dimension: status {
-    type: string
-    sql: ${TABLE}.status ;;
-  }
-
-  dimension: subject {
+  dimension: project_invoice_subject {
     type: string
     sql: ${TABLE}.subject ;;
   }
 
-  dimension: subtotal {
-    type: number
-    sql: ${TABLE}.subtotal ;;
-  }
-
-  dimension: tax {
+  dimension: project_invoice_tax {
     type: string
     sql: ${TABLE}.tax ;;
   }
 
-  dimension: tax2_amount {
-    type: number
-    sql: ${TABLE}.tax2_amount ;;
-  }
+
 
   dimension: tax_amount {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.tax_amount ;;
   }
 
-  dimension: total {
-    type: number
-    sql: ${TABLE}.total ;;
+  measure: total_project_invoice_tax_amount {
+    hidden: no
+
+    type: sum
+    sql: ${TABLE}.tax_amount ;;
   }
 
-  dimension: totaltax {
-    type: number
-    sql: ${TABLE}.totaltax ;;
-  }
-
-  dimension: type {
-    type: string
-    sql: ${TABLE}.type ;;
-  }
-
-  dimension_group: updated {
+  dimension_group: project_invoice_updated {
     type: time
     timeframes: [
       date
@@ -310,17 +188,8 @@ view: invoices {
     sql: ${TABLE}.updated_at ;;
   }
 
-
-
-  dimension: url {
-    type: string
-    sql: ${TABLE}.url ;;
-  }
-
-  measure: count {
+  measure: count_project_invoices {
     type: count
-
+    drill_fields: [id]
   }
-  }
-
-  # ----- Sets of fields for drilling ------
+}

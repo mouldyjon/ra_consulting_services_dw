@@ -21,6 +21,12 @@ view: projects {
     sql: ${TABLE}.budget ;;
   }
 
+  measure: total_budget {
+    type: sum
+    sql: ${TABLE}.budget ;;
+  }
+
+
   dimension: budget_by {
     type: string
     sql: ${TABLE}.budget_by ;;
@@ -46,6 +52,13 @@ view: projects {
     sql: ${TABLE}.cost_budget ;;
   }
 
+  measure: total_cost_budget {
+    type: sum
+    sql: ${TABLE}.cost_budget ;;
+  }
+
+
+
   dimension: cost_budget_include_expenses {
     type: yesno
     sql: ${TABLE}.cost_budget_include_expenses ;;
@@ -66,6 +79,11 @@ view: projects {
 
   dimension: fee {
     type: number
+    sql: ${TABLE}.fee ;;
+  }
+
+  measure: total_fee {
+    type: sum
     sql: ${TABLE}.fee ;;
   }
 
@@ -122,8 +140,9 @@ view: projects {
     sql: ${TABLE}.updated_at ;;
   }
 
-  measure: count {
-    type: count
+  measure: count_projects {
+    type: count_distinct
+    sql_distinct_key: ${id} ;;
 
   }
 
