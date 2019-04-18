@@ -26,6 +26,12 @@ view: time_entries {
     sql: ${TABLE}.billable_rate ;;
   }
 
+  measure: avg_daily_project_time_entry_billable_rate {
+    type: average_distinct
+    sql_distinct_key: ${project_id} ;;
+    sql: ${TABLE}.billable_rate*8 ;;
+  }
+
   dimension: project_time_entry_budgeted {
     type: number
     sql: ${TABLE}.budgeted ;;
@@ -60,6 +66,16 @@ view: time_entries {
     type: number
     hidden: yes
     sql: ${TABLE}.hours ;;
+  }
+
+  dimension: billable_revenue {
+    type: number
+    sql: ${hours} * ${project_time_entry_billable_rate} ;;
+  }
+
+  measure: total_billable_revenue {
+    type: sum
+    sql: ${hours} * ${project_time_entry_billable_rate} ;;
   }
 
   measure: total_billed_project_time_entry_hours {
@@ -117,7 +133,10 @@ view: time_entries {
   dimension_group: project_time_entry_billed {
     type: time
     timeframes: [
-      date
+      date,
+      week,
+      month,
+      quarter
     ]
     sql: ${TABLE}.spent_date ;;
   }
@@ -136,17 +155,11 @@ view: time_entries {
   }
 
   dimension_group: updated {
-    hidden: yes
+    hidden: no
 
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      time
     ]
     sql: ${TABLE}.updated_at ;;
   }

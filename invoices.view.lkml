@@ -8,7 +8,25 @@ view: invoices {
     sql: ${TABLE}.id ;;
   }
 
+ dimension_group: project_invoice_period_start {
+   type: time
+  timeframes: [
+    date,
+    week,
+    month
+  ]
+  sql: ${TABLE}.period_start;;
+ }
 
+  dimension_group: project_invoice_period_end {
+    type: time
+    timeframes: [
+      date,
+      week,
+      month
+    ]
+    sql: ${TABLE}.period_end;;
+  }
 
   dimension: amount {
     type: number
@@ -18,8 +36,8 @@ view: invoices {
   }
 
   measure: total_project_invoice_amount {
-    type: number
-    hidden: yes
+    type: sum
+    hidden: no
 
     sql: ${TABLE}.amount ;;
   }

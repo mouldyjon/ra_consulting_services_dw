@@ -1,4 +1,5 @@
 connection: "mjr_analytics_dw"
+label: "Rittman Analytics"
 
 include: "*.view.lkml"                       # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
@@ -17,6 +18,16 @@ include: "*.view.lkml"                       # include all views in this project
 #     sql_on: ${users.id} = ${orders.user_id} ;;
 #   }
 # }
+explore: customer_events {
+  label: "Client Timeline"
+  sql_always_where: ${billable_client} is true or ${sales_prospect} is true;;
+  join: customer_master {
+   sql_on: ${customer_events.customer_id} = ${customer_master.customer_id} ;;
+   relationship: many_to_one
+   type: inner
+  }
+}
+
 explore: customer_master {
   label: "Operations"
   join: invoices {
@@ -26,6 +37,12 @@ explore: customer_master {
     relationship: one_to_many
     type: left_outer
 
+  }
+
+  join: communications {
+    sql_on: ${customer_master.hubspot_company_id} = ${communications.hubspot_company_id};;
+    relationship: one_to_many
+    type: left_outer
   }
 
   join: company_bank_transactions {
@@ -57,9 +74,36 @@ explore: customer_master {
     type: left_outer
   }
 
+  join: project_tasks {
+    view_label: "Project Time Entries"
+      relationship: one_to_many
+    sql_on:  ${project_tasks.project_id} = ${projects.id};;
+  }
+
+  join: tasks {
+    view_label: "Project Time Entries"
+
+    sql_on: ${tasks.id} = ${project_tasks.task_id};;
+    relationship: many_to_one
+    type: inner
+  }
+
+  join: user_project_tasks {
+    view_label: "Project Time Entries"
+
+    sql_on: ${user_project_tasks.user_id} = ${users.id};;
+
+    relationship: many_to_one
+    type: inner
+
+
+  }
+
   join: users {
     view_label: "Consultants"
-    sql_on: ${time_entries.user_id} = ${users.id} ;;
+    sql_on: ${time_entries.user_id} = ${users.id}
+         and ${users.id} = ${user_projects.user_id};;
+
     relationship: many_to_one
     type: inner
   }
@@ -71,9 +115,16 @@ explore: customer_master {
 
   }
 
+  join: user_projects {
+    sql_on: ${user_projects.id}  = ${projects.id}
+    and ${user_projects.client_id} = ${customer_master.harvest_customer_id};;
+
+    relationship: many_to_one
+  }
+
   join: owners {
     view_label: "Sales Opportunities"
-    sql_on: ${deals.hubspot_owner_id} = ${owners.ownerid};;
+    sql_on: ${deals.hubspot_owner_id} = cast(${owners.ownerid} as string);;
     relationship: many_to_one
   }
 
