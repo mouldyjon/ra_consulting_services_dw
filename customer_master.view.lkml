@@ -2,7 +2,13 @@ view: customer_master {
   view_label: "Companies"
   sql_table_name: ra_data_warehouse.customer_master ;;
 
+  filter: billable_client {
+    hidden: no
 
+    type: yesno
+    sql: ${customer_events.billable_client} ;;
+    default_value: "Yes"
+  }
 
   dimension: customer_id {
     hidden: yes

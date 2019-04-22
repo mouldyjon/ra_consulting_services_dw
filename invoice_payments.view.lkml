@@ -90,6 +90,7 @@ view: invoice_payments {
   }
 
 
+
   dimension_group: paid {
     type: time
     timeframes: [

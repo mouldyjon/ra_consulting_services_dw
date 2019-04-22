@@ -1,5 +1,5 @@
 view: time_entries {
-  sql_table_name: rittman_analytics.time_entries ;;
+  sql_table_name: ra_data_warehouse.harvest_time_entries ;;
 
   dimension: timesheet_id {
     primary_key: yes
@@ -22,13 +22,17 @@ view: time_entries {
 
   measure: avg_hourly_project_time_entry_billable_rate {
     type: average_distinct
-    sql_distinct_key: ${project_id} ;;
+    value_format_name: gbp_0
+
+    sql_distinct_key: ${timesheet_id} ;;
     sql: ${TABLE}.billable_rate ;;
   }
 
   measure: avg_daily_project_time_entry_billable_rate {
+    value_format_name: gbp_0
+
     type: average_distinct
-    sql_distinct_key: ${project_id} ;;
+    sql_distinct_key: ${timesheet_id} ;;
     sql: ${TABLE}.billable_rate*8 ;;
   }
 
@@ -49,8 +53,10 @@ view: time_entries {
   }
 
   measure: avg_project_time_entry_cost_rate {
+    value_format_name: gbp_0
+
     type: average_distinct
-    sql_distinct_key: ${project_id} ;;
+    sql_distinct_key: ${timesheet_id} ;;
     sql: ${TABLE}.cost_rate ;;
   }
 
@@ -74,19 +80,76 @@ view: time_entries {
   }
 
   measure: total_billable_revenue {
+    value_format_name: gbp_0
+
     type: sum
     sql: ${hours} * ${project_time_entry_billable_rate} ;;
+  }
+
+  measure: total_available_time_entry_hours {
+    type: sum
+    sql: ${TABLE}.hours ;;
+  }
+
+  measure: target_pct_billed_time_entry_hours {
+    type: number
+    sql: 0.75 ;;
+  }
+
+  measure: target_pct_admin_time_entry_hours {
+    type: number
+    sql: 0.05 ;;
+  }
+
+  measure: target_pct_sales_time_entry_hours {
+    type: number
+    sql: 0.2 ;;
   }
 
   measure: total_billed_project_time_entry_hours {
     type: sum
     sql: ${TABLE}.hours ;;
+    filters: {field: project_time_entry_billable
+              value: "yes"}
   }
 
   measure: total_project_time_entry_billed_days {
     type: sum
     sql: ${TABLE}.hours/8 ;;
+    filters: {field: project_time_entry_billable
+      value: "yes"}
   }
+
+
+
+  measure: total_unbilled_project_time_entry_hours {
+    type: sum
+    sql: case when ${project_time_entry_billable} is false and ${timesheet_client_id} <> 7639423 then ${TABLE}.hours end;;
+
+  }
+
+  measure: total_excluded_holidays_time_entry_hours {
+    type: sum
+    sql: case when (not ${TABLE}.billable)
+         and ${timesheet_client_id} = 7639423
+         and (${project_time_entry_task_id} in (11262415, 11262375, 9453328)) then ${TABLE}.hours end;;
+  }
+
+  measure: total_nonbillable_admin_sales_time_entry_hours {
+    type: sum
+    sql: case when (not ${TABLE}.billable)
+         and ${timesheet_client_id} = 7639423
+         and (${project_time_entry_task_id} not in (11262415, 11262375, 9453328)) then ${TABLE}.hours end;;
+  }
+
+  measure: total_available_time_entry_billed_days {
+    type: sum
+    sql: ${TABLE}.hours/8 ;;
+  }
+
+
+
+
 
   dimension: timesheet_invoice_id {
     type: number
@@ -135,6 +198,10 @@ view: time_entries {
     timeframes: [
       date,
       week,
+      day_of_week,
+      day_of_month,
+      day_of_week_index,
+      week_of_year,
       month,
       quarter
     ]
@@ -177,11 +244,7 @@ view: time_entries {
     sql: ${TABLE}.user_id ;;
   }
 
-  measure: count {
-    hidden: yes
 
-    type: count
-  }
 
   # ----- Sets of fields for drilling ------
 

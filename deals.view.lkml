@@ -10,6 +10,7 @@ view: deals {
 
   dimension: amount {
     type: number
+
     hidden: yes
 
     sql: ${TABLE}.amount ;;
@@ -17,12 +18,16 @@ view: deals {
 
   measure: total_opportunity_amount {
     type: sum_distinct
+    value_format_name: gbp_0
+
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount ;;
   }
 
   measure: avg_opportunity_amount {
     type: average
+    value_format_name: gbp_0
+
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount ;;
   }
@@ -154,6 +159,6 @@ view: deals {
 
   measure: count_sales_opportunities {
     type: count_distinct
-    sql_distinct_key: ${deal_id} ;;
+    sql: ${deal_id} ;;
   }
 }

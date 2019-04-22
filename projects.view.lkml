@@ -142,7 +142,7 @@ view: projects {
 
   measure: count_projects {
     type: count_distinct
-    sql_distinct_key: ${id} ;;
+    sql: ${id} ;;
 
   }
 

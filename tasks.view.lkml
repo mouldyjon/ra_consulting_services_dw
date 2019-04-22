@@ -20,6 +20,7 @@ view: tasks {
 
 
   dimension: user_task_name {
+    label: "Consultant Project Role"
     type: string
     sql: ${TABLE}.name ;;
   }

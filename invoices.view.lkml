@@ -1,5 +1,5 @@
 view: invoices {
-  sql_table_name: rittman_analytics.invoices ;;
+  sql_table_name: ra_data_warehouse.harvest_invoices ;;
 
   dimension: id {
     primary_key: yes
@@ -17,6 +17,15 @@ view: invoices {
   ]
   sql: ${TABLE}.period_start;;
  }
+
+  dimension: was_paid_ontime {
+    type: yesno
+  }
+
+  dimension: is_paid {
+    type: yesno
+    sql: case when ${TABLE}.paid_date is not null then true else false end;;
+  }
 
   dimension_group: project_invoice_period_end {
     type: time
@@ -36,8 +45,10 @@ view: invoices {
   }
 
   measure: total_project_invoice_amount {
-    type: sum
+    type: sum_distinct
     hidden: no
+    value_format_name: gbp_0
+    sql_distinct_key: ${project_invoice_number} ;;
 
     sql: ${TABLE}.amount ;;
   }
@@ -88,12 +99,17 @@ view: invoices {
   measure: total_project_invoice_discount_amount {
     hidden: no
 
-    type: sum
+    type: sum_distinct
+    value_format_name: gbp_0
+
+    sql_distinct_key: ${project_invoice_number} ;;
+
     sql: ${TABLE}.discount_amount ;;
   }
 
   dimension: due_amount {
     hidden: yes
+    value_format_name: gbp_0
 
     type: number
     sql: ${TABLE}.due_amount ;;
@@ -102,7 +118,11 @@ view: invoices {
   measure: total_project_invoice_due_amount {
     hidden: no
 
-    type: sum
+    type: sum_distinct
+    value_format_name: gbp_0
+
+    sql_distinct_key: ${project_invoice_number} ;;
+
     sql: ${TABLE}.due_amount ;;
   }
 
@@ -188,13 +208,18 @@ view: invoices {
     hidden: yes
 
     type: number
+    value_format_name: gbp_0
+
     sql: ${TABLE}.tax_amount ;;
   }
 
   measure: total_project_invoice_tax_amount {
     hidden: no
 
-    type: sum
+    type: sum_distinct
+    sql_distinct_key: ${id} ;;
+    value_format_name: gbp_0
+
     sql: ${TABLE}.tax_amount ;;
   }
 
@@ -207,7 +232,9 @@ view: invoices {
   }
 
   measure: count_project_invoices {
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
+
     drill_fields: [id]
   }
 }
