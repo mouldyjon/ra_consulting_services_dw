@@ -10,6 +10,8 @@ view: customer_master {
     default_value: "Yes"
   }
 
+
+
   dimension: customer_id {
     hidden: yes
     type: number
@@ -18,7 +20,7 @@ view: customer_master {
 
   dimension: customer_name {
     type: string
-    sql: ${TABLE}.customer_name ;;
+    sql: ${TABLE}.demo_company_name;;
   }
 
   dimension: harvest_address {

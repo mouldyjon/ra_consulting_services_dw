@@ -34,11 +34,7 @@ view: customer_events {
     sql: concat(cast(${customer_id} as string),cast(${event_seq} as string)) ;;
   }
 
-  dimension: customer_name {
-    hidden: no
-    type: string
-    sql: ${TABLE}.customer_name ;;
-  }
+
 
   dimension: days_since_last_billable_day {
     group_label: "Retention"
