@@ -27,6 +27,13 @@ view: customer_events {
     sql: ${TABLE}.customer_id ;;
   }
 
+  dimension: pk {
+    type: string
+    primary_key: yes
+    hidden: yes
+    sql: concat(cast(${customer_id} as string),cast(${event_seq} as string)) ;;
+  }
+
   dimension: customer_name {
     hidden: no
     type: string
