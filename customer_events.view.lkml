@@ -27,6 +27,12 @@ view: customer_events {
     sql: ${TABLE}.customer_id ;;
   }
 
+  dimension: customer_name {
+    type: string
+    hidden: no
+    sql: ${customer_master.customer_name} ;;
+  }
+
   dimension: pk {
     type: string
     primary_key: yes
