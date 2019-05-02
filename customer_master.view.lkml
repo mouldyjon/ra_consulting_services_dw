@@ -20,7 +20,7 @@ view: customer_master {
 
   dimension: customer_name {
     type: string
-    sql: ${TABLE}.demo_company_name;;
+    sql: ${TABLE}.customer_name;;
   }
 
   dimension: harvest_address {

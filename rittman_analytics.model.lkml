@@ -42,6 +42,16 @@ explore: customer_master {
 
   }
 
+  join: harvest_forecast_entries {
+    view_label: "08 Client Project Invoices"
+    sql_on: ${customer_master.harvest_customer_id} = ${harvest_forecast_entries.client_harvest_id}
+    ;;
+    relationship: one_to_many
+    type: left_outer
+
+
+  }
+
   join: customer_events {
     view_label: "02 Client & Prospect Timeline"
     sql_on: ${customer_master.customer_id} = ${customer_events.customer_id};;
