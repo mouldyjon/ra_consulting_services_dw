@@ -1,5 +1,5 @@
 view: communications {
-  sql_table_name: ra_data_warehouse.communications ;;
+  sql_table_name: communications ;;
 
   dimension: communication_ownerid {
     type: number

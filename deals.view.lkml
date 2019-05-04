@@ -1,5 +1,5 @@
 view: deals {
-  sql_table_name: ra_data_warehouse.deals ;;
+  sql_table_name: deals ;;
   view_label: "Sales Opportunities"
 
   dimension: deal_id {
@@ -16,12 +16,28 @@ view: deals {
     sql: ${TABLE}.amount ;;
   }
 
+  dimension: pipeline_weighted_amount {
+    type: number
+
+    hidden: yes
+
+    sql: ${TABLE}.amount * (${sales_opportunity_stage_pipeline_modifier}/100) ;;
+  }
+
   measure: total_opportunity_amount {
     type: sum_distinct
     value_format_name: gbp_0
 
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount ;;
+  }
+
+  measure: total_weighted_opportunity_amount {
+    type: sum_distinct
+    value_format_name: gbp_0
+
+    sql_distinct_key: ${deal_id} ;;
+    sql: ${pipeline_weighted_amount} ;;
   }
 
   measure: avg_opportunity_amount {
@@ -40,11 +56,15 @@ view: deals {
 
   measure: total_amount_in_home_currency {
     type: sum_distinct
+    hidden: yes
+
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount_in_home_currency ;;
   }
 
   measure: avg_amount_in_home_currency {
+    hidden: yes
+
     type: average_distinct
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount_in_home_currency ;;
@@ -58,11 +78,14 @@ view: deals {
   }
 
   dimension: closed_lost_reason {
+    group_label: "Opportunity Status"
     type: string
     sql: ${TABLE}.closed_lost_reason ;;
   }
 
-  dimension_group: sales_opportunity_closed {
+  dimension_group: opportunity_closed {
+    group_label: "Opportunity Status"
+
     type: time
     timeframes: [
       date,
@@ -72,7 +95,9 @@ view: deals {
     sql: ${TABLE}.closedate ;;
   }
 
-  dimension_group: sales_opportunity_created {
+  dimension_group: opportunity_created {
+    group_label: "Opportunity Details"
+
     type: time
     timeframes: [
       date,
@@ -82,17 +107,39 @@ view: deals {
     sql: ${TABLE}.createdate ;;
   }
 
-  dimension: sales_opportunity_name {
+  dimension: opportunity_name {
+    group_label: "Opportunity Details"
+
     type: string
     sql: ${TABLE}.dealname ;;
   }
 
-  dimension: sales_opportunity_stage {
-    type: string
-    sql: ${TABLE}.dealstage ;;
+  dimension: sales_opportunity_stage_sort_index {
+    type: number
+    hidden: yes
+    sql: ${TABLE}.dealstage_sortindex ;;
   }
 
+  dimension: sales_opportunity_stage {
+    group_label: "Opportunity Status"
+
+    type: string
+    sql: ${TABLE}.dealstage ;;
+    order_by_field: sales_opportunity_stage_sort_index
+  }
+
+  dimension: sales_opportunity_stage_pipeline_modifier {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.dealstage_pipeline_modifier ;;
+
+  }
+
+
+
   dimension: sales_opportunity_type {
+    group_label: "Opportunity Details"
+
     type: string
     sql: ${TABLE}.dealtype ;;
   }
@@ -110,21 +157,19 @@ view: deals {
 
 
 
-  dimension_group: sales_opportunity_notes_last_contacted {
+  dimension_group: last_contacted {
+    group_label: "Opportunity Details"
+
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: ${TABLE}.notes_last_contacted ;;
   }
 
-  dimension_group: sales_opportunity_notes_last_updated {
+  dimension_group: notes_last_updated {
+    group_label: "Opportunity Details"
+
     type: time
     timeframes: [
       date
@@ -139,18 +184,22 @@ view: deals {
   }
 
   measure: total_sales_opportunity_notes {
+    hidden: yes
     type: sum
     sql: ${TABLE}.num_notes ;;
 
   }
 
   dimension: sales_opportunity_pipeline {
+    hidden: yes
     type: string
     sql: ${TABLE}.pipeline ;;
   }
 
-  dimension_group: sales_email_last_replied {
+  dimension_group: last_replied {
     type: time
+    group_label: "Opportunity Details"
+
     timeframes: [
       date
     ]
