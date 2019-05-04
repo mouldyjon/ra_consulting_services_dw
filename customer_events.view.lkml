@@ -29,7 +29,7 @@ view: customer_events {
 
   dimension: customer_name {
     type: string
-    hidden: no
+    hidden: yes
     sql: ${customer_master.customer_name} ;;
   }
 

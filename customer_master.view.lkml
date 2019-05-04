@@ -19,16 +19,20 @@ view: customer_master {
   }
 
   dimension: customer_name {
+    label: "Company Name"
     type: string
     sql: ${TABLE}.customer_name;;
   }
 
-  dimension: harvest_address {
+  dimension: company_billing_address {
+    group_label: "Finance Details"
     type: string
     sql: ${TABLE}.harvest_address ;;
   }
 
-  dimension_group: harvest_customer_created {
+  dimension_group: company_created {
+    group_label: "Project Details"
+
     type: time
     timeframes: [
       date,
@@ -38,7 +42,9 @@ view: customer_master {
     sql: ${TABLE}.harvest_customer_created_at ;;
   }
 
-  dimension: harvest_customer_currency {
+  dimension: company_currency {
+    group_label: "Project Details"
+
     type: string
     sql: ${TABLE}.harvest_customer_currency ;;
   }
@@ -50,34 +56,46 @@ view: customer_master {
     sql: ${TABLE}.harvest_customer_id ;;
   }
 
-  dimension: harvest_customer_is_active {
+  dimension: company_is_active_services_client {
+    group_label: "Project Details"
+
     type: yesno
     sql: ${TABLE}.harvest_customer_is_active ;;
   }
 
-  dimension: hubspot_annual_revenue {
+  dimension: company_annual_revenue {
+    group_label: "Customer Intelligence"
+
     type: number
     sql: ${TABLE}.hubspot_annual_revenue ;;
   }
 
-  dimension: hubspot_city {
+  dimension: company_city {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_city ;;
   }
 
   dimension: hubspot_company_id {
+    group_label: "Customer Intelligence"
+
     hidden: yes
 
     type: number
     sql: ${TABLE}.hubspot_company_id ;;
   }
 
-  dimension: hubspot_country {
+  dimension: company_country {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_country ;;
   }
 
-  dimension_group: hubspot_created {
+  dimension_group: company_first_contact {
+    group_label: "Customer Intelligence"
+
     type: time
     timeframes: [
       date,
@@ -87,17 +105,23 @@ view: customer_master {
     sql: ${TABLE}.hubspot_created_date ;;
   }
 
-  dimension: hubspot_description {
+  dimension: company_description {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_description ;;
   }
 
-  dimension: hubspot_domain {
+  dimension: company_domain {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_domain ;;
   }
 
-  dimension_group: hubspot_first_deal_created {
+  dimension_group: first_deal_created {
+    group_label: "Customer Intelligence"
+
     type: time
     timeframes: [
       date,
@@ -107,74 +131,102 @@ view: customer_master {
     sql: ${TABLE}.hubspot_first_deal_created_date ;;
   }
 
-  dimension: hubspot_industry {
+  dimension: company_industry {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_industry ;;
   }
 
-  dimension: hubspot_is_public {
+  dimension: company__is_public {
+    group_label: "Customer Intelligence"
+
     type: yesno
     sql: ${TABLE}.hubspot_is_public ;;
   }
 
-  dimension: hubspot_lifecycle_stage {
+  dimension: company__lifecycle_stage {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_lifecycle_stage ;;
   }
 
-  dimension: hubspot_linkedin_bio {
+  dimension: company__linkedin_bio {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_linkedin_bio ;;
   }
 
   dimension: hubspot_owner_id {
+    group_label: "Customer Intelligence"
+
     type: string
     hidden: yes
 
     sql: ${TABLE}.hubspot_owner_id ;;
   }
 
-  dimension: hubspot_state {
+  dimension: state {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_state ;;
   }
 
-  dimension: hubspot_total_money_raised {
+  dimension: company_total_money_raised {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_total_money_raised ;;
   }
 
-  dimension: hubspot_total_revenue {
+  dimension: company_total_revenue {
+    group_label: "Customer Intelligence"
+
     type: number
     sql: ${TABLE}.hubspot_total_revenue ;;
   }
 
-  dimension: hubspot_twitterhandle {
+  dimension: company_twitterhandle {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_twitterhandle ;;
   }
 
-  dimension: hubspot_type {
+  dimension: company_type {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_type ;;
   }
 
-  dimension: hubspot_website {
+  dimension: company_website {
+    group_label: "Customer Intelligence"
+
     type: string
     sql: ${TABLE}.hubspot_website ;;
   }
 
-  dimension: is_crm_tracked_client {
+  dimension: company_is_crm_tracked {
+    group_label: "Customer Intelligence"
+
     type: yesno
     sql: ${TABLE}.is_crm_tracked_client ;;
   }
 
-  dimension: is_services_client {
+  dimension: company_is_services_client {
+    group_label: "Customer Intelligence"
+
     type: yesno
     sql: ${TABLE}.is_services_client ;;
   }
 
-  dimension: is_supplier_company {
+  dimension: company_is_supplier_company {
+    group_label: "Customer Intelligence"
+
     type: yesno
     sql: ${TABLE}.is_supplier_company ;;
   }
@@ -186,25 +238,25 @@ view: customer_master {
     sql: ${TABLE}.xero_contact_id ;;
   }
 
-  dimension: xero_customer_status {
+  dimension: company_finance_status {
+    group_label: "Finance Details"
     type: string
     sql: ${TABLE}.xero_customer_status ;;
   }
 
-  dimension: xero_is_customer {
+  dimension: company_is_customer{
+    group_label: "Finance Details"
+
     type: yesno
     sql: ${TABLE}.xero_is_customer ;;
   }
 
-  dimension: xero_is_supplier {
+  dimension: company_is_supplier {
+    group_label: "Finance Details"
+
     type: yesno
     sql: ${TABLE}.xero_is_supplier ;;
   }
 
-  measure: count_companies {
 
-    type: count_distinct
-    sql_distinct_key: ${customer_id} ;;
-    drill_fields: [customer_name]
-  }
 }
