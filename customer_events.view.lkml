@@ -151,6 +151,18 @@ view: customer_events {
     sql: ${TABLE}.first_billable_day_ts ;;
   }
 
+  measure: total_new_customers {
+    group_label: "Retention"
+    type: count_distinct
+    sql: case when (${event_ts_month} = ${first_billable_day_ts_month}) and ${event_type} = 'Billable Day' then ${customer_id} end ;;
+  }
+
+  measure: total_retained_reactivated_customers {
+    group_label: "Retention"
+    type: count_distinct
+    sql: case when (${event_ts_month} != ${first_billable_day_ts_month}) and ${event_type} = 'Billable Day' then ${customer_id} end ;;
+  }
+
   dimension_group: first_invoice_day_ts {
     type: time
     hidden: yes
