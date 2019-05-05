@@ -5,6 +5,8 @@ include: "*.view.lkml"                       # include all views in this project
 
 explore: revenue_vs_budget {}
 
+explore: monthly_chart_of_accounts_balances {}
+
 explore: customer_master {
   label: "Operations"
   view_label: "01 Clients, Prospects and Suppliers"
