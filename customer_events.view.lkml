@@ -13,6 +13,7 @@ view: customer_events {
   }
 
 
+
   filter: sales_prospect {
     type: yesno
     hidden: no
@@ -131,8 +132,13 @@ view: customer_events {
   measure: total_event_value {
     hidden: no
     type: sum
-    sql: ${TABLE}.event_value ;;
-  }
+    value_format: "#.##"
+    sql: ${TABLE}.event_value  ;;
+    }
+
+
+
+
 
   measure: total_events {
     hidden: no

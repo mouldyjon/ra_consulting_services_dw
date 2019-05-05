@@ -11,7 +11,6 @@ view: customer_master {
   }
 
 
-
   dimension: customer_id {
     hidden: yes
     type: number
@@ -21,7 +20,8 @@ view: customer_master {
   dimension: customer_name {
     label: "Company Name"
     type: string
-    sql: ${TABLE}.customer_name;;
+    sql:
+      ${TABLE}.customer_name;;
   }
 
   dimension: company_billing_address {
@@ -138,21 +138,21 @@ view: customer_master {
     sql: ${TABLE}.hubspot_industry ;;
   }
 
-  dimension: company__is_public {
+  dimension: company_is_public {
     group_label: "Customer Intelligence"
 
     type: yesno
     sql: ${TABLE}.hubspot_is_public ;;
   }
 
-  dimension: company__lifecycle_stage {
+  dimension: company_lifecycle_stage {
     group_label: "Customer Intelligence"
 
     type: string
     sql: ${TABLE}.hubspot_lifecycle_stage ;;
   }
 
-  dimension: company__linkedin_bio {
+  dimension: company_linkedin_bio {
     group_label: "Customer Intelligence"
 
     type: string

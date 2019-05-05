@@ -8,6 +8,7 @@ view: budget {
 
   dimension: budget_amount {
     type: number
+    value_format_name: gbp_0
     sql: ${TABLE}.budget_amount ;;
   }
 
