@@ -1,6 +1,6 @@
 view: customer_master {
   view_label: "Companies"
-  sql_table_name: ra_data_warehouse.customer_master ;;
+  sql_table_name: ra_data_warehouse_dbt_dev.customer_master ;;
 
   filter: billable_client {
     hidden: no
@@ -9,6 +9,26 @@ view: customer_master {
     sql: ${customer_events.billable_client} ;;
     default_value: "Yes"
   }
+
+  dimension: site_visitor_category {
+    hidden: no
+    type: string
+    sql: ${TABLE}.site_visitor_category ;;
+  }
+
+  dimension: site_visitor_subcategory {
+    hidden: no
+    type: string
+    sql: ${TABLE}.site_visitor_subcategory ;;
+  }
+
+  dimension: site_visitor_customer_id {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.site_visitor_customer_id ;;
+  }
+
+
 
 
   dimension: customer_id {

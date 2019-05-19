@@ -1,5 +1,5 @@
 view: xero_invoices_and_payments {
-  sql_table_name: ra_data_warehouse.xero_invoices_and_payments ;;
+  sql_table_name: xero_invoices_and_payments ;;
 
   dimension: pk {
     hidden: yes

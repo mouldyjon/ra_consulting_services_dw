@@ -1,5 +1,5 @@
 view: deals {
-  sql_table_name: deals ;;
+  sql_table_name: ra_data_warehouse_dbt_dev.deals ;;
   view_label: "Sales Opportunities"
 
   dimension: deal_id {

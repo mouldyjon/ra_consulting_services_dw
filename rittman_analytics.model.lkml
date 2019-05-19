@@ -78,6 +78,13 @@ explore: customer_master {
 
   }
 
+  join: pageviews {
+    view_label: "12 Websites Pageviews"
+    sql_on: ${customer_master.site_visitor_customer_id} = ${pageviews.site_visitor_customer_id}  ;;
+    relationship: one_to_many
+    type: left_outer
+  }
+
   join: invoice_line_items {
     view_label: "08 Client Project Invoices"
     sql_on: ${invoices.id} = ${invoice_line_items.invoice_id} ;;

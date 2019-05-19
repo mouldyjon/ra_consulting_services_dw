@@ -1,5 +1,5 @@
 view: account_transactions {
-  sql_table_name: account_transactions ;;
+  sql_table_name: ra_data_warehouse_dbt_dev.account_transactions ;;
 
   dimension: account_bankaccounttype {
     group_label: "Chart of Accounts"

@@ -1,5 +1,5 @@
 view: invoices {
-  sql_table_name: ra_data_warehouse.harvest_invoices ;;
+  sql_table_name: ra_data_warehouse_dbt_dev.harvest_invoices ;;
 
   dimension: id {
     primary_key: yes
@@ -7,6 +7,7 @@ view: invoices {
     type: number
     sql: ${TABLE}.id ;;
   }
+
 
  dimension_group: project_invoice_period_start {
    type: time

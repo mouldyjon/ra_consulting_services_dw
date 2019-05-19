@@ -1,6 +1,6 @@
 view: customer_events {
   label: "Customer Events"
-  sql_table_name: ra_data_warehouse.customer_events ;;
+  sql_table_name: ra_data_warehouse_dbt_dev.customer_events ;;
 
 
 

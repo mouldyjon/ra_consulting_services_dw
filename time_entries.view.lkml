@@ -1,5 +1,5 @@
 view: time_entries {
-  sql_table_name: ra_data_warehouse.harvest_time_entries ;;
+  sql_table_name: ra_data_warehouse_dbt_dev.harvest_time_entries ;;
 
   dimension: timesheet_id {
     primary_key: yes
