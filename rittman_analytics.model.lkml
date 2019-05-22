@@ -7,6 +7,16 @@ explore: revenue_vs_budget {}
 
 explore: monthly_chart_of_accounts_balances {}
 
+explore: strava_activities {
+  label: "Strava"
+  join: strava_efforts {
+    sql_on: ${strava_activities.activity_id} = ${strava_efforts.activity_id} ;;
+    type: inner
+    relationship: one_to_many
+  }
+
+}
+
 explore: customer_master {
   label: "Operations"
   view_label: "01 Clients, Prospects and Suppliers"
@@ -101,7 +111,7 @@ explore: customer_master {
   join: time_entries {
     view_label: "06 Client Project Timesheets"
 
-    sql_on: ${time_entries.project_id} = ${projects.id} and ${time_entries.project_time_entry_task_id} = ${tasks.id};;
+    sql_on: ${time_entries.project_id} = ${projects.id} ;;
     relationship: one_to_many
     type: left_outer
   }

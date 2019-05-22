@@ -107,14 +107,19 @@ view: time_entries {
   }
 
   measure: total_billed_project_time_entry_hours {
-    type: sum
+    label: "Total Billed Hours"
+    type: sum_distinct
+    sql_distinct_key: ${timesheet_id} ;;
     sql: ${TABLE}.hours ;;
     filters: {field: project_time_entry_billable
               value: "yes"}
   }
 
   measure: total_project_time_entry_billed_days {
-    type: sum
+    label: "Total Billed Days"
+
+    type: sum_distinct
+    sql_distinct_key: ${timesheet_id} ;;
     sql: ${TABLE}.hours/8 ;;
     filters: {field: project_time_entry_billable
       value: "yes"}
