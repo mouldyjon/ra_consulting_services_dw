@@ -1,5 +1,9 @@
 view: florenceapp_looker_usage {
-  sql_table_name: client_looker_usage_stats.florenceapp_looker_usage ;;
+  sql_table_name: client_looker_usage_stats.combined_looker_usage ;;
+
+dimension: customer {
+  type: string
+}
 
   dimension: history_approximate_web_usage_in_minutes {
     type: number
