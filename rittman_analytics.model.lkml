@@ -5,6 +5,8 @@ include: "*.view.lkml"                       # include all views in this project
 
 explore: revenue_vs_budget {}
 
+explore: florenceapp_looker_usage {}
+
 explore: monthly_chart_of_accounts_balances {}
 
 explore: strava_activities {

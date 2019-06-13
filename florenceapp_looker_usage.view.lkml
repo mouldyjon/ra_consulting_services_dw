@@ -202,7 +202,7 @@ view: florenceapp_looker_usage {
   }
 
   measure: history_most_recent_run_length_in_seconds {
-    type: count
+    type: count_distinct
     sql: ${TABLE}.History_Most_Recent_Run_Length_in_Seconds ;;
   }
 
@@ -212,7 +212,7 @@ view: florenceapp_looker_usage {
   }
 
   measure: history_query_run_count {
-    type: count
+    type: count_distinct
     sql: ${TABLE}.History_Query_Run_Count ;;
   }
 
@@ -257,17 +257,17 @@ view: florenceapp_looker_usage {
   }
 
   measure: history_runtime_tiers_in_1_second_increments {
-    type: count
+    type: count_distinct
     sql: ${TABLE}.History_Runtime_Tiers_in_1_Second_Increments ;;
   }
 
   measure: history_runtime_tiers_in_5_second_increments {
-    type: count
+    type: count_distinct
     sql: ${TABLE}.History_Runtime_Tiers_in_5_Second_Increments ;;
   }
 
   measure: history_runtime_tiers_in_seconds {
-    type: count
+    type: count_distinct
     sql: ${TABLE}.History_Runtime_Tiers_in_Seconds ;;
   }
 
@@ -297,7 +297,7 @@ view: florenceapp_looker_usage {
   }
 
   measure: history_total_runtime_in_seconds {
-    type: count
+    type: count_distinct
     sql: ${TABLE}.History_Total_Runtime_in_Seconds ;;
   }
 
