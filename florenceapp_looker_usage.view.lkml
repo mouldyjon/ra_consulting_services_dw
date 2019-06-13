@@ -5,9 +5,8 @@ dimension: customer {
   type: string
 }
 
-  dimension: history_approximate_web_usage_in_minutes {
-    type: number
-    sql: ${TABLE}.History_Approximate_Web_Usage_in_Minutes ;;
+measure: history_approximate_web_usage_in_minutes {
+    type: count
   }
 
   measure: history_average_runtime_in_seconds {
