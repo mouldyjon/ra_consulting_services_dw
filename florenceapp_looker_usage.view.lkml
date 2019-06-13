@@ -6,7 +6,8 @@ dimension: customer {
 }
 
 measure: history_approximate_web_usage_in_minutes {
-    type: count
+    type: count_distinct
+    sql: ${TABLE}.history_approximate_web_usage_in_minutes ;;
   }
 
   measure: history_average_runtime_in_seconds {
