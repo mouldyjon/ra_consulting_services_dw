@@ -10,9 +10,8 @@ dimension: customer {
     sql: ${TABLE}.History_Approximate_Web_Usage_in_Minutes ;;
   }
 
-  dimension: history_average_runtime_in_seconds {
-    type: number
-    sql: ${TABLE}.History_Average_Runtime_in_Seconds ;;
+  measure: history_average_runtime_in_seconds {
+    type: count
   }
 
   dimension: history_cache__yes___no_ {
@@ -160,9 +159,8 @@ dimension: customer {
     sql: ${TABLE}.History_Issuer_Source ;;
   }
 
-  dimension: history_max_runtime_in_seconds {
-    type: number
-    sql: ${TABLE}.History_Max_Runtime_in_Seconds ;;
+  measure: history_max_runtime_in_seconds {
+    type: count
   }
 
   dimension: history_message {
@@ -170,9 +168,8 @@ dimension: customer {
     sql: ${TABLE}.History_Message ;;
   }
 
-  dimension: history_min_runtime_in_seconds {
-    type: number
-    sql: ${TABLE}.History_Min_Runtime_in_Seconds ;;
+  measure: history_min_runtime_in_seconds {
+    type: count
   }
 
   dimension_group: history_most_recent_query {
