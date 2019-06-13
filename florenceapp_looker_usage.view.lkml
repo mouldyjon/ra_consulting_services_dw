@@ -1,5 +1,5 @@
 view: florenceapp_looker_usage {
-  sql_table_name: client_looker_usage_stats.combined_looker_usage ;;
+  sql_table_name: looker_usage_tracking.combined_looker_usage ;;
 
 dimension: customer {
   type: string
