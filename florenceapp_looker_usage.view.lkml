@@ -6,7 +6,7 @@ dimension: customer {
 }
 
 measure: history_approximate_web_usage_in_minutes {
-    type: count_distinct
+    type: sum
     sql: ${TABLE}.history_approximate_web_usage_in_minutes ;;
   }
 
