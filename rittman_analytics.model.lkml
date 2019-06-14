@@ -9,6 +9,9 @@ explore: florenceapp_looker_usage {}
 
 explore: monthly_chart_of_accounts_balances {}
 
+explore: pages {}
+
+
 explore: strava_activities {
   label: "Strava"
   join: strava_efforts {
