@@ -41,6 +41,19 @@ view: revenue_vs_budget {
     sql: ${TABLE}.revenue_actual ;;
   }
 
+  measure: total_revenue_actual {
+    value_format_name: gbp
+    type: sum
+
+    sql: ${revenue_actual} ;;
+  }
+
+  measure: total_revenue_budget {
+    value_format_name: gbp
+    type: sum
+    sql: ${revenue_budget} ;;
+  }
+
   dimension: revenue_budget {
     type: number
     sql: ${TABLE}.revenue_budget ;;

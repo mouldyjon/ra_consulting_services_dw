@@ -1,4 +1,4 @@
-connection: "ra_dw"
+connection: "ra_dw_prod"
 label: "Rittman Analytics"
 
 include: "*.view.lkml"                       # include all views in this project
@@ -6,6 +6,17 @@ include: "*.view.lkml"                       # include all views in this project
 explore: revenue_vs_budget {}
 
 explore: monthly_chart_of_accounts_balances {}
+
+explore: rebtel_looker_usage {}
+
+explore: all_history {
+  label: "Looker Benchmarking"
+  join: all_history_facts {
+    sql_on: ${all_history.pk} = ${all_history_facts.pk} ;;
+    type: inner
+    relationship: one_to_one
+  }
+}
 
 explore: strava_activities {
   label: "Strava"
