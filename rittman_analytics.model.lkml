@@ -5,9 +5,9 @@ include: "*.view.lkml"                       # include all views in this project
 
 explore: revenue_vs_budget {}
 
+
 explore: monthly_chart_of_accounts_balances {}
 
-explore: rebtel_looker_usage {}
 
 explore: all_history {
   label: "Looker Benchmarking"
@@ -17,6 +17,8 @@ explore: all_history {
     relationship: one_to_one
   }
 }
+explore: pages {}
+
 
 explore: strava_activities {
   label: "Strava"
