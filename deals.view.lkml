@@ -1,5 +1,5 @@
 view: deals {
-  sql_table_name: ra_data_warehouse_dbt_dev.deals ;;
+  sql_table_name: ra_data_warehouse_dbt_prod.deals ;;
   view_label: "Sales Opportunities"
 
   dimension: deal_id {
@@ -209,5 +209,26 @@ view: deals {
   measure: count_sales_opportunities {
     type: count_distinct
     sql: ${deal_id} ;;
+  }
+
+  dimension: days_to_close {
+    type: number
+    sql: case when ${TABLE}.closedate is not null then date_diff(date(${TABLE}.closedate),date(${TABLE}.createdate),DAY) end;;
+  }
+
+  measure: avg_days_to_close {
+    type: average
+    sql: ${days_to_close} ;;
+  }
+
+
+  measure: count_closed_sales_opportunities {
+    type: count_distinct
+    sql: case when ${sales_opportunity_stage} like '%Sales Closed Won%' then ${deal_id} end ;;
+  }
+
+  measure: count_lost_sales_opportunities {
+    type: count_distinct
+    sql: case when ${sales_opportunity_stage} like '%Sales Closed Lost%' then ${deal_id} end ;;
   }
 }
