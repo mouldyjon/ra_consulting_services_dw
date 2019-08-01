@@ -9,6 +9,7 @@ explore: revenue_vs_budget {}
 explore: monthly_chart_of_accounts_balances {}
 
 
+
 explore: all_history {
   label: "Looker Benchmarking"
   join: all_history_facts {
@@ -39,6 +40,27 @@ explore: customer_master {
     sql_on: ${customer_master.customer_id}  = ${customer_metrics.customer_id}  ;;
     type: left_outer
     relationship: one_to_one
+  }
+
+  join: project_mapping {
+    view_label: "13 Development Projects"
+    sql_on: ${customer_master.customer_name} = ${project_mapping.customer_name};;
+    type: left_outer
+    relationship: one_to_many
+  }
+
+  join: dev_projects {
+    view_label: "13 Development Projects"
+    sql_on: ${project_mapping.project_name} = ${dev_projects.name};;
+    type: inner
+    relationship: one_to_one
+  }
+
+  join: dev_stories {
+    view_label: "13 Development Projects"
+    sql_on: ${dev_projects.id} = ${dev_stories.project_id};;
+    type: left_outer
+    relationship: one_to_many
   }
 
 

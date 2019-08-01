@@ -1,6 +1,6 @@
 view: customer_events {
   label: "Customer Events"
-  sql_table_name: ra_data_warehouse_dbt_dev.customer_events ;;
+  sql_table_name: ra_data_warehouse_dbt_prod.customer_events ;;
 
 
 
@@ -248,6 +248,11 @@ view: customer_events {
 
     type: number
     sql: ${TABLE}.weeks_since_first_contact_day ;;
+  }
+
+  measure: count_events {
+    type: count_distinct
+    sql: ${pk} ;;
   }
 
 

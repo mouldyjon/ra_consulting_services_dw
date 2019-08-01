@@ -462,14 +462,14 @@ view: events_geolocated {
     group_label: "Money Spent"
 
     type: number
-    sql: ${TABLE}.event_spend ;;
+    sql: cast(${TABLE}.event_spend as float64) ;;
   }
 
   measure: total_event_spend {
     group_label: "Money Spent"
-
+    value_format_name: gbp
     type: sum
-    sql: ${TABLE}.event_spend ;;
+    sql: cast(${TABLE}.event_spend as float64) ;;
   }
 
   dimension: event_spend_currency {
