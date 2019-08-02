@@ -3,10 +3,8 @@ label: "Rittman Analytics"
 
 include: "*.view.lkml"                       # include all views in this project
 
-explore: revenue_vs_budget {}
 
 
-explore: monthly_chart_of_accounts_balances {}
 
 
 
@@ -18,21 +16,17 @@ explore: all_history {
     relationship: one_to_one
   }
 }
-explore: pages {}
 
-
-explore: strava_activities {
-  label: "Strava"
-  join: strava_efforts {
-    sql_on: ${strava_activities.activity_id} = ${strava_efforts.activity_id} ;;
-    type: inner
-    relationship: one_to_many
-  }
-
+explore: xero_profit_and_loss {
+  label: "Company Finances"
 }
 
+
+
+
+
 explore: customer_master {
-  label: "Operations"
+  label: "Rittman Analytics Operations"
   view_label: "01 Clients, Prospects and Suppliers"
 
   join: customer_metrics {
