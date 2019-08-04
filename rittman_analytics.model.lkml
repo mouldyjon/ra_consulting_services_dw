@@ -17,8 +17,13 @@ explore: all_history {
   }
 }
 
-explore: xero_profit_and_loss {
+explore: financial_results {
   label: "Company Finances"
+  join: xero_profit_and_loss {
+    sql_on: ${financial_results.period_month} = ${xero_profit_and_loss.period_ts_month};;
+    type: inner
+    relationship: one_to_many
+  }
 }
 
 
@@ -119,9 +124,9 @@ explore: customer_master {
 
   join: pageviews {
     view_label: "12 Websites Pageviews"
-    sql_on: ${customer_master.site_visitor_customer_id} = ${pageviews.site_visitor_customer_id}  ;;
+    sql_on: ${customer_master.customer_id} = cast(${pageviews.customer_id} as int64) ;;
     relationship: one_to_many
-    type: left_outer
+    type: inner
   }
 
   join: invoice_line_items {
