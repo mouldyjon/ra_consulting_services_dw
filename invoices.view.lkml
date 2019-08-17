@@ -1,5 +1,5 @@
 view: invoices {
-  sql_table_name: ra_data_warehouse_dbt_dev.harvest_invoices ;;
+  sql_table_name: ra_data_warehouse_dbt_prod.harvest_invoices ;;
 
   dimension: id {
     primary_key: yes
@@ -10,6 +10,10 @@ view: invoices {
 
 
  dimension_group: project_invoice_period_start {
+  label: "Project Invoice Start"
+  hidden: yes
+
+  group_label: "Project Invoicing"
    type: time
   timeframes: [
     date,
@@ -20,15 +24,22 @@ view: invoices {
  }
 
   dimension: was_paid_ontime {
+    group_label: "Project Invoicing"
+
     type: yesno
   }
 
   dimension: is_paid {
+    group_label: "Project Invoicing"
+
     type: yesno
     sql: case when ${TABLE}.paid_date is not null then true else false end;;
   }
 
   dimension_group: project_invoice_period_end {
+    group_label: "Project Invoicing"
+    label: "Project Invoice End"
+    hidden: yes
     type: time
     timeframes: [
       date,
@@ -46,6 +57,8 @@ view: invoices {
   }
 
   measure: total_project_invoice_amount {
+    group_label: "Project Invoicing"
+    label: "Project Invoice Amount"
     type: sum_distinct
     hidden: no
     value_format_name: gbp_0
@@ -69,6 +82,8 @@ view: invoices {
   }
 
   dimension_group: project_invoice_created {
+    group_label: "Project Invoicing"
+    label: "Project Invoice"
     type: time
     timeframes: [
       date,
@@ -86,6 +101,8 @@ view: invoices {
   }
 
   dimension: project_invoice_currency {
+    group_label: "Project Invoicing"
+
     type: string
     sql: ${TABLE}.currency ;;
   }
@@ -98,7 +115,7 @@ view: invoices {
   }
 
   measure: total_project_invoice_discount_amount {
-    hidden: no
+    hidden: yes
 
     type: sum_distinct
     value_format_name: gbp_0
@@ -117,7 +134,7 @@ view: invoices {
   }
 
   measure: total_project_invoice_due_amount {
-    hidden: no
+    hidden: yes
 
     type: sum_distinct
     value_format_name: gbp_0
@@ -128,6 +145,9 @@ view: invoices {
   }
 
   dimension_group: project_invoice_due {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: time
     timeframes: [
       date,
@@ -138,6 +158,9 @@ view: invoices {
   }
 
   dimension_group: project_invoice_issue {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: time
     timeframes: [
       date,
@@ -148,11 +171,17 @@ view: invoices {
   }
 
   dimension: project_invoice_notes {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: string
     sql: ${TABLE}.notes ;;
   }
 
   dimension: project_invoice_number {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: string
     sql: ${TABLE}.number ;;
   }
@@ -160,16 +189,19 @@ view: invoices {
 
 
   dimension_group: project_invoice_paid {
+    group_label: "Project Invoicing"
+    label: "Project Invoice Paid"
     type: time
     timeframes: [
-      date,
-      week,
-      month
+      date
     ]
     sql: ${TABLE}.paid_date ;;
   }
 
   dimension: project_invoice_payment_term {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: string
     sql: ${TABLE}.payment_term ;;
   }
@@ -179,11 +211,17 @@ view: invoices {
 
 
   dimension: project_invoice_purchase_order {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: string
     sql: ${TABLE}.purchase_order ;;
   }
 
   dimension_group: project_invoice_sent {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: time
     timeframes: [
       date
@@ -194,11 +232,16 @@ view: invoices {
 
 
   dimension: project_invoice_subject {
+    group_label: "Project Invoicing"
+
     type: string
     sql: ${TABLE}.subject ;;
   }
 
   dimension: project_invoice_tax {
+    group_label: "Project Invoicing"
+    hidden: yes
+
     type: string
     sql: ${TABLE}.tax ;;
   }
@@ -215,7 +258,7 @@ view: invoices {
   }
 
   measure: total_project_invoice_tax_amount {
-    hidden: no
+    hidden: yes
 
     type: sum_distinct
     sql_distinct_key: ${id} ;;
@@ -225,6 +268,7 @@ view: invoices {
   }
 
   dimension_group: project_invoice_updated {
+    hidden: yes
     type: time
     timeframes: [
       date
@@ -233,6 +277,8 @@ view: invoices {
   }
 
   measure: count_project_invoices {
+    group_label: "Project Invoicing"
+
     type: count_distinct
     sql: ${id} ;;
 

@@ -12,6 +12,7 @@ view: tasks {
 
 
   dimension: user_task_billable_by_default {
+    hidden: yes
     type: yesno
     sql: ${TABLE}.billable_by_default ;;
   }
@@ -21,6 +22,7 @@ view: tasks {
 
   dimension: user_task_name {
     label: "Consultant Project Role"
+    group_label: "Project Timesheets"
     type: string
     sql: ${TABLE}.name ;;
   }

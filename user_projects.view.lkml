@@ -20,6 +20,8 @@ view: user_projects {
   }
 
   dimension_group: user_assigned_to_project {
+    hidden: yes
+
     type: time
     timeframes: [
       date,
@@ -30,6 +32,8 @@ view: user_projects {
   }
 
   dimension: user_assigned_to_hourly_rate {
+    hidden: yes
+
     type: number
     sql: ${TABLE}.hourly_rate ;;
   }
@@ -37,6 +41,7 @@ view: user_projects {
 
 
   dimension: user_assigned_as_project_manager {
+    hidden: yes
     type: yesno
     sql: ${TABLE}.is_project_manager ;;
   }

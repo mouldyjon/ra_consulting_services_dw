@@ -4,6 +4,7 @@ view: users {
   dimension: id {
     primary_key: yes
     type: number
+    hidden: yes
     sql: ${TABLE}.id ;;
   }
 
@@ -22,6 +23,7 @@ view: users {
 
   measure: consultant_avg_cost_rate {
     type: average
+    group_label: "Project Resource"
     sql: ${TABLE}.cost_rate ;;
   }
 
@@ -43,11 +45,15 @@ view: users {
   }
 
   measure: consultant_avg_default_hourly_rate {
+    group_label: "Project Resource"
+
     type: average
     sql: ${TABLE}.default_hourly_rate ;;
   }
 
   dimension: consultant_email {
+    group_label: "Project Resource"
+    hidden: yes
     type: string
     sql: ${TABLE}.email ;;
   }
@@ -59,6 +65,8 @@ view: users {
   }
 
   dimension: consultant_name {
+    group_label: "Project Resource"
+
     type: string
     sql: concat(concat(${TABLE}.first_name,' '),${TABLE}.last_name) ;;
   }
@@ -66,6 +74,8 @@ view: users {
 
 
   dimension: consultant_is_active {
+    group_label: "Project Resource"
+
     type: yesno
     sql: ${TABLE}.is_active ;;
   }
@@ -73,11 +83,14 @@ view: users {
 
 
   dimension: consultant_is_contractor {
+    group_label: "Project Resource"
     type: yesno
     sql: ${TABLE}.is_contractor ;;
   }
 
   dimension: consultant_is_project_manager {
+    group_label: "Project Resource"
+
     type: yesno
     sql: ${TABLE}.is_project_manager ;;
   }
@@ -99,17 +112,18 @@ view: users {
     sql: ${TABLE}.weekly_capacity ;;
   }
 
-  measure: avg_consultant_weekly_capacity {
-    type: average
-    sql: ${TABLE}.weekly_capacity ;;
-  }
+
 
   measure: total_consultant_weekly_capacity {
     type: sum
+    group_label: "Project Resource"
+
     sql: ${TABLE}.weekly_capacity ;;
   }
 
   measure: count_consultants {
+    group_label: "Project Resource"
+
     type: count
 
   }

@@ -2,10 +2,17 @@ view: harvest_forecast_entries {
   sql_table_name: ra_data_warehouse_dbt_dev.harvest_forecast_entries ;;
 
   dimension: id {
-    primary_key: yes
+    primary_key: no
     hidden: yes
     type: number
     sql: ${TABLE}.id ;;
+  }
+
+  dimension: pk {
+    primary_key: yes
+    hidden: yes
+    type: string
+    sql: concat(cast(${TABLE}.id as string),cast(${TABLE}.billable_rate as string)) ;;
   }
 
 

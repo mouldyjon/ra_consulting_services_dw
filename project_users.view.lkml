@@ -1,7 +1,7 @@
 view: project_users {
 
   sql_table_name: rittman_analytics.project_users ;;
-  view_label: "Project Time Entries"
+  view_label: "Client Delivery Projects"
 
   dimension: id {
     primary_key: yes
@@ -32,7 +32,7 @@ view: project_users {
     sql: ${TABLE}.hourly_rate ;;
   }
 
-  measure: avg_project_consultant_hourly_rate {
+  measure: billable_hourly_rate {
     type: average
     sql: ${TABLE}.hourly_rate ;;
   }

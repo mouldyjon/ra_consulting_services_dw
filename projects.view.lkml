@@ -1,8 +1,11 @@
 view: projects {
   sql_table_name: rittman_analytics.projects ;;
+  view_label: "Client Delivery Projects"
+
 
   dimension: id {
     primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -11,60 +14,27 @@ view: projects {
 
 
 
-  dimension: bill_by {
-    type: string
-    sql: ${TABLE}.bill_by ;;
-  }
-
-  dimension: budget {
-    type: number
-    sql: ${TABLE}.budget ;;
-  }
-
-  measure: total_budget {
-    type: sum
-    sql: ${TABLE}.budget ;;
-  }
 
 
-  dimension: budget_by {
-    type: string
-    sql: ${TABLE}.budget_by ;;
-  }
 
-  dimension: budget_is_monthly {
-    type: yesno
-    sql: ${TABLE}.budget_is_monthly ;;
-  }
 
   dimension: client_id {
     type: number
+    hidden: yes
     sql: ${TABLE}.client_id ;;
   }
 
   dimension: code {
+    group_label: "Project Details"
     type: string
     sql: ${TABLE}.code ;;
   }
 
-  dimension: cost_budget {
-    type: number
-    sql: ${TABLE}.cost_budget ;;
-  }
 
-  measure: total_cost_budget {
-    type: sum
-    sql: ${TABLE}.cost_budget ;;
-  }
-
-
-
-  dimension: cost_budget_include_expenses {
-    type: yesno
-    sql: ${TABLE}.cost_budget_include_expenses ;;
-  }
 
   dimension_group: created {
+    group_label: "Project Details"
+
     type: time
     timeframes: [
       week,
@@ -77,63 +47,48 @@ view: projects {
 
 
 
-  dimension: fee {
-    type: number
-    sql: ${TABLE}.fee ;;
-  }
-
-  measure: total_fee {
-    type: sum
-    sql: ${TABLE}.fee ;;
-  }
 
   dimension: is_active {
+    group_label: "Project Details"
+
     type: yesno
     sql: ${TABLE}.is_active ;;
   }
 
   dimension: is_billable {
+    group_label: "Project Details"
+
     type: yesno
     sql: ${TABLE}.is_billable ;;
   }
 
   dimension: is_fixed_fee {
+    group_label: "Project Details"
+
     type: yesno
     sql: ${TABLE}.is_fixed_fee ;;
   }
 
   dimension: name {
+    label: "Client Project Name"
+    group_label: "Project Details"
+
     type: string
     sql: ${TABLE}.name ;;
   }
 
-  dimension: notes {
-    type: string
-    sql: ${TABLE}.notes ;;
-  }
 
-  dimension: notify_when_over_budget {
-    type: yesno
-    sql: ${TABLE}.notify_when_over_budget ;;
-  }
-
-  dimension: over_budget_notification_percentage {
-    type: number
-    sql: ${TABLE}.over_budget_notification_percentage ;;
-  }
-
-  dimension: show_budget_to_all {
-    type: yesno
-    sql: ${TABLE}.show_budget_to_all ;;
-  }
 
   dimension: starts_on {
+    group_label: "Project Details"
+
     type: string
     sql: ${TABLE}.starts_on ;;
   }
 
   dimension_group: updated {
     type: time
+    hidden: yes
     timeframes: [
       date
     ]
@@ -141,6 +96,8 @@ view: projects {
   }
 
   measure: count_projects {
+    group_label: "Project Details"
+
     type: count_distinct
     sql: ${id} ;;
 

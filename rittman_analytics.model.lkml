@@ -64,7 +64,7 @@ explore: customer_master {
 
 
   join: invoices {
-    view_label: "08 Client Project Invoices"
+    view_label: "05 Harvest Projects"
 
     sql_on: ${customer_master.harvest_customer_id} = ${invoices.client_id};;
 
@@ -74,8 +74,9 @@ explore: customer_master {
   }
 
   join: harvest_forecast_entries {
-    view_label: "08 Client Project Invoices"
+    view_label: "14 Client Project Forecast Revenue"
     sql_on: ${customer_master.harvest_customer_id} = ${harvest_forecast_entries.client_harvest_id}
+    and ${projects.id} = ${harvest_forecast_entries.project_harvest_id}
     ;;
     relationship: one_to_many
     type: left_outer
@@ -129,21 +130,16 @@ explore: customer_master {
     type: inner
   }
 
-  join: invoice_line_items {
-    view_label: "08 Client Project Invoices"
-    sql_on: ${invoices.id} = ${invoice_line_items.invoice_id} ;;
-       relationship: one_to_many
-    type: left_outer
-  }
+
   join: projects {
-    view_label: "05 Client Projects"
+    view_label: "05 Harvest Projects"
     sql_on: ${customer_master.harvest_customer_id} = ${projects.client_id};;
     relationship: one_to_many
     type: left_outer
 
   }
   join: time_entries {
-    view_label: "06 Client Project Timesheets"
+    view_label: "05 Harvest Projects"
 
     sql_on: ${time_entries.project_id} = ${projects.id} ;;
     relationship: one_to_many
@@ -151,13 +147,13 @@ explore: customer_master {
   }
 
   join: project_tasks {
-    view_label: "06 Client Project Timesheets"
-      relationship: one_to_many
+    view_label: "05 Harvest Projects"
+    relationship: one_to_many
     sql_on:  ${project_tasks.project_id} = ${projects.id};;
   }
 
   join: tasks {
-    view_label: "06 Client Project Timesheets"
+    view_label: "05 Harvest Projects"
 
     sql_on: ${tasks.id} = ${project_tasks.task_id};;
     relationship: many_to_one
@@ -168,7 +164,7 @@ explore: customer_master {
 
 
   join: users {
-    view_label: "04 Consultants"
+    view_label: "05 Harvest Projects"
     sql_on: ${time_entries.user_id} = ${users.id}
          and ${users.id} = ${user_projects.user_id};;
 
@@ -184,7 +180,7 @@ explore: customer_master {
   }
 
   join: user_projects {
-    view_label: "08 Client Project Invoices"
+    view_label: "05 Harvest Projects"
 
     sql_on: ${user_projects.id}  = ${projects.id}
     and ${user_projects.client_id} = ${customer_master.harvest_customer_id};;
@@ -199,7 +195,7 @@ explore: customer_master {
   }
 
   join: expenses {
-    view_label: "07 Client Project Expenses"
+    view_label: "05 Harvest Projects"
     sql_on: ${customer_master.harvest_customer_id} = ${expenses.client_id}
     and ${expenses.project_id} =  ${projects.id};;
     relationship: one_to_many

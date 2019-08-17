@@ -17,11 +17,14 @@ view: invoice_line_items {
   }
 
   measure: total_project_invoice_line_item_amount {
+    hidden: yes
+
     type: sum
     sql: ${TABLE}.amount ;;
   }
 
   dimension: project_invoice_line_item_description {
+    hidden: yes
     type: string
     sql: ${TABLE}.description ;;
   }
@@ -33,6 +36,8 @@ view: invoice_line_items {
   }
 
   dimension: project_invoice_line_item_kind {
+    hidden: yes
+
     type: string
     sql: ${TABLE}.kind ;;
   }
@@ -51,11 +56,15 @@ view: invoice_line_items {
   }
 
   measure: total_project_invoice_line_item_quantity {
+    hidden: yes
+
     type: sum
     sql: ${TABLE}.quantity ;;
   }
 
   dimension: project_invoice_taxed {
+    hidden: yes
+
     type: yesno
     sql: ${TABLE}.taxed ;;
   }
@@ -69,6 +78,8 @@ view: invoice_line_items {
   }
 
   measure: avg_project_invoice_line_item_unit_price {
+    hidden: yes
+
     type: average
     sql: ${TABLE}.unit_price ;;
   }
@@ -76,6 +87,8 @@ view: invoice_line_items {
 
 
   measure: count_project_invoice_line_item {
+    hidden: yes
+
     type: count
 
   }

@@ -1,6 +1,6 @@
 view: project_tasks {
   sql_table_name: rittman_analytics.project_tasks ;;
-  view_label: "Project Time Entries"
+  view_label: "Client Delivery Projects"
 
   dimension: id {
     primary_key: yes
@@ -11,16 +11,14 @@ view: project_tasks {
 
 
 
-  dimension: project_task_billable {
+  dimension: billable_activity {
+    group_label: "Project Timesheets"
     type: yesno
 
     sql: ${TABLE}.billable ;;
   }
 
-  dimension: project_task_budget {
-    type: number
-    sql: ${TABLE}.budget ;;
-  }
+
 
   dimension_group: created {
     type: time
@@ -43,7 +41,9 @@ view: project_tasks {
     sql: ${TABLE}.hourly_rate ;;
   }
 
-  measure: avg_project_task_hourly_rate {
+  measure: activity_hourly_rate {
+    group_label: "Project Timesheets"
+
     hidden: no
     type: average
     sql: ${TABLE}.hourly_rate ;;
@@ -59,7 +59,7 @@ view: project_tasks {
 
   dimension: task_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.task_id ;;
   }
 
