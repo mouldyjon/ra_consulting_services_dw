@@ -36,7 +36,7 @@ explore: customer_master {
 
 
   join: customer_metrics {
-    view_label: "Companies"
+    view_label: "Companies and Contacts"
     sql_on: ${customer_master.customer_id}  = ${customer_metrics.customer_id}  ;;
     type: left_outer
     relationship: one_to_one
