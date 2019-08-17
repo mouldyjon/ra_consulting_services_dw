@@ -136,10 +136,18 @@ hidden: yes
 
   dimension: invoiceid {
     group_label: "Invoice Details"
-
+    label: "Xero Invoice Number"
+hidden: yes
     type: string
     sql: ${TABLE}.invoiceid ;;
+    link: {
+      label: "View Invoice in Xero"
+      url: "https://go.xero.com/AccountsReceivable/View.aspx?InvoiceID={{ value }}"
+      icon_url: "https://www.xero.com/uk/favicon.ico"
+    }
   }
+
+
 
   dimension: invoicenumber {
     group_label: "Invoice Details"

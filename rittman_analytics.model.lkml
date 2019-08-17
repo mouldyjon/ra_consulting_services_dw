@@ -33,13 +33,7 @@ explore: customer_master {
   label: "Rittman Analytics Operations"
   view_label: "Companies and Contacts"
 
-  conditionally_filter: {
-    filters: {
-      field: customer_events.billable_client
-      value: "Yes"
-    }
-    unless: [customer_events.billable_client]
-  }
+
 
   join: customer_metrics {
     view_label: "Companies"

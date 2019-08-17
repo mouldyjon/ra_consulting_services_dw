@@ -141,6 +141,11 @@ label: "Opportunity Deal Stage"
     order_by_field: sales_opportunity_stage_sort_index
   }
 
+  filter: open_opportunity {
+    type: yesno
+    sql: case when (${TABLE}.dealstage like '%Sales Closed%' or ${TABLE}.dealstage is null) then false else true end;;
+  }
+
   dimension: sales_opportunity_stage_pipeline_modifier {
     hidden: yes
     type: number
