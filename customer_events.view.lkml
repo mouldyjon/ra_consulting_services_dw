@@ -1,15 +1,14 @@
 view: customer_events {
-  label: "Customer Events"
+  view_label: "Events"
   sql_table_name: ra_data_warehouse_dbt_prod.customer_events ;;
 
 
 
   filter: billable_client {
     hidden: no
-
+    default_value: "Yes"
     type: yesno
     sql: ${TABLE}.billable_client ;;
-    default_value: "Yes"
   }
 
 

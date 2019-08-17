@@ -12,13 +12,16 @@ view: dev_projects {
 
 
   dimension: active {
-    label: "Project Active"
+    group_label: "Jira Projects"
+    label: "Jira Project Active"
     type: yesno
     sql: ${TABLE}.active ;;
   }
 
   dimension: description {
-    label: "Project Description"
+    group_label: "Jira Projects"
+
+    label: "Jira Project Description"
     type: string
     sql: ${TABLE}.description ;;
   }
@@ -27,6 +30,8 @@ view: dev_projects {
 
 
   dimension: name {
+    group_label: "Jira Projects"
+    label: "Jira Project Name"
     type: string
     sql: ${TABLE}.name ;;
   }

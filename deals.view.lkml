@@ -1,10 +1,11 @@
 view: deals {
   sql_table_name: ra_data_warehouse_dbt_prod.deals ;;
-  view_label: "Sales Opportunities"
+  view_label: "Hubspot Deal Tracking"
 
   dimension: deal_id {
     primary_key: yes
     type: number
+    hidden: yes
     sql: ${TABLE}.deal_id ;;
   }
 
@@ -27,7 +28,7 @@ view: deals {
   measure: total_opportunity_amount {
     type: sum_distinct
     value_format_name: gbp_0
-
+    label: "Opportunity Value"
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount ;;
   }
@@ -35,13 +36,14 @@ view: deals {
   measure: total_weighted_opportunity_amount {
     type: sum_distinct
     value_format_name: gbp_0
-
+    label: "Weighted Opportunity Value"
     sql_distinct_key: ${deal_id} ;;
     sql: ${pipeline_weighted_amount} ;;
   }
 
   measure: avg_opportunity_amount {
     type: average
+    hidden: yes
     value_format_name: gbp_0
 
     sql_distinct_key: ${deal_id} ;;
@@ -85,7 +87,7 @@ view: deals {
 
   dimension_group: opportunity_closed {
     group_label: "Opportunity Status"
-
+    label: "Opportunity Close"
     type: time
     timeframes: [
       date,
@@ -97,7 +99,7 @@ view: deals {
 
   dimension_group: opportunity_created {
     group_label: "Opportunity Details"
-
+    label: "Opportunity Created"
     type: time
     timeframes: [
       date,
@@ -108,10 +110,21 @@ view: deals {
   }
 
   dimension: opportunity_name {
-    group_label: "Opportunity Details"
 
     type: string
     sql: ${TABLE}.dealname ;;
+    link: {
+      label: "View Deal in Hubspot"
+      url: "https://app.hubspot.com/contacts/4402794/deal/{{ deals.deal_id._value }}/"
+      icon_url: "http://app.hubspot.com/favicon.ico"
+    }
+    link: {
+      label: "View Company in Hubspot"
+      url: "https://app.hubspot.com/contacts/4402794/company/{{ customer_master.hubspot_company_id._value }}/"
+      icon_url: "http://app.hubspot.com/favicon.ico"
+    }
+
+
   }
 
   dimension: sales_opportunity_stage_sort_index {
@@ -122,7 +135,7 @@ view: deals {
 
   dimension: sales_opportunity_stage {
     group_label: "Opportunity Status"
-
+label: "Opportunity Deal Stage"
     type: string
     sql: ${TABLE}.dealstage ;;
     order_by_field: sales_opportunity_stage_sort_index
@@ -139,7 +152,7 @@ view: deals {
 
   dimension: sales_opportunity_type {
     group_label: "Opportunity Details"
-
+    label: "New or Existing Business"
     type: string
     sql: ${TABLE}.dealtype ;;
   }
@@ -159,7 +172,7 @@ view: deals {
 
   dimension_group: last_contacted {
     group_label: "Opportunity Details"
-
+    label: "Last Contact"
     type: time
     timeframes: [
       date
@@ -169,7 +182,7 @@ view: deals {
 
   dimension_group: notes_last_updated {
     group_label: "Opportunity Details"
-
+    hidden: yes
     type: time
     timeframes: [
       date
@@ -207,27 +220,38 @@ view: deals {
   }
 
   measure: count_sales_opportunities {
+    group_label: "Sales Metrics"
+    label: "Count of Opportunities"
     type: count_distinct
     sql: ${deal_id} ;;
   }
 
   dimension: days_to_close {
+    hidden: yes
     type: number
     sql: case when ${TABLE}.closedate is not null then date_diff(date(${TABLE}.closedate),date(${TABLE}.createdate),DAY) end;;
   }
 
   measure: avg_days_to_close {
+    group_label: "Sales Metrics"
+
     type: average
     sql: ${days_to_close} ;;
   }
 
 
   measure: count_closed_sales_opportunities {
+    group_label: "Sales Metrics"
+
+    label: "Count Closed Won"
     type: count_distinct
     sql: case when ${sales_opportunity_stage} like '%Sales Closed Won%' then ${deal_id} end ;;
   }
 
   measure: count_lost_sales_opportunities {
+    label: "Count Closed Lost"
+    group_label: "Sales Metrics"
+
     type: count_distinct
     sql: case when ${sales_opportunity_stage} like '%Sales Closed Lost%' then ${deal_id} end ;;
   }

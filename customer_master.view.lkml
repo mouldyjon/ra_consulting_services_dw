@@ -20,10 +20,16 @@ view: customer_master {
   }
 
   dimension: customer_name {
+    group_label: "Company Details"
+
     label: "Company Name"
     type: string
     sql:
       ${TABLE}.customer_name;;
+    link: {
+      label: "Visit Company Website"
+      url: "https://{{ customer_master.company_website._value }}"
+    }
   }
 
   dimension: company_billing_address {
@@ -45,8 +51,8 @@ view: customer_master {
   }
 
   dimension: company_currency {
-    group_label: "Project Details"
-    hidden: yes
+    group_label: "Company Details"
+    hidden: no
 
     type: string
     sql: ${TABLE}.harvest_customer_currency ;;
@@ -114,21 +120,21 @@ view: customer_master {
   }
 
   dimension: company_description {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
 
     type: string
     sql: ${TABLE}.hubspot_description ;;
   }
 
   dimension: company_domain {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
 
     type: string
     sql: ${TABLE}.hubspot_domain ;;
   }
 
   dimension_group: first_deal_created {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: time
@@ -141,14 +147,14 @@ view: customer_master {
   }
 
   dimension: company_industry {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
 
     type: string
     sql: ${TABLE}.hubspot_industry ;;
   }
 
   dimension: company_is_public {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: yesno
@@ -156,21 +162,21 @@ view: customer_master {
   }
 
   dimension: company_lifecycle_stage {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
 
     type: string
     sql: ${TABLE}.hubspot_lifecycle_stage ;;
   }
 
   dimension: company_linkedin_bio {
-    group_label: "Customer Details"
+    group_label: "Company Details"
 
     type: string
     sql: ${TABLE}.hubspot_linkedin_bio ;;
   }
 
   dimension: hubspot_owner_id {
-    group_label: "Customer Details"
+    group_label: "Company Details"
 
     type: string
     hidden: yes
@@ -179,7 +185,7 @@ view: customer_master {
   }
 
   dimension: state {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: string
@@ -187,7 +193,7 @@ view: customer_master {
   }
 
   dimension: company_total_money_raised {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: string
@@ -195,7 +201,7 @@ view: customer_master {
   }
 
   dimension: company_total_revenue {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: number
@@ -203,7 +209,7 @@ view: customer_master {
   }
 
   dimension: company_twitterhandle {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: string
@@ -211,21 +217,21 @@ view: customer_master {
   }
 
   dimension: company_type {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
 
     type: string
     sql: ${TABLE}.hubspot_type ;;
   }
 
   dimension: company_website {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
 
     type: string
     sql: ${TABLE}.hubspot_website ;;
   }
 
   dimension: company_is_crm_tracked {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: yesno
@@ -233,7 +239,7 @@ view: customer_master {
   }
 
   dimension: company_is_services_client {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: yesno
@@ -241,7 +247,7 @@ view: customer_master {
   }
 
   dimension: company_is_supplier_company {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
     hidden: yes
 
     type: yesno

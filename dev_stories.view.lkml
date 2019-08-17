@@ -1,6 +1,6 @@
 view: dev_stories {
   sql_table_name: ra_data_warehouse_dbt_prod.dev_stories ;;
-
+  view_label: "Jira Projects"
   dimension: id {
     primary_key: yes
     hidden: yes
@@ -16,38 +16,43 @@ view: dev_stories {
   }
 
   dimension: active {
+    group_label: "Jira Issues"
     label: "Issue Active"
+    hidden: yes
     type: yesno
     sql: ${TABLE}.active ;;
   }
 
   measure: aggregate_progress {
+    hidden: yes
+
     type: average
     sql: ${TABLE}.aggregate_progress ;;
   }
 
   dimension: colourname {
-    label: "RAG Status"
+    label: "Issue Status Colour"
+    group_label: "Jira Issues"
+
     type: string
     sql: ${TABLE}.colourname ;;
   }
 
   dimension_group: created {
+    group_label: "Jira Issues"
+
     label: "Issue"
     type: time
     timeframes: [
       raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: ${TABLE}.created ;;
   }
 
   dimension_group: updated {
+    group_label: "Jira Issues"
+
     label: "Issue"
     type: time
     timeframes: [
@@ -57,12 +62,16 @@ view: dev_stories {
   }
 
   dimension: description {
+    group_label: "Jira Issues"
+
     label: "Issue Description"
     type: string
     sql: ${TABLE}.description ;;
   }
 
   dimension: displayname {
+    group_label: "Jira Issues"
+
     label: "Requestor"
     type: string
     sql: ${TABLE}.displayname ;;
@@ -71,11 +80,15 @@ view: dev_stories {
 
 
   dimension: issuetype_description {
+    group_label: "Jira Issues"
+
     type: string
     sql: ${TABLE}.issuetype_description ;;
   }
 
   dimension: issuetype_name {
+    group_label: "Jira Issues"
+
     label: "Issue Type"
     type: string
     sql: ${TABLE}.issuetype_name ;;
@@ -111,6 +124,8 @@ view: dev_stories {
   }
 
   dimension: priority_name {
+    group_label: "Jira Issues"
+
     label: "Issue Priority"
     type: string
     sql: ${TABLE}.priority_name ;;
@@ -144,17 +159,23 @@ view: dev_stories {
   }
 
   dimension: statuscategory {
+    group_label: "Jira Issues"
+
     label: "Issue Status"
     type: string
     sql: ${TABLE}.statuscategory ;;
   }
 
   dimension: subtask {
+    group_label: "Jira Issues"
+    label: "Subtask"
     type: yesno
     sql: ${TABLE}.subtask ;;
   }
 
   dimension: summary {
+    group_label: "Jira Issues"
+
     type: string
     sql: ${TABLE}.summary ;;
   }
@@ -167,11 +188,15 @@ view: dev_stories {
   }
 
   measure: total_progress {
+    group_label: "Jira Issues"
+
     type: average
     sql: ${TABLE}.total_progress ;;
   }
 
   measure: count {
+    group_label: "Jira Issues"
+    label: "Count of Issues"
     type: count
     drill_fields: [detail*]
   }

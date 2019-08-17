@@ -8,8 +8,8 @@ view: xero_invoices_and_payments {
   }
 
   dimension: amountdue {
-    group_label: "Invoice Details"
-
+    group_label: "Xero Invoicing"
+    label: "Xero Invoice Amount"
     type: number
     sql: ${TABLE}.amountdue ;;
   }
@@ -21,7 +21,8 @@ view: xero_invoices_and_payments {
   }
 
   measure: total_amount_still_due {
-    group_label: "Invoice Details"
+    group_label: "Xero Invoicing"
+    label: "Xero Invoice Amount Outstanding"
 
     type: sum_distinct
     sql_distinct_key: ${invoiceid} ;;
@@ -31,7 +32,8 @@ view: xero_invoices_and_payments {
   }
 
   measure: total_amount_paid {
-    group_label: "Payment Details"
+    group_label: "Xero Invoicing"
+    label: "Xero Invoice Amount Paid"
 
     type: sum_distinct
     sql_distinct_key: ${invoiceid} ;;
@@ -41,7 +43,7 @@ view: xero_invoices_and_payments {
 
   dimension: amountpaid {
     group_label: "Payment Details"
-
+hidden: yes
     type: number
     value_format_name: id
     sql: ${TABLE}.amountpaid ;;
@@ -49,6 +51,7 @@ view: xero_invoices_and_payments {
 
   dimension_group: datestring {
     type: time
+    hidden: yes
     timeframes: [
       raw,
       time,
@@ -62,13 +65,15 @@ view: xero_invoices_and_payments {
   }
 
   dimension: description {
+    group_label: "Xero Invoicing"
+    label: "Xero Invoice Description"
     type: string
     sql: ${TABLE}.description ;;
   }
 
   dimension_group: duedate {
-    group_label: "Invoice Details"
-    label: "Invoice Due"
+    group_label: "Xero Invoicing"
+    label: "Xero Invoice Due"
     type: time
     timeframes: [
       date
@@ -79,8 +84,8 @@ view: xero_invoices_and_payments {
 
 
   dimension_group: fullypaidondate {
-    label: "Invoice Fully Paid"
-    group_label: "Payment Details"
+    group_label: "Xero Invoicing"
+    label: "Xero Invoice Paid"
 
     type: time
     timeframes: [
@@ -90,15 +95,17 @@ view: xero_invoices_and_payments {
   }
 
   dimension: invoice_currency_code {
-    group_label: "Invoice Details"
+       group_label: "Xero Invoicing"
+    label: "Xero Invoice Created"
+    hidden: no
 
     type: string
     sql: ${TABLE}.invoice_currency_code ;;
   }
 
   dimension_group: invoice {
-    group_label: "Invoice Details"
-
+    group_label: "Xero Invoicing"
+    label: "Xero Invoice Created"
     type: time
     timeframes: [
       date
@@ -166,7 +173,7 @@ view: xero_invoices_and_payments {
 
   dimension_group: payment {
     group_label: "Payment Details"
-
+hidden: yes
     type: time
     timeframes: [
       date
@@ -176,6 +183,7 @@ view: xero_invoices_and_payments {
 
   dimension: payment_reference {
     group_label: "Payment Details"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.payment_reference ;;
@@ -183,6 +191,7 @@ view: xero_invoices_and_payments {
 
   dimension: paymentid {
     group_label: "Payment Details"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.paymentid ;;
@@ -190,6 +199,7 @@ view: xero_invoices_and_payments {
 
   dimension: quantity {
     group_label: "Invoice Details"
+    hidden: yes
 
     type: number
     sql: ${TABLE}.quantity ;;
@@ -197,6 +207,7 @@ view: xero_invoices_and_payments {
 
   dimension: subtotal {
     group_label: "Invoice Details"
+    hidden: yes
 
     type: number
     sql: ${TABLE}.subtotal ;;
@@ -218,6 +229,7 @@ view: xero_invoices_and_payments {
 
   dimension: total {
     group_label: "Invoice Details"
+    hidden: yes
 
     type: number
     sql: ${TABLE}.total ;;
@@ -241,7 +253,7 @@ view: xero_invoices_and_payments {
 
   dimension: totaltax {
     group_label: "Invoice Details"
-
+hidden: yes
 
     type: number
     sql: ${TABLE}.totaltax ;;
@@ -249,7 +261,7 @@ view: xero_invoices_and_payments {
 
   dimension: unitamount {
     group_label: "Invoice Details"
-
+hidden: yes
     type: number
     sql: ${TABLE}.unitamount ;;
   }
