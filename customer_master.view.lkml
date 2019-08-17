@@ -10,24 +10,6 @@ view: customer_master {
     default_value: "Yes"
   }
 
-  dimension: site_visitor_category {
-    hidden: no
-    type: string
-    sql: ${TABLE}.site_visitor_category ;;
-  }
-
-  dimension: site_visitor_subcategory {
-    hidden: no
-    type: string
-    sql: ${TABLE}.site_visitor_subcategory ;;
-  }
-
-  dimension: site_visitor_customer_id {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.site_visitor_customer_id ;;
-  }
-
 
 
 
@@ -52,7 +34,7 @@ view: customer_master {
 
   dimension_group: company_created {
     group_label: "Project Details"
-
+    hidden: yes
     type: time
     timeframes: [
       date,
@@ -64,6 +46,7 @@ view: customer_master {
 
   dimension: company_currency {
     group_label: "Project Details"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.harvest_customer_currency ;;
@@ -78,6 +61,7 @@ view: customer_master {
 
   dimension: company_is_active_services_client {
     group_label: "Project Details"
+    hidden: yes
 
     type: yesno
     sql: ${TABLE}.harvest_customer_is_active ;;
@@ -85,6 +69,7 @@ view: customer_master {
 
   dimension: company_annual_revenue {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: number
     sql: ${TABLE}.hubspot_annual_revenue ;;
@@ -92,6 +77,7 @@ view: customer_master {
 
   dimension: company_city {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.hubspot_city ;;
@@ -108,6 +94,7 @@ view: customer_master {
 
   dimension: company_country {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.hubspot_country ;;
@@ -115,6 +102,7 @@ view: customer_master {
 
   dimension_group: company_first_contact {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: time
     timeframes: [
@@ -141,6 +129,7 @@ view: customer_master {
 
   dimension_group: first_deal_created {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: time
     timeframes: [
@@ -160,6 +149,7 @@ view: customer_master {
 
   dimension: company_is_public {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: yesno
     sql: ${TABLE}.hubspot_is_public ;;
@@ -173,14 +163,14 @@ view: customer_master {
   }
 
   dimension: company_linkedin_bio {
-    group_label: "Customer Intelligence"
+    group_label: "Customer Details"
 
     type: string
     sql: ${TABLE}.hubspot_linkedin_bio ;;
   }
 
   dimension: hubspot_owner_id {
-    group_label: "Customer Intelligence"
+    group_label: "Customer Details"
 
     type: string
     hidden: yes
@@ -190,6 +180,7 @@ view: customer_master {
 
   dimension: state {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.hubspot_state ;;
@@ -197,6 +188,7 @@ view: customer_master {
 
   dimension: company_total_money_raised {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.hubspot_total_money_raised ;;
@@ -204,6 +196,7 @@ view: customer_master {
 
   dimension: company_total_revenue {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: number
     sql: ${TABLE}.hubspot_total_revenue ;;
@@ -211,6 +204,7 @@ view: customer_master {
 
   dimension: company_twitterhandle {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: string
     sql: ${TABLE}.hubspot_twitterhandle ;;
@@ -232,6 +226,7 @@ view: customer_master {
 
   dimension: company_is_crm_tracked {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: yesno
     sql: ${TABLE}.is_crm_tracked_client ;;
@@ -239,6 +234,7 @@ view: customer_master {
 
   dimension: company_is_services_client {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: yesno
     sql: ${TABLE}.is_services_client ;;
@@ -246,6 +242,7 @@ view: customer_master {
 
   dimension: company_is_supplier_company {
     group_label: "Customer Intelligence"
+    hidden: yes
 
     type: yesno
     sql: ${TABLE}.is_supplier_company ;;
@@ -260,12 +257,15 @@ view: customer_master {
 
   dimension: company_finance_status {
     group_label: "Finance Details"
+    hidden: yes
+
     type: string
     sql: ${TABLE}.xero_customer_status ;;
   }
 
   dimension: company_is_customer{
     group_label: "Finance Details"
+    hidden: yes
 
     type: yesno
     sql: ${TABLE}.xero_is_customer ;;
@@ -273,6 +273,7 @@ view: customer_master {
 
   dimension: company_is_supplier {
     group_label: "Finance Details"
+    hidden: yes
 
     type: yesno
     sql: ${TABLE}.xero_is_supplier ;;

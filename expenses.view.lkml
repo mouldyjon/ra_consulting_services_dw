@@ -75,9 +75,12 @@ view: expenses {
 
   dimension: notes {
     group_label: "Project Expenses"
-
+    label: "Expense Item"
     type: string
     sql: ${TABLE}.notes ;;
+    link: {label: "View Expense Receipt"
+      url: "{{ expenses.receipt_url._value }}"
+      icon_url: "https://rittman.harvestapp.com/favicon.ico"}
   }
 
   dimension: project_id {
@@ -111,10 +114,11 @@ view: expenses {
 
   dimension: receipt_url {
     group_label: "Project Expenses"
-
+    hidden: yes
     label: "Receipt"
     type: string
     sql: ${TABLE}.receipt_url ;;
+
   }
 
   dimension_group: spent {
@@ -122,13 +126,7 @@ view: expenses {
     label: "Expense Incurred"
     type: time
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
+      date
     ]
     sql: ${TABLE}.spent_date ;;
   }
@@ -137,6 +135,13 @@ view: expenses {
     hidden: yes
     type: number
     sql: ${TABLE}.total_cost ;;
+  }
+
+  measure: expenses {
+    group_label: "Project Timesheets"
+    label: "Billable Expenses"
+    type: sum
+    sql: ${total_cost} ;;
   }
 
   dimension: units {
