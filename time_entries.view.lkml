@@ -250,7 +250,8 @@ view: time_entries {
     label: "Timesheet Billed On"
     type: time
     timeframes: [
-      date
+      date,
+      month
     ]
     sql: ${TABLE}.spent_date ;;
   }

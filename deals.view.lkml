@@ -31,6 +31,27 @@ view: deals {
     label: "Opportunity Value"
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount ;;
+    action: {
+      label: "Update Opportunity Value"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obfjliw/"
+      icon_url: "http://app.hubspot.com/favicon.ico"
+
+      param: {
+        name: "deal_name"
+        value: "{{ deals.opportunity_name._value }}"
+      }
+      param: {
+        name: "deal_id"
+        value: "{{ deals.deal_id._value }}"
+      }
+      form_param: {
+        name: "new_opportunity_amount"
+        type: string
+        label: "Updated Opportunity Value"
+        description: "Specify Updated Opportunity Stage"
+        required: yes
+      }
+    }
   }
 
   measure: total_weighted_opportunity_amount {
@@ -48,6 +69,7 @@ view: deals {
 
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount ;;
+
   }
 
   dimension: amount_in_home_currency {
@@ -62,7 +84,9 @@ view: deals {
 
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount_in_home_currency ;;
+
   }
+
 
   measure: avg_amount_in_home_currency {
     hidden: yes
@@ -78,6 +102,13 @@ view: deals {
     type: number
     sql: ${TABLE}.associatedcompanyids ;;
   }
+
+  dimension: hubspot_owner_email {
+    hidden: no
+    type: string
+    sql: "mark@rittman.co.uk" ;;
+  }
+
 
   dimension: closed_lost_reason {
     group_label: "Opportunity Status"
@@ -123,14 +154,46 @@ view: deals {
       url: "https://app.hubspot.com/contacts/4402794/company/{{ customer_master.hubspot_company_id._value }}/"
       icon_url: "http://app.hubspot.com/favicon.ico"
     }
+    action: {
+      label: "Request status update from BDM"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obfjj2v/"
+      icon_url: "http://app.hubspot.com/favicon.ico"
+
+      param: {
+        name: "deal_name"
+        value: "{{ deals.opportunity_name._value }}"
+      }
+      param: {
+        name: "deal_id"
+        value: "{{ deals.deal_id._value }}"
+      }
+      param: {
+        name: "hubspot_owner_email"
+        value: "{{ deals.hubspot_owner_email._value }}"
+      }
+      form_param: {
+        name: "request_message"
+        type: string
+        label: "Message to BDM"
+        description: "Add note to BDM status update request"
+        required: yes
+      }
+    }
 
 
   }
+
 
   dimension: sales_opportunity_stage_sort_index {
     type: number
     hidden: yes
     sql: ${TABLE}.dealstage_sortindex ;;
+  }
+
+  dimension: dealstage_id {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.deadstage_id ;;
   }
 
   dimension: sales_opportunity_stage {
@@ -139,6 +202,56 @@ label: "Opportunity Deal Stage"
     type: string
     sql: ${TABLE}.dealstage ;;
     order_by_field: sales_opportunity_stage_sort_index
+    action: {
+      label: "Update Deal Status"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obfqxpo/"
+      icon_url: "http://app.hubspot.com/favicon.ico"
+
+      param: {
+        name: "deal_name"
+        value: "{{ deals.opportunity_name._value }}"
+        }
+      param: {
+        name: "deal_id"
+        value: "{{ deals.deal_id._value }}"
+      }
+      form_param: {
+        name: "new_deal_stage"
+        type: select
+        label: "New Deal Stage"
+        description: "Specify New Deal Stage"
+        required: yes
+        option: {
+          name: "appointmentscheduled"
+          label: "Initial Inbound Enquiry"
+        }
+        option: {
+          name: "qualifiedtobuy"
+          label: "Initial Meeting & Presentation"
+        }
+        option: {
+          name: "presentationscheduled"
+          label: "Proposal Sent"
+        }
+        option: {
+          name: "553a886b-24bc-4ec4-bca3-b1b7fcd9e1c7"
+          label: "Deal Verbally Closed subject to SoW + MSA"
+        }
+        option: {
+          name: "closedwon"
+          label: "Sales Closed Won"
+        }
+        option: {
+          name: "closedlost"
+          label: "Sales Closed Lost"
+        }
+        option: {
+          name: "presentationscheduled"
+          label: "Proposal Sent"
+        }
+
+      }
+    }
   }
 
   filter: open_opportunity {

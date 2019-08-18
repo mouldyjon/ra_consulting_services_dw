@@ -221,7 +221,8 @@ view: account_transactions {
 
     type: time
     timeframes: [
-      date
+      date,
+      month
     ]
     sql: ${TABLE}.transaction_date ;;
   }

@@ -90,9 +90,9 @@ view: customer_master {
   }
 
   dimension: hubspot_company_id {
-    group_label: "Customer Intelligence"
+    group_label: "Company Details"
 
-    hidden: yes
+    hidden: no
 
     type: number
     sql: ${TABLE}.hubspot_company_id ;;
