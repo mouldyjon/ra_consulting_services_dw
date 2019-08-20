@@ -54,6 +54,32 @@ view: deals {
     }
   }
 
+  measure: total_closed_opportunity_amount {
+    type: sum_distinct
+    value_format_name: gbp_0
+    label: "Total Closed Won Opportunity Value"
+    sql_distinct_key: ${deal_id} ;;
+    sql: case when ${sales_opportunity_stage} like '%Sales Closed Won%' then ${amount} end ;;
+  }
+
+  measure: total_open_opportunity_amount {
+    type: sum_distinct
+    value_format_name: gbp_0
+    label: "Total Open Opportunity Value"
+    sql_distinct_key: ${deal_id} ;;
+    sql: case when ${sales_opportunity_stage} like '%Sales Closed Lost%' or ${sales_opportunity_stage} is not null then ${amount} end ;;
+  }
+
+  measure: total_closed_lost_opportunity_amount {
+    type: sum_distinct
+    value_format_name: gbp_0
+    label: "Total Closed Lost Opportunity Value"
+    sql_distinct_key: ${deal_id} ;;
+    sql: ${amount} ;;
+    filters: {field: sales_opportunity_stage
+      value: "Sales Closed Lost"}
+  }
+
   measure: total_weighted_opportunity_amount {
     type: sum_distinct
     value_format_name: gbp_0

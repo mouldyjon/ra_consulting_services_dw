@@ -56,15 +56,39 @@ view: invoices {
     sql: ${TABLE}.amount ;;
   }
 
-  measure: total_project_invoice_amount {
+  measure: total_project_invoice_gross_amount {
     group_label: "Project Invoicing"
-    label: "Project Invoice Amount"
+    label: "Project Invoice Gross Amount"
     type: sum_distinct
     hidden: no
     value_format_name: gbp_0
     sql_distinct_key: ${project_invoice_number} ;;
 
     sql: ${TABLE}.amount ;;
+  }
+
+  measure: total_project_invoice_net_amount {
+    group_label: "Project Invoicing"
+    label: "Project Invoice Gross Amount"
+    type: sum_distinct
+    hidden: no
+    value_format_name: gbp_0
+    sql_distinct_key: ${project_invoice_number} ;;
+
+    sql: ${TABLE}.amount - ifnull(cast(${TABLE}.tax as float64),0);;
+  }
+
+  measure: total_paid_project_invoice_net_amount {
+    group_label: "Project Invoicing"
+    label: "Project Paid Invoice Net Amount"
+    type: sum_distinct
+    hidden: no
+    value_format_name: gbp_0
+    sql_distinct_key: ${project_invoice_number} ;;
+
+    sql: ${TABLE}.amount - ifnull(cast(${TABLE}.tax as float64),0);;
+    filters: {field: is_paid
+              value: "Yes"}
   }
 
   dimension: client_id {
