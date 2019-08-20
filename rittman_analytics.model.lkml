@@ -33,7 +33,12 @@ explore: customer_master {
   label: "Rittman Analytics Operations"
   view_label: "Companies and Contacts"
 
-
+ join: customer_revenue {
+   view_label: "Companies and Contacts"
+  type: left_outer
+  relationship: one_to_one
+  sql_on: ${customer_master.customer_id} = ${customer_revenue.customer_master_customer_id} ;;
+ }
 
   join: customer_metrics {
     view_label: "Companies and Contacts"
@@ -195,8 +200,7 @@ explore: customer_master {
 
   join: expenses {
     view_label: "Harvest Project Timesheets and Invoicing"
-    sql_on: ${customer_master.harvest_customer_id} = ${expenses.client_id}
-    and ${expenses.project_id} =  ${projects.id};;
+    sql_on: ${invoices.id} = ${expenses.invoice_id};;
     relationship: one_to_many
     type: left_outer
   }

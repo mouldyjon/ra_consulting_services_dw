@@ -100,7 +100,7 @@ view: time_entries {
     value_format_name: gbp_0
 
     type: sum
-    sql: ${hours} * ${project_time_entry_billable_rate} ;;
+    sql: case when ${project_time_entry_billable} then ${hours} * ${project_time_entry_billable_rate} end;;
   }
 
   measure: total_available_time_entry_hours {

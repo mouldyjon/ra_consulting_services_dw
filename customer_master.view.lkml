@@ -14,7 +14,9 @@ view: customer_master {
 
 
   dimension: customer_id {
-    hidden: yes
+    group_label: "Company Details"
+
+    hidden: no
     type: number
     sql: ${TABLE}.customer_id ;;
   }
