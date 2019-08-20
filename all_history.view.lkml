@@ -247,8 +247,19 @@ view: all_history {
   dimension: site {
     label: "Client"
     type: string
-    sql: ${TABLE}.site ;;
+    sql: case when ${TABLE}.site = 'Rebtel' then 'Telco Startup'
+              when ${TABLE}.site = 'Colourpop' then 'Beauty Startup'
+              when ${TABLE}.site like '%Let%' then 'Sports Tech Startup'
+              else ${TABLE}.site end;;
   }
+
+  dimension: site_or_others {
+    label: "Client Comparison"
+    type: string
+    sql: case when ${TABLE}.site = 'Florence' then 'Florence'
+              else 'Other Clients' end;;
+  }
+
 
   dimension: user_count {
     type: number
