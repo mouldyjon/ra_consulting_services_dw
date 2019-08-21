@@ -153,6 +153,35 @@ view: all_history {
     sql: ${history_query_run_count} ;;
   }
 
+  measure: query_executions_pct_of_total {
+    type: percent_of_total
+    sql: ${history_query_run_count} ;;
+  }
+
+  measure: min_query_executions {
+    type: min
+    sql: ${TABLE}.History_Query_Run_Count ;;
+  }
+  measure: 25_percentile_query_executions {
+    type: percentile
+    percentile: 25
+    sql: ${TABLE}.History_Query_Run_Count ;;
+  }
+  measure: median_query_executions {
+    type: median
+    sql: ${TABLE}.History_Query_Run_Count ;;
+  }
+  measure: 75_percentile_executions {
+    type: percentile
+    percentile: 75
+    sql: ${TABLE}.History_Query_Run_Count ;;
+  }
+  measure: max_percentile_executions {
+    type: max
+    sql: ${TABLE}.History_Query_Run_Count;;
+  }
+
+
   dimension: history_rebuild_pdts__yes___no_ {
     label: "Query Triggered PDT Rebuild"
     group_label: "Query"

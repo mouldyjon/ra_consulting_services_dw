@@ -69,7 +69,7 @@ view: invoices {
 
   measure: total_project_invoice_net_amount {
     group_label: "Project Invoicing"
-    label: "Project Invoice Gross Amount"
+    label: "Project Invoice Net Amount"
     type: sum_distinct
     hidden: no
     value_format_name: gbp_0

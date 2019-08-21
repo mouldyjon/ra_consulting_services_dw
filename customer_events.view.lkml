@@ -139,11 +139,15 @@ view: customer_events {
 
 
 
+
+
   measure: total_events {
     hidden: no
     type: sum
     sql: 1 ;;
   }
+
+
 
   dimension_group: first_billable_day_ts {
     label: "Customer Since"
