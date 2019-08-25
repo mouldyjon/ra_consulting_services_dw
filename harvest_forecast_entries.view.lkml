@@ -1,5 +1,5 @@
 view: harvest_forecast_entries {
-  sql_table_name: ra_data_warehouse_dbt_dev.harvest_forecast_entries ;;
+  sql_table_name: ra_data_warehouse_dbt_prod.harvest_forecast_entries ;;
 
   dimension: id {
     primary_key: no

@@ -1,5 +1,5 @@
 view: monthly_chart_of_accounts_balances {
-  sql_table_name: ra_data_warehouse_dbt_dev.monthly_chart_of_accounts_balances ;;
+  sql_table_name: ra_data_warehouse_dbt_prod.monthly_chart_of_accounts_balances ;;
 
   dimension: account {
     type: string

@@ -10,7 +10,7 @@ view: customer_revenue {
       LEFT JOIN ra_data_warehouse_dbt_prod.harvest_invoices  AS invoices ON customer_master.harvest_customer_id = invoices.client_id
       LEFT JOIN ra_data_warehouse_dbt_prod.customer_events  AS customer_events ON customer_master.customer_id = customer_events.customer_id
       LEFT JOIN rittman_analytics.projects  AS projects ON customer_master.harvest_customer_id = projects.client_id
-      LEFT JOIN ra_data_warehouse_dbt_dev.harvest_time_entries  AS time_entries ON time_entries.project_id = projects.id
+      LEFT JOIN ra_data_warehouse_dbt_prod.harvest_time_entries  AS time_entries ON time_entries.project_id = projects.id
       LEFT JOIN ra_data_warehouse_dbt_prod.deals  AS deals ON customer_master.hubspot_company_id = deals.associatedcompanyids
 
       WHERE customer_events.billable_client AND projects.is_billable
