@@ -39,8 +39,19 @@ view: strava_activities {
     sql: ${TABLE}.Dist_km ;;
   }
 
+  measure: total_dist_km {
+    type: sum
+    sql: ${dist_km} ;;
+  }
+
+
   dimension: elapsed_time {
     type: number
+    sql: ${TABLE}.Elapsed_Time ;;
+  }
+
+  measure: total_elapsed_time {
+    type: sum
     sql: ${TABLE}.Elapsed_Time ;;
   }
 
@@ -53,6 +64,8 @@ view: strava_activities {
     type: number
     sql: ${TABLE}.Elev_Time_m_h ;;
   }
+
+
 
   dimension: elv_m {
     type: number

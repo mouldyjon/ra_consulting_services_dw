@@ -34,6 +34,11 @@ view: dev_projects {
     label: "Jira Project Name"
     type: string
     sql: ${TABLE}.name ;;
+    action: {
+      label: "Refresh using Stitch and dbt"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obnns7r/"
+      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
+    }
   }
 
 

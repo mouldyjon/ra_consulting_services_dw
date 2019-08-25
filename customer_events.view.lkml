@@ -128,6 +128,12 @@ view: customer_events {
     sql: ${TABLE}.event_value ;;
   }
 
+  dimension: event_units {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.event_value ;;
+  }
+
   measure: total_event_value {
     hidden: no
     type: sum
@@ -135,6 +141,80 @@ view: customer_events {
     sql: ${TABLE}.event_value  ;;
     }
 
+  measure: total_event_units {
+    hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${TABLE}.event_units  ;;
+  }
+
+  measure: total_days_billed {
+    hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${TABLE}.event_value  ;;
+    filters: {field: event_type
+              value: "Billable Day"}
+  }
+
+  dimension: revenue_billed {
+    type: number
+    hidden: yes
+    value_format: "#.##"
+    sql: case when ${TABLE}.event_type = 'Billable Day' then ${TABLE}.event_value*${TABLE}.event_units end ;;
+  }
+
+  measure: total_revenue_billed {
+    hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${revenue_billed}  ;;
+  }
+
+  measure: total_revenue_invoiced
+  {hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${TABLE}.event_value  ;;
+    filters: {field: event_type
+      value: "Client Invoiced"}
+  }
+
+  measure: total_revenue_paid
+  {hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${TABLE}.event_value  ;;
+    filters: {field: event_type
+      value: "Client Paid"}
+  }
+
+  measure: total_looker_usage_mins
+  {hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${TABLE}.event_value  ;;
+    filters: {field: event_type
+      value: "daily_looker_usage_mins"}
+  }
+
+  measure: total_jira_stories_completed
+  {hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${TABLE}.event_value  ;;
+    filters: {field: event_type
+      value: "Jira User Story Closed"}
+  }
+
+  measure: total_jira_tasks_completed
+  {hidden: no
+    type: sum
+    value_format: "#.##"
+    sql: ${TABLE}.event_value  ;;
+    filters: {field: event_type
+      value: "Jira Task Closed"}
+  }
 
 
 

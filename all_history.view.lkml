@@ -260,16 +260,21 @@ view: all_history {
   dimension: history_total_runtime_in_seconds {
     type: number
     hidden: yes
+    value_format_name: decimal_0
+
     sql: ${TABLE}.History_Total_Runtime_in_Seconds ;;
   }
 
    measure: total_query_execution_time_secs {
      type: sum
+    value_format_name: decimal_0
+
      sql: ${history_total_runtime_in_seconds} ;;
    }
 
   measure: avg_query_execution_time_secs {
     type: average
+    value_format_name: decimal_0
     sql: ${history_total_runtime_in_seconds} ;;
   }
 

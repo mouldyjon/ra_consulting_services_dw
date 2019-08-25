@@ -32,6 +32,11 @@ view: deals {
     sql_distinct_key: ${deal_id} ;;
     sql: ${TABLE}.amount ;;
     action: {
+      label: "Refresh using Stitch and dbt"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obn1e8q/"
+      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
+    }
+    action: {
       label: "Update Opportunity Value"
       url: "https://hooks.zapier.com/hooks/catch/3347385/obfjliw/"
       icon_url: "http://app.hubspot.com/favicon.ico"
@@ -169,6 +174,11 @@ view: deals {
 
     type: string
     sql: ${TABLE}.dealname ;;
+    action: {
+      label: "Refresh using Stitch and dbt"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obn1e8q/"
+      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
+    }
     link: {
       label: "View Deal in Hubspot"
       url: "https://app.hubspot.com/contacts/4402794/deal/{{ deals.deal_id._value }}/"
@@ -227,6 +237,11 @@ label: "Opportunity Deal Stage"
     type: string
     sql: ${TABLE}.dealstage ;;
     order_by_field: sales_opportunity_stage_sort_index
+    action: {
+      label: "Refresh using Stitch and dbt"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obn1e8q/"
+      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
+    }
     action: {
       label: "Update Deal Status"
       url: "https://hooks.zapier.com/hooks/catch/3347385/obfqxpo/"

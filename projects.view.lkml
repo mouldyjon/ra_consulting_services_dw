@@ -49,37 +49,78 @@ view: projects {
 
 
 
-  filter: is_active {
+  dimension: project_active {
     group_label: "Project Details"
     label: "Project is Active"
     type: yesno
     sql: ${TABLE}.is_active ;;
   }
 
-  filter: is_billable {
-    group_label: "Project Details"
+  dimension: budget_by {
+    group_label: "Project Commercials"
+    label: "Budget By"
+    type: string
+    sql: ${TABLE}.budget_by ;;
+  }
+
+  dimension: budget {
+    group_label: "Project Commercials"
+    label: "Budget Amount"
+    type: number
+    sql: ${TABLE}.budget_by ;;
+  }
+
+  dimension: cost_budget {
+    group_label: "Project Commercials"
+    label: "Cost Budget"
+    type: number
+    sql: ${TABLE}.budget_by ;;
+  }
+
+  dimension: project_billable {
+    group_label: "Project Commercials"
     label: "Project is Billable"
 
     type: yesno
     sql: ${TABLE}.is_billable ;;
   }
 
-  filter: is_fixed_fee {
-    group_label: "Project Details"
+  dimension: cost_budget_includes_expenses {
+    group_label: "Project Commercials"
+    label: "Cost Budget Includes Expenses"
+
+    type: yesno
+    sql: ${TABLE}.cost_budget_includes_expenses ;;
+  }
+
+  dimension: notify_when_over_budget {
+    group_label: "Project Commercials"
+    label: "Notify When Over Budget"
+
+    type: yesno
+    sql: ${TABLE}.cost_budget_includes_expenses ;;
+  }
+
+  dimension: project_fixed_fee {
+    group_label: "Project Commercials"
     label: "Project is Fixed-Price"
     type: yesno
-    default_value: "no"
     sql: ${TABLE}.is_fixed_fee ;;
   }
 
   dimension: name {
-    label: "Client Project Name"
+    label: "Project Name"
     group_label: "Project Details"
     link: {
       label: "View Project in Harvest"
       url: "https://rittman.harvestapp.com/projects/{{ projects.id._value }}"
       icon_url: "http://rittman.harvestapp.com/favicon.ico"
    }
+    action: {
+      label: "Refresh using Stitch and dbt"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obnpjv0/"
+      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
+    }
     type: string
     sql: ${TABLE}.name ;;
   }
@@ -91,6 +132,12 @@ view: projects {
 
     type: string
     sql: ${TABLE}.starts_on ;;
+  }
+  dimension: ends_on {
+    group_label: "Project Details"
+
+    type: string
+    sql: ${TABLE}.ends_on ;;
   }
 
   dimension_group: updated {
@@ -107,6 +154,11 @@ view: projects {
 
     type: count_distinct
     sql: ${id} ;;
+    action: {
+      label: "Refresh using Stitch and dbt"
+      url: "https://hooks.zapier.com/hooks/catch/3347385/obnpjv0/"
+      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
+    }
 
   }
 
