@@ -1,5 +1,5 @@
 view: projects {
-  sql_table_name: rittman_analytics.projects ;;
+  sql_table_name: ra_data_warehouse_dbt_prod.harvest_projects  ;;
   view_label: "Client Delivery Projects"
 
 
@@ -60,15 +60,25 @@ view: projects {
     group_label: "Project Commercials"
     label: "Budget By"
     type: string
-    sql: ${TABLE}.budget_by ;;
+    sql: case when ${TABLE}.budget_by = 'project' then 'Total Project Hours' else ${TABLE}.budget_by end;;
   }
 
   dimension: budget {
     group_label: "Project Commercials"
     label: "Budget Amount"
     type: number
-    sql: ${TABLE}.budget_by ;;
+    sql: ${TABLE}.budget ;;
   }
+
+  measure: total_budget {
+    group_label: "Project Commercials"
+    label: "Total Budget Amount"
+    type: sum
+    sql: ${budget} ;;
+  }
+
+
+
 
   dimension: cost_budget {
     group_label: "Project Commercials"

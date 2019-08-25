@@ -72,6 +72,9 @@ explore: customer_master {
   }
 
 
+
+
+
   join: invoices {
     view_label: "Harvest Project Timesheets and Invoicing"
 
@@ -169,8 +172,7 @@ explore: customer_master {
 
   join: users {
     view_label: "Harvest Project Timesheets and Invoicing"
-    sql_on: ${time_entries.user_id} = ${users.id}
-         and ${users.id} = ${user_projects.user_id};;
+    sql_on: ${time_entries.user_id} = ${users.id};;
 
     relationship: many_to_one
     type: inner

@@ -251,6 +251,7 @@ view: time_entries {
     type: time
     timeframes: [
       date,
+      week,
       month
     ]
     sql: ${TABLE}.spent_date ;;

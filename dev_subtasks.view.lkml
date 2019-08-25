@@ -1,5 +1,5 @@
-view: dev_stories {
-  sql_table_name: ra_data_warehouse_dbt_prod.dev_stories ;;
+view: dev_subtasks {
+  sql_table_name: ra_data_warehouse_dbt_prod.dev_subtasks ;;
   view_label: "Jira Projects"
   dimension: id {
     primary_key: yes
@@ -186,7 +186,6 @@ view: dev_stories {
     type: string
     sql: ${TABLE}.project_key ;;
   }
-
 
   dimension: projecttypekey {
     hidden: yes
