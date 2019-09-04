@@ -24,8 +24,9 @@ view: dev_subtasks {
 
 
   dimension: active {
-    group_label: "Jira Issues"
-    label: "Issue Active"
+    group_label: "Jira Subtasks"
+    group_item_label: "Active"
+    label: "Subtask Active"
     hidden: yes
     type: yesno
     sql: ${TABLE}.active ;;
@@ -39,17 +40,17 @@ view: dev_subtasks {
   }
 
   dimension: colourname {
-    label: "Issue Status Colour"
-    group_label: "Jira Issues"
-
+    label: "Subtask Status Colour"
+    group_label: "Jira Subtasks"
+    group_item_label: "Status Colour"
     type: string
     sql: ${TABLE}.colourname ;;
   }
 
   dimension_group: created {
-    group_label: "Jira Issues"
-
-    label: "Issue"
+    group_label: "Jira Story Subtasks"
+    group_item_label: ""
+    label: "Subtask"
     type: time
     timeframes: [
       raw,
@@ -59,9 +60,10 @@ view: dev_subtasks {
   }
 
   dimension_group: updated {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
+    group_item_label: ""
 
-    label: "Issue"
+    label: "Subtask"
     type: time
     timeframes: [
       date
@@ -70,7 +72,7 @@ view: dev_subtasks {
   }
 
   dimension: description {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
 
     label: "Issue Description"
     type: string
@@ -78,7 +80,7 @@ view: dev_subtasks {
   }
 
   dimension: displayname {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
 
     label: "Requestor"
     type: string
@@ -88,43 +90,43 @@ view: dev_subtasks {
 
 
   dimension: issuetype_description {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
 
     type: string
     sql: ${TABLE}.issuetype_description ;;
   }
 
   dimension: issuetype_name {
-    group_label: "Jira Issues"
-
-    label: "Issue Type"
+    group_label: "Jira Subtasks"
+    group_item_label: "Type"
+    label: "Subtask Type"
     type: string
     sql: ${TABLE}.issuetype_name ;;
   }
 
   dimension: estimated_hours {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
     label: "Estimated Hours to Complete"
     type: number
     sql: ${TABLE}.estimated_hours ;;
   }
 
   dimension: remaining_hours_to_complete {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
     label: "Remaining Hours to Complete"
     type: number
     sql: ${TABLE}.estimated_hours ;;
   }
 
   measure: total_estimated_hours {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
     label: "Total Estimated Hours to Complete"
     type: sum
     sql: ${estimated_hours} ;;
   }
 
   measure: total_remaining_hours_to_complete {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
     label: "Total Remaining Hours to Complete"
     type: sum
     sql: ${remaining_hours_to_complete} ;;
@@ -160,9 +162,9 @@ view: dev_subtasks {
   }
 
   dimension: priority_name {
-    group_label: "Jira Issues"
-
-    label: "Issue Priority"
+    group_label: "Jira Subtasks"
+    group_item_label: "Priority"
+    label: "Subtask Priority"
     type: string
     sql: ${TABLE}.priority_name ;;
   }
@@ -195,23 +197,24 @@ view: dev_subtasks {
   }
 
   dimension: statuscategory {
-    group_label: "Jira Issues"
-
-    label: "Issue Status"
+    group_label: "Jira Subtasks"
+    group_item_label: "Status Category"
+    label: "Subtask Status"
     type: string
     sql: ${TABLE}.statuscategory ;;
   }
 
   dimension: subtask {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
     label: "Subtask"
     type: yesno
     sql: ${TABLE}.subtask ;;
   }
 
   dimension: summary {
-    group_label: "Jira Issues"
-
+    group_label: "Jira Subtasks"
+    label: "Subtask Summary"
+    group_item_label: "Summary"
     type: string
     sql: ${TABLE}.summary ;;
   }
@@ -224,15 +227,15 @@ view: dev_subtasks {
   }
 
   measure: total_progress {
-    group_label: "Jira Issues"
+    group_label: "Jira Subtasks"
 
     type: average
     sql: ${TABLE}.total_progress ;;
   }
 
   measure: count {
-    group_label: "Jira Issues"
-    label: "Count of Issues"
+    group_label: "Jira Subtasks"
+    label: "Count of Subtasks"
     type: count
     drill_fields: [detail*]
   }

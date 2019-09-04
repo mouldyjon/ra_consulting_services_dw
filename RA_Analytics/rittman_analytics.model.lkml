@@ -2,7 +2,7 @@ connection: "ra_dw_prod"
 label: "Rittman Analytics"
 
 include: "*.view.lkml"                       # include all views in this project
-
+#aggregate_awareness:  yes
 
 
 
@@ -64,12 +64,32 @@ explore: customer_master {
     relationship: one_to_one
   }
 
-  join: dev_stories {
-    view_label: "Jira Projects"
-    sql_on: ${dev_projects.id} = ${dev_stories.project_id};;
-    type: left_outer
+
+
+
+
+  join: dev_epics {
+    view_label: "Jira Stories"
+    sql_on: ${dev_projects.id} = ${dev_epics.project_id};;
+    type: inner
     relationship: one_to_many
   }
+
+  join: dev_tasks {
+    view_label: "Jira Tasks"
+    sql_on: ${dev_epics.key} = ${dev_tasks.parent_key};;
+    type: inner
+    relationship: one_to_many
+  }
+
+  join: dev_subtasks {
+    view_label: "Jira Stories"
+    sql_on: ${dev_tasks.key} = ${dev_subtasks.parent_key};;
+    type: inner
+    relationship: one_to_many
+  }
+
+
 
 
 
