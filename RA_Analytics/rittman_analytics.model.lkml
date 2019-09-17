@@ -2,7 +2,7 @@ connection: "ra_dw_prod"
 label: "Rittman Analytics"
 
 include: "*.view.lkml"                       # include all views in this project
-#aggregate_awareness:  yes
+aggregate_awareness:  yes
 
 
 
