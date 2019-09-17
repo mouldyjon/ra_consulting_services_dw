@@ -1,205 +1,332 @@
 view: customer_events {
+  view_label: "Events"
   sql_table_name: ra_data_warehouse_dbt_prod.customer_events ;;
 
-  dimension: billable_client {
+
+
+  filter: billable_client {
+    hidden: no
+    default_value: "Yes"
     type: yesno
     sql: ${TABLE}.billable_client ;;
   }
 
+
+
+  filter: sales_prospect {
+    type: yesno
+    hidden: no
+
+    sql: ${TABLE}.sales_prospect ;;
+
+  }
+
   dimension: customer_id {
     type: number
+    hidden: no
     sql: ${TABLE}.customer_id ;;
   }
 
   dimension: customer_name {
     type: string
-    sql: ${TABLE}.customer_name ;;
+    hidden: yes
+    sql: ${customer_master.customer_name} ;;
   }
 
+  dimension: pk {
+    type: string
+    primary_key: yes
+    hidden: yes
+    sql: concat(cast(${customer_id} as string),cast(${event_seq} as string)) ;;
+  }
+
+
+
   dimension: days_since_last_billable_day {
+    group_label: "Retention"
     type: number
     sql: ${TABLE}.days_since_last_billable_day ;;
   }
 
-  dimension: days_since_last_incoming_email {
-    type: number
-    sql: ${TABLE}.days_since_last_incoming_email ;;
-  }
-
-  dimension: days_since_last_outgoing_email {
-    type: number
-    sql: ${TABLE}.days_since_last_outgoing_email ;;
-  }
-
-  dimension: event_details {
+  dimension: churn_status {
+    group_label: "Retention"
     type: string
-    sql: ${TABLE}.event_details ;;
-  }
+    sql: case when ${TABLE}.days_since_last_billable_day < 30 then 'Active'
+              when ${TABLE}.days_since_last_billable_day between 30 and 89 then 'Inactive'
+              when ${TABLE}.days_since_last_billable_day between 90 and 180 then 'Dormant'
+              when ${TABLE}.days_since_last_billable_day > 180 then 'Churned'
+              else 'n/a' end;;
 
-  dimension: event_seq {
-    type: number
-    sql: ${TABLE}.event_seq ;;
-  }
+    }
 
-  dimension: event_source {
-    type: string
-    sql: ${TABLE}.event_source ;;
-  }
+    dimension: days_since_last_incoming_email {
+      group_label: "Retention"
+      hidden: yes
 
-  dimension_group: event_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.event_ts ;;
-  }
+      type: number
+      sql: ${TABLE}.days_since_last_incoming_email ;;
+    }
 
-  dimension: event_type {
-    type: string
-    sql: ${TABLE}.event_type ;;
-  }
+    dimension: days_since_last_outgoing_email {
+      group_label: "Retention"
+      hidden: yes
 
-  dimension: event_units {
-    type: number
-    sql: ${TABLE}.event_units ;;
-  }
 
-  dimension: event_value {
-    type: number
-    sql: ${TABLE}.event_value ;;
-  }
+      type: number
+      sql: ${TABLE}.days_since_last_outgoing_email ;;
+    }
 
-  dimension_group: first_billable_day_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.first_billable_day_ts ;;
-  }
+    dimension: time_since_last_email_contact {
+      group_label: "Retention"
+      type: string
+      sql: case when ${TABLE}.days_since_last_billable_day < 30 then 'This month'
+            when ${TABLE}.days_since_last_billable_day between 30 and 89 then 'Last 3 Months'
+            when ${TABLE}.days_since_last_billable_day between 90 and 180 then 'Last 6 Months'
+            when ${TABLE}.days_since_last_billable_day > 180 then '>6 Months Ago'
+            else 'n/a' end;;
+    }
 
-  dimension_group: first_contact_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.first_contact_ts ;;
-  }
+    dimension: event_details {
+      group_label: "Event Details"
 
-  dimension_group: first_invoice_day_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.first_invoice_day_ts ;;
-  }
+      type: string
+      sql: ${TABLE}.event_details ;;
+    }
 
-  dimension_group: last_billable_day_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.last_billable_day_ts ;;
-  }
+    dimension: event_seq {
+      group_label: "Retention"
 
-  dimension_group: last_incoming_email_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.last_incoming_email_ts ;;
-  }
+      type: number
+      sql: ${TABLE}.event_seq ;;
+    }
 
-  dimension_group: last_invoice_day_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.last_invoice_day_ts ;;
-  }
+    dimension_group: event_ts {
+      label: "Event"
+      type: time
+      timeframes: [
+        date,
+        day_of_week,
+        day_of_week_index,
+        day_of_month,
+        week_of_year,
+        week,
+        month
+      ]
+      sql: ${TABLE}.event_ts ;;
+    }
 
-  dimension_group: last_outgoing_email_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.last_outgoing_email_ts ;;
-  }
+    dimension: event_type {
+      group_label: "Event Details"
 
-  dimension: months_since_first_billable_day {
-    type: number
-    sql: ${TABLE}.months_since_first_billable_day ;;
-  }
+      type: string
+      sql: ${TABLE}.event_type ;;
+    }
 
-  dimension: months_since_first_contact_day {
-    type: number
-    sql: ${TABLE}.months_since_first_contact_day ;;
-  }
+    dimension: event_value {
+      hidden: yes
+      type: number
+      sql: coalesce(${TABLE}.event_value,0) ;;
+    }
 
-  dimension: sales_prospect {
-    type: yesno
-    sql: ${TABLE}.sales_prospect ;;
-  }
+    dimension: event_units {
+      hidden: yes
+      type: number
+      sql: coalesce(${TABLE}.event_value,0) ;;
+    }
 
-  dimension: weeks_since_first_billable_day {
-    type: number
-    sql: ${TABLE}.weeks_since_first_billable_day ;;
-  }
+    measure: total_event_value {
+      hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_value,0)  ;;
+    }
 
-  dimension: weeks_since_first_contact_day {
-    type: number
-    sql: ${TABLE}.weeks_since_first_contact_day ;;
-  }
+    measure: total_event_units {
+      hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_units,0)  ;;
+    }
 
-  measure: count {
-    type: count
-    drill_fields: [customer_name]
+    measure: total_days_billed {
+      hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_value,0)  ;;
+      filters: {field: event_type
+        value: "Billable Day"}
+    }
+
+    dimension: revenue_billed {
+      type: number
+      hidden: yes
+      sql: coalesce(case when ${TABLE}.event_type = 'Billable Day' then ${TABLE}.event_value*${TABLE}.event_units end,0) ;;
+    }
+
+    measure: total_revenue_billed {
+      hidden: no
+      type: sum
+      sql: coalesce(${revenue_billed},0)  ;;
+    }
+
+    measure: total_revenue_invoiced
+    {hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_value,0)  ;;
+      filters: {field: event_type
+        value: "Client Invoiced"}
+    }
+
+    measure: total_revenue_paid
+    {hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_value,0)  ;;
+      filters: {field: event_type
+        value: "Client Paid"}
+    }
+
+    measure: total_looker_usage_mins
+    {hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_value,0)  ;;
+      filters: {field: event_type
+        value: "daily_looker_usage_mins"}
+    }
+
+    measure: total_jira_stories_completed
+    {hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_value,0)   ;;
+      filters: {field: event_type
+        value: "Jira User Story Closed"}
+    }
+
+    measure: total_jira_tasks_completed
+    {hidden: no
+      type: sum
+      sql: coalesce(${TABLE}.event_value,0)  ;;
+      filters: {field: event_type
+        value: "Jira Task Closed"}
+    }
+
+
+
+
+
+
+    measure: total_events {
+      hidden: no
+      type: sum
+      sql: 1 ;;
+    }
+
+
+
+    dimension_group: first_billable_day_ts {
+      label: "Customer Since"
+      group_label: "Retention"
+
+      type: time
+      timeframes: [
+        month
+      ]
+      sql: ${TABLE}.first_billable_day_ts ;;
+    }
+
+    measure: total_new_active_customers {
+      group_label: "Retention"
+      type: count_distinct
+      sql: case when (${event_ts_month} = ${first_billable_day_ts_month}) and ${event_type} in ('Billable Day','Non-Billable Day') then ${customer_id} end ;;
+    }
+
+    measure: total_retained_reactivated_active_customers {
+      group_label: "Retention"
+      type: count_distinct
+      sql: case when (${event_ts_month} != ${first_billable_day_ts_month}) and ${event_type} in ('Billable Day','Non-Billable Day') then ${customer_id} end ;;
+    }
+
+    measure: total_active_customers {
+      group_label: "Retention"
+      type: count_distinct
+      sql: case when ${event_type} in ('Billable Day','Non-Billable Day') then ${customer_id} end ;;
+    }
+
+    dimension_group: first_invoice_day_ts {
+      type: time
+      hidden: yes
+      timeframes: [
+        raw,
+        time,
+        date,
+        week,
+        month,
+        quarter,
+        year
+      ]
+      sql: ${TABLE}.first_invoice_day_ts ;;
+    }
+
+    dimension_group: last_billable_day_ts {
+      hidden: yes
+
+      type: time
+      timeframes: [
+        raw,
+        time,
+        date,
+        week,
+        month,
+        quarter,
+        year
+      ]
+      sql: ${TABLE}.last_billable_day_ts ;;
+    }
+
+    dimension_group: last_invoice_day_ts {
+      hidden: yes
+
+      type: time
+      timeframes: [
+        raw,
+        time,
+        date,
+        week,
+        month,
+        quarter,
+        year
+      ]
+      sql: ${TABLE}.last_invoice_day_ts ;;
+    }
+
+    dimension: months_since_first_billable_day {
+      group_label: "Retention"
+
+      type: number
+      sql: ${TABLE}.months_since_first_billable_day ;;
+    }
+
+    dimension: weeks_since_first_billable_day {
+      group_label: "Retention"
+
+      type: number
+      sql: ${TABLE}.weeks_since_first_billable_day ;;
+    }
+
+    dimension: months_since_first_contact_day {
+      group_label: "Retention"
+
+      type: number
+      sql: ${TABLE}.months_since_first_contact_day ;;
+    }
+
+    dimension: weeks_since_first_contact_day {
+      group_label: "Retention"
+
+      type: number
+      sql: ${TABLE}.weeks_since_first_contact_day ;;
+    }
+
+    measure: count_events {
+      type: count_distinct
+      sql: ${pk} ;;
+    }
+
+
   }
-}

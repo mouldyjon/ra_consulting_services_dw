@@ -4,7 +4,7 @@ include: "*.view.lkml"                       # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 aggregate_awareness: yes
 explore: customer_master {
-  label: "Rittman Analytics Operations"
+  label: "Customer Analytics"
   view_label: "Customers"
   join: customer_events {
     sql_on: ${customer_master.customer_id} = ${customer_events.customer_id} ;;
