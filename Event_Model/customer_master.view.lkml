@@ -28,10 +28,7 @@ view: customer_master {
     type: string
     sql:
       ${TABLE}.customer_name;;
-    link: {
-      label: "Visit Company Website"
-      url: "https://{{ customer_master.company_website._value }}"
-    }
+
   }
 
   dimension: company_billing_address {
