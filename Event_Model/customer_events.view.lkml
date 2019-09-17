@@ -125,31 +125,31 @@ view: customer_events {
     dimension: event_value {
       hidden: yes
       type: number
-      sql: coalesce(${TABLE}.event_value,0) ;;
+      sql: ${TABLE}.event_value ;;
     }
 
     dimension: event_units {
       hidden: yes
       type: number
-      sql: coalesce(${TABLE}.event_value,0) ;;
+      sql: ${TABLE}.event_value ;;
     }
 
     measure: total_event_value {
       hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_value,0)  ;;
+      sql: ${TABLE}.event_value  ;;
     }
 
     measure: total_event_units {
       hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_units,0)  ;;
+      sql: ${TABLE}.event_units  ;;
     }
 
     measure: total_days_billed {
       hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_value,0)  ;;
+      sql: ${TABLE}.event_value  ;;
       filters: {field: event_type
         value: "Billable Day"}
     }
@@ -157,19 +157,19 @@ view: customer_events {
     dimension: revenue_billed {
       type: number
       hidden: yes
-      sql: coalesce(case when ${TABLE}.event_type = 'Billable Day' then ${TABLE}.event_value*${TABLE}.event_units end,0) ;;
+      sql: case when ${TABLE}.event_type = 'Billable Day' then ${TABLE}.event_value*${TABLE}.event_units end ;;
     }
 
     measure: total_revenue_billed {
       hidden: no
       type: sum
-      sql: coalesce(${revenue_billed},0)  ;;
+      sql: ${revenue_billed}  ;;
     }
 
     measure: total_revenue_invoiced
     {hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_value,0)  ;;
+      sql: ${TABLE}.event_value ;;
       filters: {field: event_type
         value: "Client Invoiced"}
     }
@@ -177,7 +177,7 @@ view: customer_events {
     measure: total_revenue_paid
     {hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_value,0)  ;;
+      sql: ${TABLE}.event_value ;;
       filters: {field: event_type
         value: "Client Paid"}
     }
@@ -185,7 +185,7 @@ view: customer_events {
     measure: total_looker_usage_mins
     {hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_value,0)  ;;
+      sql: ${TABLE}.event_value  ;;
       filters: {field: event_type
         value: "daily_looker_usage_mins"}
     }
@@ -193,7 +193,7 @@ view: customer_events {
     measure: total_jira_stories_completed
     {hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_value,0)   ;;
+      sql: ${TABLE}.event_value  ;;
       filters: {field: event_type
         value: "Jira User Story Closed"}
     }
@@ -201,7 +201,7 @@ view: customer_events {
     measure: total_jira_tasks_completed
     {hidden: no
       type: sum
-      sql: coalesce(${TABLE}.event_value,0)  ;;
+      sql: ${TABLE}.event_value  ;;
       filters: {field: event_type
         value: "Jira Task Closed"}
     }
