@@ -1,5 +1,5 @@
 view: customer_event_journey {
-  sql_table_name: ra_data_warehouse_dbt_prod.customer_event_journey ;;
+  sql_table_name: ra_data_warehouse_dbt_prod.customer_event_sequence ;;
 
   dimension: customer_id {
     type: number
