@@ -58,7 +58,7 @@ explore: customer_master {
   }
 
   join: dev_projects {
-    view_label: "Jira Projects"
+    view_label: "Jira Issues"
     sql_on: ${project_mapping.project_name} = ${dev_projects.name};;
     type: inner
     relationship: one_to_one
@@ -68,22 +68,17 @@ explore: customer_master {
 
 
 
-  join: dev_epics {
-    view_label: "Jira Stories"
-    sql_on: ${dev_projects.id} = ${dev_epics.project_id};;
-    type: inner
-    relationship: one_to_many
-  }
+
 
   join: dev_tasks {
-    view_label: "Jira Tasks"
-    sql_on: ${dev_epics.key} = ${dev_tasks.parent_key};;
+    view_label: "Jira Issues"
+    sql_on: ${dev_projects.id} = ${dev_tasks.project_id};;
     type: inner
     relationship: one_to_many
   }
 
   join: dev_subtasks {
-    view_label: "Jira Stories"
+    view_label: "Jira Issues"
     sql_on: ${dev_tasks.key} = ${dev_subtasks.parent_key};;
     type: inner
     relationship: one_to_many

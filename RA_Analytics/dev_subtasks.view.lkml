@@ -235,7 +235,7 @@ view: dev_subtasks {
 
   measure: count {
     group_label: "Jira Subtasks"
-    label: "Count of Subtasks"
+    label: "Count of Jira Subtasks"
     type: count
     drill_fields: [detail*]
   }

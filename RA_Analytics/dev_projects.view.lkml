@@ -40,6 +40,11 @@ view: dev_projects {
       icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
     }
   }
+  measure: count {
+    group_label: "Jira Projects"
+    label: "Count of Jira Projects"
+    type: count
+  }
 
 
 

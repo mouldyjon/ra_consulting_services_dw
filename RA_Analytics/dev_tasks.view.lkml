@@ -232,7 +232,7 @@ view: dev_tasks {
 
   measure: count {
     group_label: "Jira Issues"
-    label: "Count of Issues"
+    label: "Count of Jira Issues"
     type: count
     drill_fields: [detail*]
   }
