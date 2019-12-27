@@ -90,26 +90,17 @@ explore: customer_master {
 
 
 
-  join: invoices {
-    view_label: "Harvest Project Timesheets and Invoicing"
+  join: harvest_invoices {
+    view_label: "Harvest Invoicing"
 
-    sql_on: ${customer_master.harvest_customer_id} = ${invoices.client_id};;
+    sql_on: ${customer_master.harvest_customer_id} = ${harvest_invoices.client_id};;
 
     relationship: one_to_many
     type: left_outer
 
   }
 
-  join: harvest_forecast_entries {
-    view_label: "Harvest Project Forecasts"
-    sql_on: ${customer_master.harvest_customer_id} = ${harvest_forecast_entries.client_harvest_id}
-    and ${projects.id} = ${harvest_forecast_entries.project_harvest_id}
-    ;;
-    relationship: one_to_many
-    type: left_outer
 
-
-  }
 
   join: customer_events {
     view_label: "Customer Lifecycle"
@@ -119,15 +110,45 @@ explore: customer_master {
 
   }
 
-
-
+  join: deals {
+    sql_on: ${deals.deal_id} = ${bridge.deal_id}  ;;
+    type: inner
+    relationship: one_to_many
+  }
+  join: deals_history {
+    view_label: "Hubspot Deal History"
+    sql_on: ${deals_history.deal_id} = ${bridge.deal_id} ;;
+    type: full_outer
+    relationship: one_to_many
+  }
+  join: bridge {
+    view_label: "Hubspot Companies"
+    sql_on: ${customer_master.hubspot_company_id} = ${bridge.associatedcompanyids} ;;
+    type: left_outer
+    relationship: one_to_many
+  }
+#  join: owners {
+#    view_label: "Hubspot Owners"
+#    sql_on: ${deals.hubspot_owner_id} = (${owners.ownerid} as string);;
+#    relationship: many_to_one
+#  }
   join: communications {
     view_label: "Hubspot Conversations"
-
     sql_on: ${customer_master.hubspot_company_id} = ${communications.hubspot_company_id};;
     relationship: one_to_many
     type: left_outer
   }
+  join: contacts {
+    view_label: "Hubspot Contacts"
+    sql_on: ${contacts.associatedcompanyid} = ${bridge.associatedcompanyids} ;;
+    relationship: one_to_many
+    type: inner
+  }
+
+
+
+
+
 
   join: account_transactions {
     view_label: "Xero Accounting"
@@ -152,75 +173,47 @@ explore: customer_master {
     type: inner
   }
 
-
-  join: projects {
+  join: timesheets{
     view_label: "Harvest Project Timesheets and Invoicing"
-    sql_on: ${customer_master.harvest_customer_id} = ${projects.client_id};;
-    relationship: one_to_many
-    type: left_outer
-
-  }
-  join: time_entries {
-    view_label: "Harvest Project Timesheets and Invoicing"
-
-    sql_on: ${time_entries.project_id} = ${projects.id} ;;
+    sql_on: ${customer_master.harvest_customer_id} = ${timesheets.client_id} ;;
     relationship: one_to_many
     type: left_outer
   }
 
-  join: project_tasks {
-    view_label: "Harvest Project Timesheets and Invoicing"
-    relationship: one_to_many
-    sql_on:  ${project_tasks.project_id} = ${projects.id};;
-  }
 
-  join: tasks {
+  join: harvest_projects {
     view_label: "Harvest Project Timesheets and Invoicing"
-
-    sql_on: ${tasks.id} = ${project_tasks.task_id};;
+    sql_on: ${timesheets.project_id} = ${harvest_projects.id};;
     relationship: many_to_one
+    type: inner
+
+  }
+
+
+  join: harvest_tasks {
+    view_label: "Harvest Project Timesheets and Invoicing"
+    relationship: many_to_one
+    sql_on: ${timesheets.task_id} = ${harvest_tasks.id} ;;
     type: inner
   }
 
-
-
-
-  join: users {
+  join: harvest_users {
     view_label: "Harvest Project Timesheets and Invoicing"
-    sql_on: ${time_entries.user_id} = ${users.id};;
-
     relationship: many_to_one
+    sql_on: ${timesheets.user_id} = ${harvest_users.id} ;;
     type: inner
-  }
-  join: deals {
-    view_label: "Hubspot Deal Tracking"
+    }
 
-    sql_on: ${customer_master.hubspot_company_id} = ${deals.hubspot_company_id};;
+  join: harvest_timesheet_invoices {
+    from: harvest_invoices
     relationship: one_to_many
-
-  }
-
-  join: user_projects {
-    view_label: "Harvest Project Timesheets and Invoicing"
-
-    sql_on: ${user_projects.id}  = ${projects.id}
-    and ${user_projects.client_id} = ${customer_master.harvest_customer_id};;
-
-    relationship: many_to_one
-  }
-
-  join: owners {
-    view_label: "Hubspot Deal Tracking"
-    sql_on: ${deals.hubspot_owner_id} = cast(${owners.ownerid} as string);;
-    relationship: many_to_one
-  }
-
-  join: expenses {
-    view_label: "Harvest Project Timesheets and Invoicing"
-    sql_on: ${invoices.id} = ${expenses.invoice_id};;
-    relationship: one_to_many
+    sql_on: ${timesheets.invoice_id} = ${harvest_timesheet_invoices.id} ;;
     type: left_outer
   }
+
+
+
+
 
 
 

@@ -1,11 +1,13 @@
-view: projects {
-  sql_table_name: ra_data_warehouse_dbt_prod.harvest_projects  ;;
+view: harvest_projects {
+  sql_table_name: harvest_projects  ;;
   view_label: "Client Delivery Projects"
 
 
   dimension: id {
     primary_key: yes
-    hidden: yes
+    hidden: no
+    group_label: "Harvest IDs"
+    label: "Project ID"
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -123,7 +125,7 @@ view: projects {
     group_label: "Project Details"
     link: {
       label: "View Project in Harvest"
-      url: "https://rittman.harvestapp.com/projects/{{ projects.id._value }}"
+      url: "https://rittman.harvestapp.com/projects/{{ harvest_projects.id._value }}"
       icon_url: "http://rittman.harvestapp.com/favicon.ico"
    }
     action: {

@@ -1,10 +1,12 @@
-view: users {
-  sql_table_name: rittman_analytics.users ;;
+view: harvest_users {
+  sql_table_name: harvest_users ;;
 
   dimension: id {
     primary_key: yes
     type: number
-    hidden: yes
+    hidden: no
+    group_label: "Harvest IDs"
+    label: "User Project User ID"
     sql: ${TABLE}.id ;;
   }
 
@@ -16,20 +18,23 @@ view: users {
 
 
   dimension: cost_rate {
-    hidden: yes
+    group_label: "Project Users"
+    hidden: no
     type: number
     sql: ${TABLE}.cost_rate ;;
   }
 
-  measure: consultant_avg_cost_rate {
+  measure: user_avg_cost_rate {
     type: average
-    group_label: "Project Resource"
+    group_label: "Project Users"
     sql: ${TABLE}.cost_rate ;;
   }
 
-  dimension_group: consultant_created {
+  dimension_group: user_created_at {
     type: time
-    hidden: yes
+    hidden: no
+    group_label: "Project Users"
+
     timeframes: [
       date,
       week,
@@ -38,22 +43,24 @@ view: users {
     sql: ${TABLE}.created_at ;;
   }
 
-  dimension: consultant_default_hourly_rate {
+  dimension: user_default_hourly_rate {
     type: number
-    hidden: yes
+    hidden: no
+    group_label: "Project Users"
+
     sql: ${TABLE}.default_hourly_rate ;;
   }
 
-  measure: consultant_avg_default_hourly_rate {
-    group_label: "Project Resource"
+  measure: avg_user_default_hourly_rate {
+    group_label: "Project Users"
 
     type: average
     sql: ${TABLE}.default_hourly_rate ;;
   }
 
   dimension: consultant_email {
-    group_label: "Project Resource"
-    hidden: yes
+    group_label: "Project Users"
+    hidden: no
     type: string
     sql: ${TABLE}.email ;;
   }
@@ -64,8 +71,8 @@ view: users {
     sql: ${TABLE}.first_name ;;
   }
 
-  dimension: consultant_name {
-    group_label: "Project Resource"
+  dimension: user_name {
+    group_label: "Project Users"
 
     type: string
     sql: concat(concat(${TABLE}.first_name,' '),${TABLE}.last_name) ;;
@@ -73,8 +80,8 @@ view: users {
 
 
 
-  dimension: consultant_is_active {
-    group_label: "Project Resource"
+  dimension: user_is_active {
+    group_label: "Project Users"
 
     type: yesno
     sql: ${TABLE}.is_active ;;
@@ -82,14 +89,14 @@ view: users {
 
 
 
-  dimension: consultant_is_contractor {
-    group_label: "Project Resource"
+  dimension: user_is_contractor {
+    group_label: "Project Users"
     type: yesno
     sql: ${TABLE}.is_contractor ;;
   }
 
-  dimension: consultant_is_project_manager {
-    group_label: "Project Resource"
+  dimension: user_is_project_manager {
+    group_label: "Project Users"
 
     type: yesno
     sql: ${TABLE}.is_project_manager ;;
@@ -106,25 +113,28 @@ view: users {
 
 
 
-  dimension: consultant_weekly_capacity {
-    hidden: yes
+  dimension: user_weekly_capacity {
+    hidden: no
+    group_label: "Project Users"
+
     type: number
     sql: ${TABLE}.weekly_capacity ;;
   }
 
 
 
-  measure: total_consultant_weekly_capacity {
+  measure: total_user_weekly_capacity {
     type: sum
-    group_label: "Project Resource"
+    group_label: "Project Users"
 
     sql: ${TABLE}.weekly_capacity ;;
   }
 
-  measure: count_consultants {
-    group_label: "Project Resource"
+  measure: count_users {
+    group_label: "Project Users"
 
-    type: count
+    type: count_distinct
+    sql: ${id} ;;
 
   }
 }

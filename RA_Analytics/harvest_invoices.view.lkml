@@ -1,16 +1,18 @@
-view: invoices {
+view: harvest_invoices {
   sql_table_name: ra_data_warehouse_dbt_prod.harvest_invoices ;;
 
   dimension: id {
     primary_key: yes
-    hidden: yes
+    hidden: no
     type: number
+    group_label: "Harvest IDs"
+    label: "Harvest Invoice ID"
     sql: ${TABLE}.id ;;
   }
 
 
  dimension_group: project_invoice_period_start {
-  label: "Project Invoice Start"
+  label: "Client Harvest Invoice Start"
   hidden: yes
 
   group_label: "Project Invoicing"
@@ -25,12 +27,14 @@ view: invoices {
 
   dimension: was_paid_ontime {
     group_label: "Project Invoicing"
+    label: "Client Harvest Invoice Was Paid on Time"
 
     type: yesno
   }
 
   dimension: is_paid {
     group_label: "Project Invoicing"
+    label: "Client Harvest Invoice is Time"
 
     type: yesno
     sql: case when ${TABLE}.paid_date is not null then true else false end;;
@@ -38,7 +42,7 @@ view: invoices {
 
   dimension_group: project_invoice_period_end {
     group_label: "Project Invoicing"
-    label: "Project Invoice End"
+    label: "Client Harvest Invoice End"
     hidden: yes
     type: time
     timeframes: [
@@ -58,7 +62,7 @@ view: invoices {
 
   measure: total_project_invoice_gross_amount {
     group_label: "Project Invoicing"
-    label: "Project Invoice Gross Amount"
+    label: "Client Harvest Invoice Gross Amount"
     type: sum_distinct
     hidden: no
     value_format_name: gbp_0
@@ -69,7 +73,7 @@ view: invoices {
 
   measure: total_project_invoice_net_amount {
     group_label: "Project Invoicing"
-    label: "Project Invoice Net Amount"
+    label: "Client Harvest Invoice Net Amount"
     type: sum_distinct
     hidden: no
     value_format_name: gbp_0
@@ -80,7 +84,7 @@ view: invoices {
 
   measure: total_paid_project_invoice_net_amount {
     group_label: "Project Invoicing"
-    label: "Project Paid Invoice Net Amount"
+    label: "Client Harvest Paid Invoice Net Amount"
     type: sum_distinct
     hidden: no
     value_format_name: gbp_0
@@ -107,7 +111,7 @@ view: invoices {
 
   dimension_group: project_invoice_created {
     group_label: "Project Invoicing"
-    label: "Project Invoice"
+    label: "Client Harvest Invoice"
     type: time
     timeframes: [
       date,
@@ -126,6 +130,7 @@ view: invoices {
 
   dimension: project_invoice_currency {
     group_label: "Project Invoicing"
+    label: "Client Harvest Invoice Currency"
 
     type: string
     sql: ${TABLE}.currency ;;
@@ -214,7 +219,7 @@ view: invoices {
 
   dimension_group: project_invoice_paid {
     group_label: "Project Invoicing"
-    label: "Project Invoice Paid"
+    label: "Client Harvest Invoice Paid"
     type: time
     timeframes: [
       date
@@ -265,6 +270,7 @@ view: invoices {
   dimension: project_invoice_tax {
     group_label: "Project Invoicing"
     hidden: yes
+    label: "Client Harvest Invoice Subject"
 
     type: string
     sql: ${TABLE}.tax ;;
@@ -302,6 +308,7 @@ view: invoices {
 
   measure: count_project_invoices {
     group_label: "Project Invoicing"
+    label: "Client Harvest Invoices Count"
 
     type: count_distinct
     sql: ${id} ;;

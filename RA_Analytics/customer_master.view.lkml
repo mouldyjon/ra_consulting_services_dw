@@ -1,6 +1,6 @@
 view: customer_master {
   view_label: "Companies"
-  sql_table_name: ra_data_warehouse_dbt_prod.customer_master ;;
+  sql_table_name: customer_master ;;
 
   filter: billable_client {
     hidden: no

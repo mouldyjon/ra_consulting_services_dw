@@ -1,5 +1,5 @@
 view: deals {
-  sql_table_name: ra_data_warehouse_dbt_prod.deals ;;
+  sql_table_name: deals_labelled ;;
   view_label: "Hubspot Deal Tracking"
 
   dimension: deal_id {
@@ -10,219 +10,102 @@ view: deals {
   }
 
   dimension: amount {
+    group_label: "  Deals"
     type: number
-
-    hidden: yes
-
+    value_format_name: gbp_0
+    hidden: no
     sql: ${TABLE}.amount ;;
+  }
+
+  dimension: amount_tier {
+    group_label: "  Deals"
+    type: tier
+    tiers: [50000,150000,500000]
+    style: integer
+    value_format_name: gbp_0
+    sql: ${amount} ;;
+  }
+
+  dimension: closed_won {
+    group_label: "  Deals"
+    type: yesno
+    hidden: no
+    sql: ${TABLE}.closedwon ;;
+  }
+
+  dimension: deal_stage {
+    type: yesno
+    hidden: yes
+    sql: ${TABLE}.dealstage ;;
+  }
+
+  dimension: probability {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.probability ;;
   }
 
   dimension: pipeline_weighted_amount {
+    group_label: "  Deals"
+    hidden: no
     type: number
-
-    hidden: yes
-
-    sql: ${TABLE}.amount * (${sales_opportunity_stage_pipeline_modifier}/100) ;;
-  }
-
-  measure: total_opportunity_amount {
-    type: sum_distinct
-    value_format_name: gbp_0
-    label: "Opportunity Value"
-    sql_distinct_key: ${deal_id} ;;
-    sql: ${TABLE}.amount ;;
-    action: {
-      label: "Refresh using Stitch and dbt"
-      url: "https://hooks.zapier.com/hooks/catch/3347385/obn1e8q/"
-      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
-    }
-    action: {
-      label: "Update Opportunity Value"
-      url: "https://hooks.zapier.com/hooks/catch/3347385/obfjliw/"
-      icon_url: "http://app.hubspot.com/favicon.ico"
-
-      param: {
-        name: "deal_name"
-        value: "{{ deals.opportunity_name._value }}"
-      }
-      param: {
-        name: "deal_id"
-        value: "{{ deals.deal_id._value }}"
-      }
-      form_param: {
-        name: "new_opportunity_amount"
-        type: string
-        label: "Updated Opportunity Value"
-        description: "Specify Updated Opportunity Stage"
-        required: yes
-      }
-    }
-  }
-
-  measure: total_closed_opportunity_amount {
-    type: sum_distinct
-    value_format_name: gbp_0
-    label: "Total Closed Won Opportunity Value"
-    sql_distinct_key: ${deal_id} ;;
-    sql: case when ${sales_opportunity_stage} like '%Sales Closed Won%' then ${amount} end ;;
-  }
-
-  measure: total_open_opportunity_amount {
-    type: number
-    value_format_name: gbp_0
-    label: "Total Open Opportunity Value"
-    sql: ${total_opportunity_amount} - ${total_closed_lost_opportunity_amount} - ${total_closed_opportunity_amount} ;;
-  }
-
-  measure: total_closed_lost_opportunity_amount {
-    type: sum_distinct
-    value_format_name: gbp_0
-    label: "Total Closed Lost Opportunity Value"
-    sql_distinct_key: ${deal_id} ;;
-    sql: ${amount} ;;
-    filters: {field: sales_opportunity_stage
-      value: "Sales Closed Lost"}
-  }
-
-  measure: total_weighted_opportunity_amount {
-    type: sum_distinct
-    value_format_name: gbp_0
-    label: "Weighted Opportunity Value"
-    sql_distinct_key: ${deal_id} ;;
-    sql: ${pipeline_weighted_amount} ;;
-  }
-
-  measure: avg_opportunity_amount {
-    type: average
-    hidden: yes
-    value_format_name: gbp_0
-
-    sql_distinct_key: ${deal_id} ;;
-    sql: ${TABLE}.amount ;;
-
-  }
-
-  dimension: amount_in_home_currency {
-    type: number
-    hidden: yes
-    sql: ${TABLE}.amount_in_home_currency ;;
-  }
-
-  measure: total_amount_in_home_currency {
-    type: sum_distinct
-    hidden: yes
-
-    sql_distinct_key: ${deal_id} ;;
-    sql: ${TABLE}.amount_in_home_currency ;;
-
-  }
-
-
-  measure: avg_amount_in_home_currency {
-    hidden: yes
-
-    type: average_distinct
-    sql_distinct_key: ${deal_id} ;;
-    sql: ${TABLE}.amount_in_home_currency ;;
-  }
-
-  dimension: hubspot_company_id {
-    hidden: yes
-
-    type: number
-    sql: ${TABLE}.associatedcompanyids ;;
+    sql: ${TABLE}.amount * (${probability}/1);;
   }
 
   dimension: hubspot_owner_email {
-    hidden: no
+    hidden: yes
     type: string
-    sql: "mark@rittman.co.uk" ;;
+    sql: ${TABLE}.hubspot_owner_email ;;
   }
 
-
   dimension: closed_lost_reason {
-    group_label: "Opportunity Status"
+    group_label: "  Deals"
     type: string
     sql: ${TABLE}.closed_lost_reason ;;
   }
 
+  dimension: pipeline {
+    label: "       Pipeline Name"
+    group_label: "  Deals"
+    type: string
+    sql: ${TABLE}.pipeline_label ;;
+  }
+
   dimension_group: opportunity_closed {
-    group_label: "Opportunity Status"
-    label: "Opportunity Close"
+    group_label: "  Deals"
+    label: "Deal Close"
     type: time
     timeframes: [
       date,
-      week,
-      month
+      month,
+      year
     ]
     sql: ${TABLE}.closedate ;;
   }
 
   dimension_group: opportunity_created {
-    group_label: "Opportunity Details"
-    label: "Opportunity Created"
+    group_label: "  Deals"
+    label: "Deal Created"
     type: time
     timeframes: [
-      date,
-      week,
-      month
+      date
     ]
     sql: ${TABLE}.createdate ;;
   }
 
   dimension: opportunity_name {
-
+    label: "     Deal Name"
+    group_label: "  Deals"
     type: string
     sql: ${TABLE}.dealname ;;
-    action: {
-      label: "Refresh using Stitch and dbt"
-      url: "https://hooks.zapier.com/hooks/catch/3347385/obn1e8q/"
-      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
-    }
-    link: {
-      label: "View Deal in Hubspot"
-      url: "https://app.hubspot.com/contacts/4402794/deal/{{ deals.deal_id._value }}/"
-      icon_url: "http://app.hubspot.com/favicon.ico"
-    }
-    link: {
-      label: "View Company in Hubspot"
-      url: "https://app.hubspot.com/contacts/4402794/company/{{ customer_master.hubspot_company_id._value }}/"
-      icon_url: "http://app.hubspot.com/favicon.ico"
-    }
-    action: {
-      label: "Request status update from BDM"
-      url: "https://hooks.zapier.com/hooks/catch/3347385/obfjj2v/"
-      icon_url: "http://app.hubspot.com/favicon.ico"
-
-      param: {
-        name: "deal_name"
-        value: "{{ deals.opportunity_name._value }}"
-      }
-      param: {
-        name: "deal_id"
-        value: "{{ deals.deal_id._value }}"
-      }
-      param: {
-        name: "hubspot_owner_email"
-        value: "{{ deals.hubspot_owner_email._value }}"
-      }
-      form_param: {
-        name: "request_message"
-        type: string
-        label: "Message to BDM"
-        description: "Add note to BDM status update request"
-        required: yes
-      }
-    }
-
-
   }
-
 
   dimension: sales_opportunity_stage_sort_index {
     type: number
-    hidden: yes
-    sql: ${TABLE}.dealstage_sortindex ;;
+    label: "   Deal Stage Order"
+    group_label: "  Deals"
+    group_item_label: "Stage Order"
+    sql: ${TABLE}.stage_displayorder ;;
   }
 
   dimension: dealstage_id {
@@ -232,92 +115,15 @@ view: deals {
   }
 
   dimension: sales_opportunity_stage {
-    group_label: "Opportunity Status"
-label: "Opportunity Deal Stage"
+    label: "   Deal Stage"
+    group_label: "  Deals"
+    group_item_label: "Stage"
+
     type: string
-    sql: ${TABLE}.dealstage ;;
+    sql: ${TABLE}.stage_label ;;
     order_by_field: sales_opportunity_stage_sort_index
-    action: {
-      label: "Refresh using Stitch and dbt"
-      url: "https://hooks.zapier.com/hooks/catch/3347385/obn1e8q/"
-      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
-    }
-    action: {
-      label: "Update Deal Status"
-      url: "https://hooks.zapier.com/hooks/catch/3347385/obfqxpo/"
-      icon_url: "http://app.hubspot.com/favicon.ico"
-
-      param: {
-        name: "deal_name"
-        value: "{{ deals.opportunity_name._value }}"
-        }
-      param: {
-        name: "deal_id"
-        value: "{{ deals.deal_id._value }}"
-      }
-      form_param: {
-        name: "new_deal_stage"
-        type: select
-        label: "New Deal Stage"
-        description: "Specify New Deal Stage"
-        required: yes
-        option: {
-          name: "appointmentscheduled"
-          label: "Initial Inbound Enquiry"
-        }
-        option: {
-          name: "qualifiedtobuy"
-          label: "Initial Meeting & Presentation"
-        }
-        option: {
-          name: "presentationscheduled"
-          label: "Proposal Sent"
-        }
-        option: {
-          name: "553a886b-24bc-4ec4-bca3-b1b7fcd9e1c7"
-          label: "Deal Verbally Closed subject to SoW + MSA"
-        }
-        option: {
-          name: "closedwon"
-          label: "Sales Closed Won"
-        }
-        option: {
-          name: "closedlost"
-          label: "Sales Closed Lost"
-        }
-        option: {
-          name: "presentationscheduled"
-          label: "Proposal Sent"
-        }
-
-      }
-    }
-  }
-
-  filter: open_opportunity {
-    type: yesno
-    sql: case when (${TABLE}.dealstage like '%Sales Closed%' or ${TABLE}.dealstage is null) then false else true end;;
-  }
-
-  dimension: sales_opportunity_stage_pipeline_modifier {
-    hidden: yes
-    type: number
-    sql: ${TABLE}.dealstage_pipeline_modifier ;;
 
   }
-
-
-
-  dimension: sales_opportunity_type {
-    group_label: "Opportunity Details"
-    label: "New or Existing Business"
-    type: string
-    sql: ${TABLE}.dealtype ;;
-  }
-
-
-
-
 
   dimension: hubspot_owner_id {
     hidden: yes
@@ -329,8 +135,9 @@ label: "Opportunity Deal Stage"
 
 
   dimension_group: last_contacted {
-    group_label: "Opportunity Details"
     label: "Last Contact"
+    group_label: "  Deals"
+
     type: time
     timeframes: [
       date
@@ -339,7 +146,6 @@ label: "Opportunity Deal Stage"
   }
 
   dimension_group: notes_last_updated {
-    group_label: "Opportunity Details"
     hidden: yes
     type: time
     timeframes: [
@@ -368,8 +174,9 @@ label: "Opportunity Deal Stage"
   }
 
   dimension_group: last_replied {
+    group_label: "  Deals"
+
     type: time
-    group_label: "Opportunity Details"
 
     timeframes: [
       date
@@ -377,40 +184,324 @@ label: "Opportunity Deal Stage"
     sql: ${TABLE}.sales_email_last_replied ;;
   }
 
-  measure: count_sales_opportunities {
-    group_label: "Sales Metrics"
-    label: "Count of Opportunities"
-    type: count_distinct
-    sql: ${deal_id} ;;
+  dimension_group: start {
+    group_label: "  Deals"
+
+    type: time
+
+    timeframes: [
+      date
+    ]
+    sql: ${TABLE}.start_date_ts ;;
+  }
+
+  dimension_group: end {
+    group_label: "  Deals"
+
+    type: time
+
+    timeframes: [
+      date
+    ]
+    sql: ${TABLE}.end_date_ts ;;
+  }
+
+  dimension_group: dealstage {
+
+    type: time
+    group_label: "  Deals"
+    timeframes: [raw,date,month]
+    sql: ${TABLE}.dealstage_ts ;;
+  }
+
+
+  dimension: source {
+    group_label: "  Deals"
+    label: "   Deal Source"
+    type: string
+    sql: ${TABLE}.source ;;
+  }
+
+  dimension: salesperson {
+    group_label: "  Deals"
+
+    label: "  Salesperson Name"
+    type: string
+    sql: ${TABLE}.salesperson_full_name ;;
+  }
+
+  dimension: salesperson_email {
+    group_label: "  Deals"
+
+    label: "  Salesperson Email"
+    type: string
+    sql: ${TABLE}.salesperson_email ;;
   }
 
   dimension: days_to_close {
     hidden: yes
     type: number
-    sql: case when ${TABLE}.closedate is not null then date_diff(date(${TABLE}.closedate),date(${TABLE}.createdate),DAY) end;;
+    sql: case when ${sales_opportunity_stage_sort_index} = 5 then date_diff(date(${TABLE}.closedate),date(${TABLE}.createdate),DAY) end;;
   }
 
-  measure: avg_days_to_close {
-    group_label: "Sales Metrics"
+  dimension: services_stage_group {
+    type: string
+    description: "For services only, pipeline stages grouped to open, won and lost"
+    group_label: "  Deals"
+    hidden: no
+    sql: CASE
+      WHEN ${sales_opportunity_stage_sort_index} = 0 THEN 'N/A'
+      WHEN ${sales_opportunity_stage_sort_index} > 0 AND ${sales_opportunity_stage_sort_index} < 5 THEN 'Open'
+      WHEN ${sales_opportunity_stage_sort_index} = 5 THEN 'Won'
+      ELSE 'Lost'
+      END ;;
+  }
 
+  dimension: difference_total_weighted{
+    group_label: "  Deals"
+    type: number
+    sql: ${amount} - ${pipeline_weighted_amount} ;;
+    value_format_name: gbp_0
+  }
+
+  #dimension: Open_Closed {
+  # group_label: "  Deals"
+
+  # label: "  Open/Closed"
+  # type: string
+  #  sql: case
+  #       when (${sales_opportunity_stage_sort_index} < 5) then 'Open'
+  #        when (${sales_opportunity_stage_sort_index} > 4) then 'Closed'
+  #        end;;
+  #}
+
+  filter: open_opportunity {
+    label: "Open Deal"
+    hidden: yes
+    type: yesno
+    sql: case when ${sales_opportunity_stage_sort_index} >= 9 then false else true end;;
+  }
+
+  dimension: active_deal {
+    label: "Active Deal"
+    hidden: no
+    type: yesno
+    sql: ${TABLE}.is_active;;
+  }
+
+  filter: closed_won_opportunity {
+    label: "Closed Won Deal"
+    type: yesno
+    hidden: yes
+
+    sql: case when ${sales_opportunity_stage_sort_index} = 9 then false else true end;;
+  }
+  filter: closed_lost_opportunity {
+    label: "Closed Lost Deal"
+    type: yesno
+    hidden: yes
+
+    sql: case when ${sales_opportunity_stage_sort_index} = 10 then false else true end;;
+  }
+
+  measure: services_all_deals_count {
+    group_label: "Deal Counts"
+    type: count_distinct
+    description: "Count of all deals, services only"
+    sql: ${deal_id} ;;
+  }
+
+  measure: services_active_deals_count {
+    group_label: "Deal Counts"
+    type: count_distinct
+    description: "Count of active deals, services only"
+    sql: ${deal_id} ;;
+    filters: {field: active_deal
+      value: "Yes"}
+  }
+
+  measure: services_active_customers_count {
+    group_label: "Deal Counts"
+    type: count_distinct
+    description: "Count of active customers, services only"
+    sql: ${customer_master.customer_id} ;;
+    filters: {field: active_deal
+      value: "Yes"}
+  }
+
+
+
+  measure: services_open_deals_count {
+    group_label: "Deal Counts"
+    type: count
+    description: "Count of open deals, services only"
+    filters: {
+      field: services_stage_group
+      value: "Open"
+    }
+  }
+
+  measure: services_won_deals_count {
+    group_label: "Deal Counts"
+    type: count
+    description: "Count of won deals, services only"
+    filters: {
+      field: services_stage_group
+      value: "Won"
+    }
+  }
+
+  measure: services_lost_deals_count {
+    group_label: "Deal Counts"
+    type: count
+    description: "Count of lost deals, services only"
+    filters: {
+      field: services_stage_group
+      value: "Lost"
+    }
+  }
+
+  measure: services_all_deals_total_amount {
+    group_label: "Total Deal Amounts"
+    type: sum
+    description: "Sum of total amount for all deals, services only"
+    sql: ${amount} ;;
+    value_format_name: gbp_0
+  }
+
+  measure: services_open_deals_total_amount {
+    group_label: "Total Deal Amounts"
+    type: sum
+    description: "Sum of total amount for open deals, services only"
+    sql: ${amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Open"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: services_won_deals_total_amount {
+    group_label: "Total Deal Amounts"
+    type: sum
+    description: "Sum of total amount for won deals, services only"
+    sql: ${amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Won"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: services_lost_deals_total_amount {
+    group_label: "Total Deal Amounts"
+    type: sum
+    description: "Sum of total amount for lost deals, services only"
+    sql: ${amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Lost"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: services_all_deals_weighted_amount {
+    group_label: "Weighted Deal Amounts"
+    type: sum
+    description: "Sum of weighted amount for all deals, services only"
+    sql: ${pipeline_weighted_amount} ;;
+    value_format_name: gbp_0
+  }
+
+  measure: services_open_deals_weighted_amount {
+    group_label: "Weighted Deal Amounts"
+    type: sum
+    description: "Sum of weighted amount for open deals, services only"
+    sql: ${pipeline_weighted_amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Open"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: services_difference_total_weighted {
+    group_label: "Total Deal Amounts"
+    type: sum
+    description: "Sum of difference between total deal amount and weighted deal amount"
+    sql: ${difference_total_weighted} ;;
+    value_format_name: gbp_0
+  }
+
+  measure: services_all_deals_average_amount {
+    group_label: "Average Deal Amounts"
+    type: average
+    description: "Average of total amount for all deals, services only"
+    sql: ${amount} ;;
+    value_format_name: gbp_0
+  }
+
+  measure: services_open_deals_average_amount {
+    group_label: "Average Deal Amounts"
+    type: average
+    description: "Average of total amount for open deals, services only"
+    sql: ${amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Open"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: services_won_deals_average_amount {
+    group_label: "Average Deal Amounts"
+    type: average
+    description: "Average of total amount for won deals, services only"
+    sql: ${amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Won"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: services_lost_deals_average_amount {
+    group_label: "Average Deal Amounts"
+    type: average
+    description: "Average of total amount for lost deals, services only"
+    sql: ${amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Lost"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: services_all_deals_average_weighted_amount {
+    group_label: "Average Deal Amounts"
+    type: average
+    description: "Average of weighted amount for all deals, services only"
+    sql: ${pipeline_weighted_amount} ;;
+    value_format_name: gbp_0
+  }
+
+  measure: services_open_deals_average_weighted_amount {
+    group_label: "Average Deal Amounts"
+    type: average
+    description: "Average of weighted amount for open deals, services only"
+    sql: ${pipeline_weighted_amount} ;;
+    filters: {
+      field: services_stage_group
+      value: "Open"
+    }
+    value_format_name: gbp_0
+  }
+
+  measure: average_days_to_close {
     type: average
     sql: ${days_to_close} ;;
+    value_format: "0"
   }
 
 
-  measure: count_closed_sales_opportunities {
-    group_label: "Sales Metrics"
-
-    label: "Count Closed Won"
-    type: count_distinct
-    sql: case when ${sales_opportunity_stage} like '%Sales Closed Won%' then ${deal_id} end ;;
-  }
-
-  measure: count_lost_sales_opportunities {
-    label: "Count Closed Lost"
-    group_label: "Sales Metrics"
-
-    type: count_distinct
-    sql: case when ${sales_opportunity_stage} like '%Sales Closed Lost%' then ${deal_id} end ;;
-  }
 }
