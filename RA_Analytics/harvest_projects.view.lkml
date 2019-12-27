@@ -12,14 +12,6 @@ view: harvest_projects {
     sql: ${TABLE}.id ;;
   }
 
-
-
-
-
-
-
-
-
   dimension: client_id {
     type: number
     hidden: yes
