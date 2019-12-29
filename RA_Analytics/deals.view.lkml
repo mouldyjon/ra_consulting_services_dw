@@ -2,54 +2,34 @@ view: deals {
   sql_table_name: deals_labelled ;;
   view_label: "Hubspot Deal Tracking"
 
-  dimension: deal_id {
-    primary_key: yes
-    type: number
+
+
+  measure: count {
+    type: count
+    drill_fields: [detail*]
+  }
+
+  dimension_group: sales_email_last_replied {
     hidden: yes
-    sql: ${TABLE}.deal_id ;;
+    type: time
+    sql: ${TABLE}.sales_email_last_replied ;;
   }
 
-  dimension: amount {
-    group_label: "  Deals"
-    type: number
-    value_format_name: gbp_0
-    hidden: no
-    sql: ${TABLE}.amount ;;
-  }
-
-  dimension: amount_tier {
-    group_label: "  Deals"
-    type: tier
-    tiers: [50000,150000,500000]
-    style: integer
-    value_format_name: gbp_0
-    sql: ${amount} ;;
-  }
-
-  dimension: closed_won {
-    group_label: "  Deals"
-    type: yesno
-    hidden: no
-    sql: ${TABLE}.closedwon ;;
-  }
-
-  dimension: deal_stage {
-    type: yesno
+  dimension: closed_lost_reason {
     hidden: yes
-    sql: ${TABLE}.dealstage ;;
+    type: string
+    sql: ${TABLE}.closed_lost_reason ;;
   }
 
-  dimension: probability {
+  dimension: dealname {
+    type: string
+    sql: ${TABLE}.dealname ;;
+  }
+
+  dimension: hubspot_owner_id {
     hidden: yes
-    type: number
-    sql: ${TABLE}.probability ;;
-  }
-
-  dimension: pipeline_weighted_amount {
-    group_label: "  Deals"
-    hidden: no
-    type: number
-    sql: ${TABLE}.amount * (${probability}/1);;
+    type: string
+    sql: ${TABLE}.hubspot_owner_id ;;
   }
 
   dimension: hubspot_owner_email {
@@ -58,450 +38,453 @@ view: deals {
     sql: ${TABLE}.hubspot_owner_email ;;
   }
 
-  dimension: closed_lost_reason {
-    group_label: "  Deals"
-    type: string
-    sql: ${TABLE}.closed_lost_reason ;;
-  }
-
-  dimension: pipeline {
-    label: "       Pipeline Name"
-    group_label: "  Deals"
-    type: string
-    sql: ${TABLE}.pipeline_label ;;
-  }
-
-  dimension_group: opportunity_closed {
-    group_label: "  Deals"
-    label: "Deal Close"
-    type: time
-    timeframes: [
-      date,
-      month,
-      year
-    ]
-    sql: ${TABLE}.closedate ;;
-  }
-
-  dimension_group: opportunity_created {
-    group_label: "  Deals"
-    label: "Deal Created"
-    type: time
-    timeframes: [
-      date
-    ]
-    sql: ${TABLE}.createdate ;;
-  }
-
-  dimension: opportunity_name {
-    label: "     Deal Name"
-    group_label: "  Deals"
-    type: string
-    sql: ${TABLE}.dealname ;;
-  }
-
-  dimension: sales_opportunity_stage_sort_index {
-    type: number
-    label: "   Deal Stage Order"
-    group_label: "  Deals"
-    group_item_label: "Stage Order"
-    sql: ${TABLE}.stage_displayorder ;;
-  }
-
-  dimension: dealstage_id {
-    type: string
+  dimension_group: lastmodifieddate {
     hidden: yes
-    sql: ${TABLE}.deadstage_id ;;
-  }
-
-  dimension: sales_opportunity_stage {
-    label: "   Deal Stage"
-    group_label: "  Deals"
-    group_item_label: "Stage"
-
-    type: string
-    sql: ${TABLE}.stage_label ;;
-    order_by_field: sales_opportunity_stage_sort_index
-
-  }
-
-  dimension: hubspot_owner_id {
-    hidden: yes
-
-    type: string
-    sql: ${TABLE}.hubspot_owner_id ;;
-  }
-
-
-
-  dimension_group: last_contacted {
-    label: "Last Contact"
-    group_label: "  Deals"
-
     type: time
-    timeframes: [
-      date
-    ]
-    sql: ${TABLE}.notes_last_contacted ;;
+    sql: ${TABLE}.lastmodifieddate ;;
   }
 
   dimension_group: notes_last_updated {
     hidden: yes
     type: time
-    timeframes: [
-      date
-    ]
     sql: ${TABLE}.notes_last_updated ;;
   }
 
-  dimension: num_notes {
-    type: number
-    hidden: yes
-    sql: ${TABLE}.num_notes ;;
+  dimension: dealstage {
+    type: string
+    sql: ${TABLE}.dealstage ;;
   }
 
-  measure: total_sales_opportunity_notes {
+  dimension: dealstage_id {
     hidden: yes
-    type: sum
-    sql: ${TABLE}.num_notes ;;
-
+    type: string
+    sql: ${TABLE}.dealstage_id ;;
   }
 
-  dimension: sales_opportunity_pipeline {
+  dimension_group: dealstage_ts {
+    type: time
+    sql: ${TABLE}.dealstage_ts ;;
+  }
+
+  dimension: pipeline {
     hidden: yes
     type: string
     sql: ${TABLE}.pipeline ;;
   }
 
-  dimension_group: last_replied {
-    group_label: "  Deals"
-
+  dimension_group: close {
     type: time
-
-    timeframes: [
-      date
-    ]
-    sql: ${TABLE}.sales_email_last_replied ;;
+    timeframes: [date,month]
+    sql: ${TABLE}.closedate ;;
   }
 
-  dimension_group: start {
-    group_label: "  Deals"
+  dimension_group: create {
+    timeframes: [date,month,quarter]
 
     type: time
-
-    timeframes: [
-      date
-    ]
-    sql: ${TABLE}.start_date_ts ;;
+    sql: ${TABLE}.createdate ;;
   }
 
-  dimension_group: end {
-    group_label: "  Deals"
+  dimension: amount {
+    hidden: yes
+
+    type: number
+    sql: ${TABLE}.amount ;;
+  }
+
+  measure: total_deal_amount {
+    type: sum
+    sql: ${TABLE}.amount ;;
+  }
+
+  measure: avg_deal_amount {
+    type: average
+    sql: ${TABLE}.amount ;;
+  }
+
+
+  dimension_group: notes_last_contacted {
+    hidden: yes
 
     type: time
-
-    timeframes: [
-      date
-    ]
-    sql: ${TABLE}.end_date_ts ;;
+    sql: ${TABLE}.notes_last_contacted ;;
   }
 
-  dimension_group: dealstage {
+  dimension: amount_in_home_currency {
+    hidden: yes
+
+    type: number
+    sql: ${TABLE}.amount_in_home_currency ;;
+  }
+
+  dimension_group: hubspot_owner_assigneddate {
+    hidden: yes
 
     type: time
-    group_label: "  Deals"
-    timeframes: [raw,date,month]
-    sql: ${TABLE}.dealstage_ts ;;
+    sql: ${TABLE}.hubspot_owner_assigneddate ;;
   }
 
+  dimension: num_notes {
+    hidden: yes
+
+    type: number
+    sql: ${TABLE}.num_notes ;;
+  }
+
+  dimension: description {
+    type: string
+    sql: ${TABLE}.description ;;
+  }
 
   dimension: source {
-    group_label: "  Deals"
-    label: "   Deal Source"
+    hidden: yes
+
     type: string
     sql: ${TABLE}.source ;;
   }
 
-  dimension: salesperson {
-    group_label: "  Deals"
-
-    label: "  Salesperson Name"
-    type: string
-    sql: ${TABLE}.salesperson_full_name ;;
-  }
-
   dimension: salesperson_email {
-    group_label: "  Deals"
+    hidden: yes
 
-    label: "  Salesperson Email"
     type: string
     sql: ${TABLE}.salesperson_email ;;
   }
 
-  dimension: days_to_close {
-    hidden: yes
-    type: number
-    sql: case when ${sales_opportunity_stage_sort_index} = 5 then date_diff(date(${TABLE}.closedate),date(${TABLE}.createdate),DAY) end;;
-  }
-
-  dimension: services_stage_group {
+  dimension: is_closed {
     type: string
-    description: "For services only, pipeline stages grouped to open, won and lost"
-    group_label: "  Deals"
-    hidden: no
-    sql: CASE
-      WHEN ${sales_opportunity_stage_sort_index} = 0 THEN 'N/A'
-      WHEN ${sales_opportunity_stage_sort_index} > 0 AND ${sales_opportunity_stage_sort_index} < 5 THEN 'Open'
-      WHEN ${sales_opportunity_stage_sort_index} = 5 THEN 'Won'
-      ELSE 'Lost'
-      END ;;
+    sql: ${TABLE}.is_closed ;;
   }
 
-  dimension: difference_total_weighted{
-    group_label: "  Deals"
+  dimension: pricing_model {
+    type: string
+    sql: ${TABLE}.pricing_model ;;
+  }
+
+  dimension: deal_source {
+    type: string
+    sql: ${TABLE}.deal_source ;;
+  }
+
+  dimension: products_in_solution {
+    hidden: yes
+
+    type: string
+    sql: ${TABLE}.products_in_solution ;;
+  }
+
+  dimension: sprint_type {
+    type: string
+    sql: ${TABLE}.sprint_type ;;
+  }
+
+  dimension: days_to_close {
     type: number
-    sql: ${amount} - ${pipeline_weighted_amount} ;;
-    value_format_name: gbp_0
+    sql: ${TABLE}.days_to_close ;;
   }
 
-  #dimension: Open_Closed {
-  # group_label: "  Deals"
-
-  # label: "  Open/Closed"
-  # type: string
-  #  sql: case
-  #       when (${sales_opportunity_stage_sort_index} < 5) then 'Open'
-  #        when (${sales_opportunity_stage_sort_index} > 4) then 'Closed'
-  #        end;;
-  #}
-
-  filter: open_opportunity {
-    label: "Open Deal"
-    hidden: yes
-    type: yesno
-    sql: case when ${sales_opportunity_stage_sort_index} >= 9 then false else true end;;
+  dimension: partner_referral_type {
+    type: string
+    sql: ${TABLE}.partner_referral_type ;;
   }
 
-  dimension: active_deal {
-    label: "Active Deal"
-    hidden: no
-    type: yesno
-    sql: ${TABLE}.is_active;;
-  }
-
-  filter: closed_won_opportunity {
-    label: "Closed Won Deal"
-    type: yesno
+  dimension: deal_components {
     hidden: yes
 
-    sql: case when ${sales_opportunity_stage_sort_index} = 9 then false else true end;;
+    type: string
+    sql: ${TABLE}.deal_components ;;
   }
-  filter: closed_lost_opportunity {
-    label: "Closed Lost Deal"
+
+  dimension: deal_type {
+    type: string
+    sql: ${TABLE}.deal_type ;;
+  }
+
+  measure: count_services_deal_component {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_services_deal_component ;;
+  }
+
+  measure: count_support_deal_component {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_support_deal_component ;;
+  }
+
+  measure: count_license_referral_deal_component {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_license_referral_deal_component ;;
+  }
+
+  measure: count_managed_services_deal_component {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_managed_services_deal_component ;;
+  }
+
+  measure: count_data_analytics_sprint_type {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_data_analytics_sprint_type ;;
+  }
+
+  measure: count_data_engineering_sprint_type {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_data_engineering_sprint_type ;;
+  }
+
+  measure: count_data_science_sprint_type {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_data_science_sprint_type ;;
+  }
+
+  measure: count_data_strategy_sprint_type {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_data_strategy_sprint_type ;;
+  }
+
+  measure: count_data_integration_sprint_type {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_data_integration_sprint_type ;;
+  }
+
+  measure: count_data_collection_sprint_type {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_data_collection_sprint_type ;;
+  }
+
+  measure: count_looker_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_looker_product_in_solution ;;
+  }
+
+  measure: count_dbt_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_dbt_product_in_solution ;;
+  }
+
+  measure: count_stitch_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_stitch_product_in_solution ;;
+  }
+
+  measure: count_segment_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_segment_product_in_solution ;;
+  }
+
+  measure: count_gcp_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_gcp_product_in_solution ;;
+  }
+
+  measure: count_snowflake_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_snowflake_product_in_solution ;;
+  }
+
+  measure: count_fivetran_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_fivetran_product_in_solution ;;
+  }
+
+  measure: count_qubit_product_in_solution {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_qubit_product_in_solution ;;
+  }
+
+  measure: count_partner_referral_source {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_partner_referral_source ;;
+  }
+
+  measure: count_ceo_network_source {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_ceo_network_source ;;
+  }
+
+  measure: count_staff_referral_referral_source {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_staff_referral_referral_source ;;
+  }
+
+  measure: count_organic_search_source {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_organic_search_source ;;
+  }
+
+  measure: count_repeat_customer_source {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_repeat_customer_source ;;
+  }
+
+  measure: count_paid_search_source {
+    group_label: "Deal Categorisation"
+
+    type: sum
+    sql: ${TABLE}.count_paid_search_source ;;
+  }
+
+  dimension: associatedcompanyids {
+    type: number
+    sql: ${TABLE}.associatedcompanyids ;;
+  }
+
+  dimension: deal_id {
+    primary_key: yes
+
+    type: number
+    sql: ${TABLE}.deal_id ;;
+  }
+
+
+
+  dimension: probability {
+    type: number
+    sql: ${TABLE}.probability ;;
+  }
+
+  dimension: closedwon {
     type: yesno
-    hidden: yes
-
-    sql: case when ${sales_opportunity_stage_sort_index} = 10 then false else true end;;
+    sql: ${TABLE}.closedwon ;;
   }
 
-  measure: services_all_deals_count {
-    group_label: "Deal Counts"
-    type: count_distinct
-    description: "Count of all deals, services only"
-    sql: ${deal_id} ;;
+  dimension: stage_label {
+    type: string
+    sql: ${TABLE}.stage_label ;;
   }
 
-  measure: services_active_deals_count {
-    group_label: "Deal Counts"
-    type: count_distinct
-    description: "Count of active deals, services only"
-    sql: ${deal_id} ;;
-    filters: {field: active_deal
-      value: "Yes"}
+  dimension: stage_displayorder {
+    type: number
+    sql: ${TABLE}.stage_displayorder ;;
   }
 
-  measure: services_active_customers_count {
-    group_label: "Deal Counts"
-    type: count_distinct
-    description: "Count of active customers, services only"
-    sql: ${customer_master.customer_id} ;;
-    filters: {field: active_deal
-      value: "Yes"}
+  dimension: pk {
+    type: string
+    sql: ${TABLE}.pk ;;
   }
 
-
-
-  measure: services_open_deals_count {
-    group_label: "Deal Counts"
-    type: count
-    description: "Count of open deals, services only"
-    filters: {
-      field: services_stage_group
-      value: "Open"
-    }
+  dimension: pipeline_label {
+    type: string
+    sql: ${TABLE}.pipeline_label ;;
   }
 
-  measure: services_won_deals_count {
-    group_label: "Deal Counts"
-    type: count
-    description: "Count of won deals, services only"
-    filters: {
-      field: services_stage_group
-      value: "Won"
-    }
+  dimension: pipeline_displayorder {
+    type: number
+    sql: ${TABLE}.pipeline_displayorder ;;
   }
 
-  measure: services_lost_deals_count {
-    group_label: "Deal Counts"
-    type: count
-    description: "Count of lost deals, services only"
-    filters: {
-      field: services_stage_group
-      value: "Lost"
-    }
+  dimension: pipeline_active {
+    type: yesno
+    sql: ${TABLE}.pipeline_active ;;
   }
 
-  measure: services_all_deals_total_amount {
-    group_label: "Total Deal Amounts"
-    type: sum
-    description: "Sum of total amount for all deals, services only"
-    sql: ${amount} ;;
-    value_format_name: gbp_0
+  set: detail {
+    fields: [
+      sales_email_last_replied_time,
+      closed_lost_reason,
+      dealname,
+      hubspot_owner_id,
+      hubspot_owner_email,
+      lastmodifieddate_time,
+      notes_last_updated_time,
+      dealstage,
+      dealstage_id,
+      dealstage_ts_time,
+      pipeline,
+      amount,
+      notes_last_contacted_time,
+      amount_in_home_currency,
+      hubspot_owner_assigneddate_time,
+      num_notes,
+      description,
+      source,
+      salesperson_email,
+      is_closed,
+      pricing_model,
+      deal_source,
+      products_in_solution,
+      sprint_type,
+      days_to_close,
+      partner_referral_type,
+      deal_components,
+      deal_type,
+      count_services_deal_component,
+      count_support_deal_component,
+      count_license_referral_deal_component,
+      count_managed_services_deal_component,
+      count_data_analytics_sprint_type,
+      count_data_engineering_sprint_type,
+      count_data_science_sprint_type,
+      count_data_strategy_sprint_type,
+      count_data_integration_sprint_type,
+      count_data_collection_sprint_type,
+      count_looker_product_in_solution,
+      count_dbt_product_in_solution,
+      count_stitch_product_in_solution,
+      count_segment_product_in_solution,
+      count_gcp_product_in_solution,
+      count_snowflake_product_in_solution,
+      count_fivetran_product_in_solution,
+      count_qubit_product_in_solution,
+      count_partner_referral_source,
+      count_ceo_network_source,
+      count_staff_referral_referral_source,
+      count_organic_search_source,
+      count_repeat_customer_source,
+      count_paid_search_source,
+      associatedcompanyids,
+      deal_id,
+      probability,
+      closedwon,
+      stage_label,
+      stage_displayorder,
+      pk,
+      pipeline_label,
+      pipeline_displayorder,
+      pipeline_active
+    ]
   }
-
-  measure: services_open_deals_total_amount {
-    group_label: "Total Deal Amounts"
-    type: sum
-    description: "Sum of total amount for open deals, services only"
-    sql: ${amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Open"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: services_won_deals_total_amount {
-    group_label: "Total Deal Amounts"
-    type: sum
-    description: "Sum of total amount for won deals, services only"
-    sql: ${amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Won"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: services_lost_deals_total_amount {
-    group_label: "Total Deal Amounts"
-    type: sum
-    description: "Sum of total amount for lost deals, services only"
-    sql: ${amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Lost"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: services_all_deals_weighted_amount {
-    group_label: "Weighted Deal Amounts"
-    type: sum
-    description: "Sum of weighted amount for all deals, services only"
-    sql: ${pipeline_weighted_amount} ;;
-    value_format_name: gbp_0
-  }
-
-  measure: services_open_deals_weighted_amount {
-    group_label: "Weighted Deal Amounts"
-    type: sum
-    description: "Sum of weighted amount for open deals, services only"
-    sql: ${pipeline_weighted_amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Open"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: services_difference_total_weighted {
-    group_label: "Total Deal Amounts"
-    type: sum
-    description: "Sum of difference between total deal amount and weighted deal amount"
-    sql: ${difference_total_weighted} ;;
-    value_format_name: gbp_0
-  }
-
-  measure: services_all_deals_average_amount {
-    group_label: "Average Deal Amounts"
-    type: average
-    description: "Average of total amount for all deals, services only"
-    sql: ${amount} ;;
-    value_format_name: gbp_0
-  }
-
-  measure: services_open_deals_average_amount {
-    group_label: "Average Deal Amounts"
-    type: average
-    description: "Average of total amount for open deals, services only"
-    sql: ${amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Open"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: services_won_deals_average_amount {
-    group_label: "Average Deal Amounts"
-    type: average
-    description: "Average of total amount for won deals, services only"
-    sql: ${amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Won"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: services_lost_deals_average_amount {
-    group_label: "Average Deal Amounts"
-    type: average
-    description: "Average of total amount for lost deals, services only"
-    sql: ${amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Lost"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: services_all_deals_average_weighted_amount {
-    group_label: "Average Deal Amounts"
-    type: average
-    description: "Average of weighted amount for all deals, services only"
-    sql: ${pipeline_weighted_amount} ;;
-    value_format_name: gbp_0
-  }
-
-  measure: services_open_deals_average_weighted_amount {
-    group_label: "Average Deal Amounts"
-    type: average
-    description: "Average of weighted amount for open deals, services only"
-    sql: ${pipeline_weighted_amount} ;;
-    filters: {
-      field: services_stage_group
-      value: "Open"
-    }
-    value_format_name: gbp_0
-  }
-
-  measure: average_days_to_close {
-    type: average
-    sql: ${days_to_close} ;;
-    value_format: "0"
-  }
-
-
 }

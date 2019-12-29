@@ -93,7 +93,8 @@ explore: customer_master {
   join: harvest_invoices {
     view_label: "Harvest Invoicing"
 
-    sql_on: ${customer_master.harvest_customer_id} = ${harvest_invoices.client_id};;
+    sql_on: ${customer_master.harvest_customer_id} = ${harvest_invoices.client_id}
+    and ${customer_master.harvest_customer_id} is not null;;
 
     relationship: one_to_many
     type: left_outer
@@ -204,12 +205,8 @@ explore: customer_master {
     type: inner
     }
 
-  join: harvest_timesheet_invoices {
-    from: harvest_invoices
-    relationship: one_to_many
-    sql_on: ${timesheets.invoice_id} = ${harvest_timesheet_invoices.id} ;;
-    type: left_outer
-  }
+
+
 
 
 

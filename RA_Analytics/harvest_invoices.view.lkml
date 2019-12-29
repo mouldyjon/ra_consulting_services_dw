@@ -1,5 +1,5 @@
 view: harvest_invoices {
-  sql_table_name: ra_data_warehouse_dbt_prod.harvest_invoices ;;
+  sql_table_name: client_invoices ;;
 
   dimension: id {
     primary_key: yes
@@ -11,19 +11,19 @@ view: harvest_invoices {
   }
 
 
- dimension_group: project_invoice_period_start {
-  label: "Client Harvest Invoice Start"
-  hidden: yes
+  dimension_group: project_invoice_period_start {
+    label: "Client Harvest Invoice Start"
+    hidden: yes
 
-  group_label: "Project Invoicing"
-   type: time
-  timeframes: [
-    date,
-    week,
-    month
-  ]
-  sql: ${TABLE}.period_start;;
- }
+    group_label: "Project Invoicing"
+    type: time
+    timeframes: [
+      date,
+      week,
+      month
+    ]
+    sql: ${TABLE}.period_start;;
+  }
 
   dimension: was_paid_ontime {
     group_label: "Project Invoicing"
@@ -60,13 +60,34 @@ view: harvest_invoices {
     sql: ${TABLE}.amount ;;
   }
 
+  dimension: net_amount {
+    type: number
+    hidden: yes
+
+    sql: ${TABLE}.net_amount ;;
+  }
+
+  dimension: rechargeable_expenses {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.total_rechargeable_expenses ;;
+  }
+
+  measure: total_rechargeable_expenses {
+    group_label: "Project Invoicing"
+
+    hidden: yes
+    type: sum
+    sql: ${TABLE}.total_rechargeable_expenses ;;
+
+  }
+
   measure: total_project_invoice_gross_amount {
     group_label: "Project Invoicing"
     label: "Client Harvest Invoice Gross Amount"
-    type: sum_distinct
-    hidden: no
+    type: sum
+    hidden: yes
     value_format_name: gbp_0
-    sql_distinct_key: ${project_invoice_number} ;;
 
     sql: ${TABLE}.amount ;;
   }
@@ -74,26 +95,16 @@ view: harvest_invoices {
   measure: total_project_invoice_net_amount {
     group_label: "Project Invoicing"
     label: "Client Harvest Invoice Net Amount"
-    type: sum_distinct
-    hidden: no
+    type: sum
+    hidden: yes
     value_format_name: gbp_0
-    sql_distinct_key: ${project_invoice_number} ;;
 
-    sql: ${TABLE}.amount - ifnull(cast(${TABLE}.tax as float64),0);;
+    sql: ${TABLE}.net_amount ;;
   }
 
-  measure: total_paid_project_invoice_net_amount {
-    group_label: "Project Invoicing"
-    label: "Client Harvest Paid Invoice Net Amount"
-    type: sum_distinct
-    hidden: no
-    value_format_name: gbp_0
-    sql_distinct_key: ${project_invoice_number} ;;
 
-    sql: ${TABLE}.amount - ifnull(cast(${TABLE}.tax as float64),0);;
-    filters: {field: is_paid
-              value: "Yes"}
-  }
+
+
 
   dimension: client_id {
     type: number
@@ -109,15 +120,13 @@ view: harvest_invoices {
     sql: ${TABLE}.client_key ;;
   }
 
+
+
   dimension_group: project_invoice_created {
     group_label: "Project Invoicing"
     label: "Client Harvest Invoice"
     type: time
-    timeframes: [
-      date,
-      week,
-      month
-    ]
+    timeframes: [week,month,quarter]
     sql: ${TABLE}.created_at ;;
   }
 
@@ -146,10 +155,9 @@ view: harvest_invoices {
   measure: total_project_invoice_discount_amount {
     hidden: yes
 
-    type: sum_distinct
+    type: sum
     value_format_name: gbp_0
 
-    sql_distinct_key: ${project_invoice_number} ;;
 
     sql: ${TABLE}.discount_amount ;;
   }
@@ -165,10 +173,9 @@ view: harvest_invoices {
   measure: total_project_invoice_due_amount {
     hidden: yes
 
-    type: sum_distinct
+    type: sum
     value_format_name: gbp_0
 
-    sql_distinct_key: ${project_invoice_number} ;;
 
     sql: ${TABLE}.due_amount ;;
   }
@@ -290,8 +297,7 @@ view: harvest_invoices {
   measure: total_project_invoice_tax_amount {
     hidden: yes
 
-    type: sum_distinct
-    sql_distinct_key: ${id} ;;
+    type: sum
     value_format_name: gbp_0
 
     sql: ${TABLE}.tax_amount ;;
@@ -314,5 +320,73 @@ view: harvest_invoices {
     sql: ${id} ;;
 
     drill_fields: [id]
+  }
+
+  measure: total_amount_billed {
+    group_label: "Project Invoicing"
+    type: sum
+    value_format_name: gbp_0
+
+    sql: ${TABLE}.total_amount_billed ;;
+  }
+
+  measure: services_amount_billed {
+    group_label: "Project Invoicing"
+    type: sum
+    value_format_name: gbp_0
+
+    sql: ${TABLE}.services_amount_billed ;;
+  }
+
+  measure: expenses_amount_billed {
+    group_label: "Project Invoicing"
+    type: sum
+    value_format_name: gbp_0
+
+    sql: ${TABLE}.expenses_amount_billed ;;
+  }
+
+  measure: license_referral_fee_amount_billed {
+    group_label: "Project Invoicing"
+    type: sum
+    value_format_name: gbp_0
+
+    sql: ${TABLE}.license_referral_fee_amount_billed ;;
+  }
+
+  measure: tax_amount_billed {
+    group_label: "Project Invoicing"
+    type: sum
+    value_format_name: gbp_0
+
+    sql: ${TABLE}.tax_billed ;;
+  }
+
+  measure: support_amount_billed {
+    group_label: "Project Invoicing"
+    type: sum
+    value_format_name: gbp_0
+
+    sql: ${TABLE}.support_amount_billed ;;
+  }
+
+  dimension: months_since_first_invoice {
+    group_label: "Project Invoicing"
+
+    type: number
+    sql: ${TABLE}.months_since_first_invoice ;;
+  }
+
+  dimension: client_invoice_seq_no {
+    group_label: "Project Invoicing"
+
+    type: number
+    sql: ${TABLE}.client_invoice_seq_no ;;
+  }
+
+  measure: total_clients {
+    group_label: "Project Invoicing"
+    type: count_distinct
+    sql: ${TABLE}.client_id ;;
   }
 }
