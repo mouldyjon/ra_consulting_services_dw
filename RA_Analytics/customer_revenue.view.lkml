@@ -32,12 +32,14 @@ view: customer_revenue {
   dimension: client_closed_business {
     type: number
     group_label: "Company Revenue Metrics"
+    hidden: yes
 
     sql: ${TABLE}.deals_total_closed_opportunity_amount ;;
   }
 
   dimension: client_billable_revenue {
     type: number
+    hidden: yes
     group_label: "Company Revenue Metrics"
 
     sql: ${TABLE}.time_entries_total_billable_revenue ;;
@@ -46,6 +48,7 @@ view: customer_revenue {
   dimension: client_net_invoices_paid {
     type: number
     group_label: "Company Revenue Metrics"
+    hidden: yes
 
     sql: ${TABLE}.invoices_total_paid_project_invoice_net_amount ;;
   }
@@ -53,6 +56,7 @@ view: customer_revenue {
   dimension: client_opportunities_open {
     type: number
     group_label: "Company Revenue Metrics"
+    hidden: yes
 
     sql: ${TABLE}.deals_total_open_opportunity_amount ;;
   }

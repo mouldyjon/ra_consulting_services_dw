@@ -15,6 +15,7 @@ view: customer_master {
 
   dimension: customer_id {
     group_label: "Company Details"
+    group_item_label: "ID"
 
     hidden: no
     type: number
@@ -23,7 +24,7 @@ view: customer_master {
 
   dimension: customer_name {
     group_label: "Company Details"
-
+group_item_label: "Name"
     label: "Company Name"
     type: string
     sql:
@@ -35,13 +36,16 @@ view: customer_master {
   }
 
   dimension: company_billing_address {
-    group_label: "Finance Details"
+    group_label: "Company Details"
+    label: "Company Billing Address"
+    group_item_label: "Billing Address"
     type: string
     sql: ${TABLE}.harvest_address ;;
   }
 
   dimension_group: company_created {
     group_label: "Project Details"
+
     hidden: yes
     type: time
     timeframes: [
@@ -52,13 +56,7 @@ view: customer_master {
     sql: ${TABLE}.harvest_customer_created_at ;;
   }
 
-  dimension: company_currency {
-    group_label: "Company Details"
-    hidden: no
 
-    type: string
-    sql: ${TABLE}.harvest_customer_currency ;;
-  }
 
   dimension: harvest_customer_id {
     hidden: yes
@@ -67,46 +65,28 @@ view: customer_master {
     sql: ${TABLE}.harvest_customer_id ;;
   }
 
-  dimension: company_is_active_services_client {
-    group_label: "Project Details"
-    hidden: yes
 
-    type: yesno
-    sql: ${TABLE}.harvest_customer_is_active ;;
-  }
 
   dimension: company_annual_revenue {
     group_label: "Customer Intelligence"
     hidden: yes
-
+group_item_label: "Annual Revenue"
     type: number
     sql: ${TABLE}.hubspot_annual_revenue ;;
   }
 
-  dimension: company_city {
-    group_label: "Customer Intelligence"
-    hidden: yes
 
-    type: string
-    sql: ${TABLE}.hubspot_city ;;
-  }
 
   dimension: hubspot_company_id {
     group_label: "Company Details"
 
-    hidden: no
+    hidden: yes
 
     type: number
     sql: ${TABLE}.hubspot_company_id ;;
   }
 
-  dimension: company_country {
-    group_label: "Customer Intelligence"
-    hidden: yes
 
-    type: string
-    sql: ${TABLE}.hubspot_country ;;
-  }
 
   dimension_group: company_first_contact {
     group_label: "Customer Intelligence"
@@ -123,14 +103,14 @@ view: customer_master {
 
   dimension: company_description {
     group_label: "Company Details"
-
+group_item_label: "Description"
     type: string
     sql: ${TABLE}.hubspot_description ;;
   }
 
   dimension: company_domain {
     group_label: "Company Details"
-
+group_item_label: "Domain"
     type: string
     sql: ${TABLE}.hubspot_domain ;;
   }
@@ -150,7 +130,7 @@ view: customer_master {
 
   dimension: company_industry {
     group_label: "Company Details"
-
+group_item_label: "Industry"
     type: string
     sql: ${TABLE}.hubspot_industry ;;
   }
@@ -165,14 +145,14 @@ view: customer_master {
 
   dimension: company_lifecycle_stage {
     group_label: "Company Details"
-
+label: "Lifecycle Stage"
     type: string
     sql: ${TABLE}.hubspot_lifecycle_stage ;;
   }
 
   dimension: company_linkedin_bio {
     group_label: "Company Details"
-
+group_item_label: "LinkedIn Bio"
     type: string
     sql: ${TABLE}.hubspot_linkedin_bio ;;
   }
@@ -220,13 +200,14 @@ view: customer_master {
 
   dimension: company_type {
     group_label: "Company Details"
-
+group_item_label: "Type"
     type: string
     sql: ${TABLE}.hubspot_type ;;
   }
 
   dimension: company_website {
     group_label: "Company Details"
+    group_item_label: "Website"
 
     type: string
     sql: ${TABLE}.hubspot_website ;;

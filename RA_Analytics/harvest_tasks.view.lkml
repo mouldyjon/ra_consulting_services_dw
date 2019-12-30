@@ -15,14 +15,14 @@ view: harvest_tasks {
 
   dimension: task_billable_by_default {
     hidden: no
-    group_label: "Harvest Tasks"
+    group_label: "Delivery Tasks"
 
     type: yesno
     sql: ${TABLE}.billable_by_default ;;
   }
 
   dimension: task_default_hourly_rate {
-    group_label: "Harvest Tasks"
+    group_label: "Delivery Tasks"
 
     hidden: no
     type: number
@@ -35,7 +35,7 @@ view: harvest_tasks {
 
   dimension: task_name {
     label: "Task Name"
-    group_label: "Harvest Tasks"
+    group_label: "Delivery Tasks"
     type: string
     sql: ${TABLE}.name ;;
   }

@@ -20,9 +20,7 @@ view: customer_metrics {
  ;;
   }
 
-  measure: count {
-    type: count
-  }
+
 
   dimension: customer_id {
     primary_key: yes

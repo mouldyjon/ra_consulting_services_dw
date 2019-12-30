@@ -1,6 +1,5 @@
 view: contacts {
   sql_table_name: contacts ;;
-  view_label: "Hubspot Contacts"
   drill_fields: [contactid]
 
   dimension: contactid {
@@ -18,17 +17,26 @@ view: contacts {
 
   dimension: address {
     group_label: "Contact Details"
+    label: "Contact Address"
+    group_item_label: "Address"
     type: string
     sql: ${TABLE}.address ;;
   }
 
   dimension: city {
     group_label: "Contact Details"
+
+    label: "Contact City"
+    group_item_label: "City"
     type: string
     sql: ${TABLE}.city ;;
   }
 
   dimension: company {
+    group_label: "Contact Details"
+
+    label: "Contact Company Name"
+    group_item_label: "Company Name"
     hidden: yes
     type: string
     sql: ${TABLE}.company ;;
@@ -51,15 +59,13 @@ view: contacts {
 
   dimension: email {
     group_label: "Contact Details"
+    label: "Contact Email"
+    group_item_label: "Email"
     type: string
     sql: ${TABLE}.email ;;
   }
 
-  dimension: firstname {
-    group_label: "Contact Details"
-    type: string
-    sql: ${TABLE}.firstname ;;
-  }
+
 
   dimension: hubspot_owner_id {
     hidden: yes
@@ -82,7 +88,8 @@ view: contacts {
   dimension: jobtitle {
     type: string
     group_label: "Contact Details"
-    label: "Position"
+    label: "Contact Job Title"
+    group_item_label: "Title"
     sql: ${TABLE}.jobtitle ;;
   }
 
@@ -101,56 +108,58 @@ view: contacts {
     sql: ${TABLE}.lastmodifieddate ;;
   }
 
-  dimension: lastname {
-    group_label: "Contact Details"
-    type: string
-    sql: ${TABLE}.lastname ;;
-  }
+
 
   dimension: lifecyclestage {
     group_label: "Contact Details"
+    hidden: yes
     type: string
     sql: ${TABLE}.lifecyclestage ;;
   }
 
   dimension: mobilephone {
     group_label: "Contact Details"
+    label: "Mobile Number"
     type: string
     sql: ${TABLE}.mobilephone ;;
   }
 
   dimension: name {
     group_label: "Contact Details"
+    label: "Contact Name"
+    group_item_label: "Name"
     type: string
     sql: ${TABLE}.name ;;
   }
 
   dimension: num_associated_deals {
-    group_label: "Contact values"
+    group_label: "Contact Details"
+    label: "Number of Associated Deals"
     type: number
     sql: ${TABLE}.num_associated_deals ;;
   }
 
   dimension: phone {
     group_label: "Contact Details"
+    label: "Phone Number"
     type: string
     sql: ${TABLE}.phone ;;
   }
 
-  dimension: recent_deal_amount {
-    group_label: "Contact Values"
-    type: number
-    sql: ${TABLE}.recent_deal_amount ;;
-  }
+
 
   dimension: state {
     group_label: "Contact Details"
+    label: "Contact State"
+    group_item_label: "State"
     type: string
     sql: ${TABLE}.state ;;
   }
 
   dimension: website {
     group_label: "Contact Details"
+    label: "Contact Website"
+    group_item_label: "State"
     type: string
     sql: ${TABLE}.website ;;
   }
@@ -162,10 +171,5 @@ view: contacts {
     sql: ${TABLE}.zip ;;
   }
 
-  measure: count {
-    group_label: "Contact Values"
-    label: "Contact Count"
-    type: count
-    drill_fields: [contactid, firstname, lastname, name]
-  }
+
 }

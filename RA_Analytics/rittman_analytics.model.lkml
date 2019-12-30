@@ -31,17 +31,17 @@ explore: financial_results {
 
 explore: customer_master {
   label: "Rittman Analytics Operations"
-  view_label: "Companies and Contacts"
+  view_label: "      Customer Success"
 
  join: customer_revenue {
-   view_label: "Companies and Contacts"
+   view_label: "      Customer Success"
   type: left_outer
   relationship: one_to_one
   sql_on: ${customer_master.customer_id} = ${customer_revenue.customer_master_customer_id} ;;
  }
 
   join: customer_metrics {
-    view_label: "Companies and Contacts"
+    view_label: "      Customer Success"
     sql_on: ${customer_master.customer_id}  = ${customer_metrics.customer_id}  ;;
     type: left_outer
     relationship: one_to_one
@@ -50,39 +50,8 @@ explore: customer_master {
 
 
 
-  join: project_mapping {
-    view_label: "13 Development Projects"
-    sql_on: ${customer_master.customer_name} = ${project_mapping.customer_name};;
-    type: left_outer
-    relationship: one_to_many
-  }
-
-  join: dev_projects {
-    view_label: "Jira Issues"
-    sql_on: ${project_mapping.project_name} = ${dev_projects.name};;
-    type: inner
-    relationship: one_to_one
-  }
 
 
-
-
-
-
-
-  join: dev_tasks {
-    view_label: "Jira Issues"
-    sql_on: ${dev_projects.id} = ${dev_tasks.project_id};;
-    type: inner
-    relationship: one_to_many
-  }
-
-  join: dev_subtasks {
-    view_label: "Jira Issues"
-    sql_on: ${dev_tasks.key} = ${dev_subtasks.parent_key};;
-    type: inner
-    relationship: one_to_many
-  }
 
 
 
@@ -91,7 +60,7 @@ explore: customer_master {
 
 
   join: harvest_invoices {
-    view_label: "Harvest Invoicing"
+    view_label: "     Project Management"
 
     sql_on: ${customer_master.harvest_customer_id} = ${harvest_invoices.client_id}
     and ${customer_master.harvest_customer_id} is not null;;
@@ -104,7 +73,7 @@ explore: customer_master {
 
 
   join: customer_events {
-    view_label: "Customer Lifecycle"
+    view_label: "      Customer Success"
     sql_on: ${customer_master.customer_id} = ${customer_events.customer_id};;
     relationship: one_to_many
     type: left_outer
@@ -113,17 +82,19 @@ explore: customer_master {
 
   join: deals {
     sql_on: ${deals.deal_id} = ${bridge.deal_id}  ;;
+    view_label: "   Sales"
+
     type: inner
     relationship: one_to_many
   }
   join: deals_history {
-    view_label: "Hubspot Deal History"
+    view_label: "   Sales"
     sql_on: ${deals_history.deal_id} = ${bridge.deal_id} ;;
     type: full_outer
     relationship: one_to_many
   }
   join: bridge {
-    view_label: "Hubspot Companies"
+    view_label: "   Sales"
     sql_on: ${customer_master.hubspot_company_id} = ${bridge.associatedcompanyids} ;;
     type: left_outer
     relationship: one_to_many
@@ -134,16 +105,23 @@ explore: customer_master {
 #    relationship: many_to_one
 #  }
   join: communications {
-    view_label: "Hubspot Conversations"
+    view_label: "   Sales"
     sql_on: ${customer_master.hubspot_company_id} = ${communications.hubspot_company_id};;
     relationship: one_to_many
     type: left_outer
   }
   join: contacts {
-    view_label: "Hubspot Contacts"
+    view_label: "      Customer Success"
     sql_on: ${contacts.associatedcompanyid} = ${bridge.associatedcompanyids} ;;
     relationship: one_to_many
     type: inner
+  }
+
+  join: tickets {
+    view_label: "    Project Delivery"
+    sql_on: ${customer_master.customer_id} = ${tickets.customer_id} ;;
+    relationship: one_to_many
+    type: left_outer
   }
 
 
@@ -152,30 +130,19 @@ explore: customer_master {
 
 
   join: account_transactions {
-    view_label: "Xero Accounting"
+    view_label: "  Finance"
     sql_on: ${customer_master.xero_contact_id} = ${account_transactions.xero_company_id} ;;
     relationship: one_to_many
     type: left_outer
 
   }
 
-  join: xero_invoices_and_payments {
-    view_label: "Xero Accounting"
-    sql_on: ${customer_master.xero_contact_id} = ${xero_invoices_and_payments.xero_company_id} ;;
-    relationship: one_to_many
-    type: left_outer
 
-  }
 
-  join: pageviews {
-    view_label: "Website Analytics"
-    sql_on: ${customer_master.customer_id} = cast(${pageviews.customer_id} as int64) ;;
-    relationship: one_to_many
-    type: inner
-  }
+
 
   join: timesheets{
-    view_label: "Harvest Project Timesheets and Invoicing"
+    view_label: "     Project Management"
     sql_on: ${customer_master.harvest_customer_id} = ${timesheets.client_id} ;;
     relationship: one_to_many
     type: left_outer
@@ -183,7 +150,7 @@ explore: customer_master {
 
 
   join: harvest_projects {
-    view_label: "Harvest Project Timesheets and Invoicing"
+    view_label: "     Project Management"
     sql_on: ${timesheets.project_id} = ${harvest_projects.id};;
     relationship: many_to_one
     type: inner
@@ -192,14 +159,14 @@ explore: customer_master {
 
 
   join: harvest_tasks {
-    view_label: "Harvest Project Timesheets and Invoicing"
+    view_label: "     Project Management"
     relationship: many_to_one
     sql_on: ${timesheets.task_id} = ${harvest_tasks.id} ;;
-    type: inner
+    type: left_outer
   }
 
   join: harvest_users {
-    view_label: "Harvest Project Timesheets and Invoicing"
+    view_label: "     Project Management"
     relationship: many_to_one
     sql_on: ${timesheets.user_id} = ${harvest_users.id} ;;
     type: inner

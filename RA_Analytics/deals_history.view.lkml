@@ -1,6 +1,6 @@
 view: deals_history {
   sql_table_name: deals_labelled_history ;;
-  view_label: "Hubspot  Historic Deal Tracking"
+  view_label: "Sales"
 
   dimension: deal_id {
     primary_key: yes
@@ -11,58 +11,42 @@ view: deals_history {
 
   dimension: days_difference {
     type: number
-    group_label: "  Velocity"
-    label: "Difference between days"
+    group_label: "Deals History"
+    label: "Days to Current Funnel Stage"
     hidden: no
     sql: ${TABLE}.days_diff ;;
   }
 
-  dimension: deal_name {
-    type: string
-    group_label: "  Deals"
-    label: "Deal name"
-    hidden: no
-    sql: ${TABLE}.dealname ;;
-  }
 
   measure: avg_days_difference {
     type: average
-    group_label: "  Velocity"
-    label: "Average Difference between days"
+    group_label: "Deals History"
+    label: "Average Days to Next Funnel Stage"
     hidden: no
     sql: ${TABLE}.days_diff ;;
   }
 
   dimension: sales_opportunity_stage {
-    label: "   Deal Stage"
-    group_label: "  Deals"
-    group_item_label: "Stage"
+    label: "Current Funnel Stage"
+    group_label: "Deals History"
+    group_item_label: "Current Funnel Stage"
 
     type: string
     sql: ${TABLE}.stage_label ;;
+    order_by_field: sales_opportunity_stage_sort_index
   }
-  dimension_group: dealstage {
 
-    type: time
-    group_label: "  Deals"
-    timeframes: [raw,date,month]
-    sql: ${TABLE}.dealstage_ts ;;
-  }
+
 
   dimension: sales_opportunity_stage_sort_index {
     type: number
+    hidden: yes
     label: "   Deal Stage Order"
     group_label: "  Deals"
     group_item_label: "Stage Order"
     sql: ${TABLE}.stage_displayorder ;;
   }
 
-  dimension: sales_opportunity_stage_pipeline_modifier {
-    group_label: "  Deals"
-    hidden: no
-    type: number
-    sql: ${TABLE}.probability ;;
 
-  }
 
 }

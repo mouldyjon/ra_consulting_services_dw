@@ -153,18 +153,9 @@ view: harvest_projects {
     sql: ${TABLE}.updated_at ;;
   }
 
-  measure: count_projects {
-    group_label: "Project Details"
 
-    type: count_distinct
-    sql: ${id} ;;
-    action: {
-      label: "Refresh using Stitch and dbt"
-      url: "https://hooks.zapier.com/hooks/catch/3347385/obnpjv0/"
-      icon_url: "https://www.google.com/s2/favicons?domain=stitchdata.com"
-    }
 
-  }
+
 
   # ----- Sets of fields for drilling ------
 

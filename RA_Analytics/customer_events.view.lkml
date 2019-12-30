@@ -5,7 +5,7 @@ view: customer_events {
 
 
   filter: billable_client {
-    hidden: no
+    hidden: yes
     default_value: "Yes"
     type: yesno
     sql: ${TABLE}.billable_client ;;
@@ -22,8 +22,9 @@ view: customer_events {
   }
 
   dimension: customer_id {
+
     type: number
-    hidden: no
+    hidden: yes
     sql: ${TABLE}.customer_id ;;
   }
 
@@ -43,13 +44,13 @@ view: customer_events {
 
 
   dimension: days_since_last_billable_day {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     type: number
     sql: ${TABLE}.days_since_last_billable_day ;;
   }
 
   dimension: churn_status {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     type: string
     sql: case when ${TABLE}.days_since_last_billable_day < 30 then 'Active'
               when ${TABLE}.days_since_last_billable_day between 30 and 89 then 'Inactive'
@@ -60,7 +61,7 @@ view: customer_events {
   }
 
   dimension: days_since_last_incoming_email {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     hidden: yes
 
     type: number
@@ -68,7 +69,7 @@ view: customer_events {
   }
 
   dimension: days_since_last_outgoing_email {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     hidden: yes
 
 
@@ -77,7 +78,7 @@ view: customer_events {
   }
 
   dimension: time_since_last_email_contact {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     type: string
     sql: case when ${TABLE}.days_since_last_billable_day < 30 then 'This month'
     when ${TABLE}.days_since_last_billable_day between 30 and 89 then 'Last 3 Months'
@@ -87,20 +88,22 @@ view: customer_events {
   }
 
   dimension: event_details {
-    group_label: "Event Details"
+    group_label: "Client Events"
 
     type: string
     sql: ${TABLE}.event_details ;;
   }
 
   dimension: event_seq {
-    group_label: "Retention"
+    group_label: "Customer Retention"
 
     type: number
     sql: ${TABLE}.event_seq ;;
   }
 
   dimension_group: event_ts {
+    group_label: "Client Events"
+
     label: "Event"
     type: time
     timeframes: [
@@ -116,7 +119,7 @@ view: customer_events {
   }
 
   dimension: event_type {
-    group_label: "Event Details"
+    group_label: "Client Events"
 
     type: string
     sql: ${TABLE}.event_type ;;
@@ -135,6 +138,8 @@ view: customer_events {
   }
 
   measure: total_event_value {
+    group_label: "Client Events"
+
     hidden: no
     type: sum
     value_format: "#.##"
@@ -142,6 +147,8 @@ view: customer_events {
     }
 
   measure: total_event_units {
+    group_label: "Client Events"
+
     hidden: no
     type: sum
     value_format: "#.##"
@@ -149,6 +156,8 @@ view: customer_events {
   }
 
   measure: total_days_billed {
+    group_label: "Client Metrics"
+
     hidden: no
     type: sum
     value_format: "#.##"
@@ -165,14 +174,14 @@ view: customer_events {
   }
 
   measure: total_revenue_billed {
-    hidden: no
+    hidden: yes
     type: sum
     value_format: "#.##"
     sql: ${revenue_billed}  ;;
   }
 
   measure: total_revenue_invoiced
-  {hidden: no
+  {hidden: yes
     type: sum
     value_format: "#.##"
     sql: ${TABLE}.event_value  ;;
@@ -181,7 +190,7 @@ view: customer_events {
   }
 
   measure: total_revenue_paid
-  {hidden: no
+  {hidden: yes
     type: sum
     value_format: "#.##"
     sql: ${TABLE}.event_value  ;;
@@ -190,7 +199,10 @@ view: customer_events {
   }
 
   measure: total_looker_usage_mins
-  {hidden: no
+
+  {    group_label: "Client Metrics"
+
+    hidden: no
     type: sum
     value_format: "#.##"
     sql: ${TABLE}.event_value  ;;
@@ -198,23 +210,7 @@ view: customer_events {
       value: "daily_looker_usage_mins"}
   }
 
-  measure: total_jira_stories_completed
-  {hidden: no
-    type: sum
-    value_format: "#.##"
-    sql: ${TABLE}.event_value  ;;
-    filters: {field: event_type
-      value: "Jira User Story Closed"}
-  }
 
-  measure: total_jira_tasks_completed
-  {hidden: no
-    type: sum
-    value_format: "#.##"
-    sql: ${TABLE}.event_value  ;;
-    filters: {field: event_type
-      value: "Jira Task Closed"}
-  }
 
 
 
@@ -231,8 +227,8 @@ view: customer_events {
 
   dimension_group: first_billable_day_ts {
     label: "Customer Since"
-    group_label: "Retention"
-
+    group_label: "Customer Retention"
+    hidden: yes
     type: time
     timeframes: [
       month
@@ -241,19 +237,19 @@ view: customer_events {
   }
 
   measure: total_new_active_customers {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     type: count_distinct
     sql: case when (${event_ts_month} = ${first_billable_day_ts_month}) and ${event_type} in ('Billable Day','Non-Billable Day') then ${customer_id} end ;;
   }
 
   measure: total_retained_reactivated_active_customers {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     type: count_distinct
     sql: case when (${event_ts_month} != ${first_billable_day_ts_month}) and ${event_type} in ('Billable Day','Non-Billable Day') then ${customer_id} end ;;
   }
 
   measure: total_active_customers {
-    group_label: "Retention"
+    group_label: "Customer Retention"
     type: count_distinct
     sql: case when ${event_type} in ('Billable Day','Non-Billable Day') then ${customer_id} end ;;
   }
@@ -306,37 +302,34 @@ view: customer_events {
   }
 
   dimension: months_since_first_billable_day {
-    group_label: "Retention"
+    group_label: "Customer Retention"
 
     type: number
     sql: ${TABLE}.months_since_first_billable_day ;;
   }
 
   dimension: weeks_since_first_billable_day {
-    group_label: "Retention"
+    group_label: "Customer Retention"
 
     type: number
     sql: ${TABLE}.weeks_since_first_billable_day ;;
   }
 
   dimension: months_since_first_contact_day {
-    group_label: "Retention"
+    group_label: "Customer Retention"
 
     type: number
     sql: ${TABLE}.months_since_first_contact_day ;;
   }
 
   dimension: weeks_since_first_contact_day {
-    group_label: "Retention"
+    group_label: "Customer Retention"
 
     type: number
     sql: ${TABLE}.weeks_since_first_contact_day ;;
   }
 
-  measure: count_events {
-    type: count_distinct
-    sql: ${pk} ;;
-  }
+
 
 
 }
