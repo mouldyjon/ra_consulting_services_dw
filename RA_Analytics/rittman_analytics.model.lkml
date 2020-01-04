@@ -81,16 +81,16 @@ explore: customer_master {
   }
 
   join: deals {
-    sql_on: ${deals.deal_id} = ${bridge.deal_id}  ;;
     view_label: "   Sales"
-
+    sql_on: ${deals.deal_id} = ${bridge.deal_id} ;;
     type: inner
     relationship: one_to_many
   }
-  join: deals_history {
+  join: deal_revenue_forecast {
     view_label: "   Sales"
-    sql_on: ${deals_history.deal_id} = ${bridge.deal_id} ;;
-    type: full_outer
+    sql_on: ${deals.deal_id} = ${deal_revenue_forecast.deal_id}
+      and  ${deals.historic_record_valid_to_time} is null;;
+    type: left_outer
     relationship: one_to_many
   }
   join: bridge {
