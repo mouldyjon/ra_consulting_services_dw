@@ -377,6 +377,13 @@ view: harvest_invoices {
     sql: ${TABLE}.months_since_first_invoice ;;
   }
 
+  dimension: quarters_since_first_invoice {
+    group_label: "Project Invoicing"
+
+    type: number
+    sql: ${TABLE}.quarters_since_first_invoice ;;
+  }
+
   dimension: client_invoice_seq_no {
     group_label: "Project Invoicing"
 

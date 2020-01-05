@@ -27,6 +27,14 @@ view: deals {
     sql: ${TABLE}.days_between_stage ;;
   }
 
+  dimension: assigned_consultant {
+    type: string
+    group_label: "Deal Details"
+    label: "Assigned Consultant"
+    hidden: no
+    sql: ${TABLE}.assigned_consultant ;;
+  }
+
 
   measure: avg_days_difference {
     type: average

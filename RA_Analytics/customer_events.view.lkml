@@ -256,15 +256,10 @@ view: customer_events {
 
   dimension_group: first_invoice_day_ts {
     type: time
-    hidden: yes
+    hidden: no
     timeframes: [
-      raw,
-      time,
-      date,
-      week,
       month,
-      quarter,
-      year
+      quarter
     ]
     sql: ${TABLE}.first_invoice_day_ts ;;
   }

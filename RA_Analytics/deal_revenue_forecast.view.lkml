@@ -59,7 +59,7 @@ view: deal_revenue_forecast {
     label: "Allocated Weighted Revenue"
     value_format_name: gbp
     type: sum
-    sql: case when ${deals_history.services_stage_group} = 'Open' then ${weighted_amount_monthly_forecast} else 0 end ;;
+    sql: case when ${deals.services_stage_group} = 'Open' then ${weighted_amount_monthly_forecast} else 0 end ;;
   }
 
 
