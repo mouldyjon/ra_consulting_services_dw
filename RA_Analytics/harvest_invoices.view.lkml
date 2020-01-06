@@ -126,7 +126,7 @@ view: harvest_invoices {
     group_label: "Project Invoicing"
     label: "Client Harvest Invoice"
     type: time
-    timeframes: [week,month,quarter]
+    timeframes: [week,month,quarter,month_num,year,month_name]
     sql: ${TABLE}.created_at ;;
   }
 
