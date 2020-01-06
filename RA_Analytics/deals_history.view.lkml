@@ -1,5 +1,5 @@
 view: deals {
-  sql_table_name: deals_labelled_history ;;
+  sql_table_name: deals ;;
   view_label: "Sales"
 
 
