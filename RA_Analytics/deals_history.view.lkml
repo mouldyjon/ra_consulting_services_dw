@@ -303,7 +303,7 @@ view: deals {
 
   dimension_group: last_contacted {
     label: "Last Contact"
-    group_label: "  Deals"
+    group_label: "Deal Details"
     hidden: yes
 
     type: time
@@ -342,7 +342,7 @@ view: deals {
   }
 
   dimension_group: last_replied {
-    group_label: "  Deals"
+    group_label: "Deal Details"
     hidden: yes
 
     type: time
@@ -429,7 +429,42 @@ view: deals {
     group_label: "Deal Details"
     label: "Deal Source"
     type: string
+    hidden: yes
     sql: ${TABLE}.source ;;
+  }
+
+
+
+  dimension: products_in_solution {
+    group_label: "Deal Details"
+    label: "Deal Products in Solution"
+    type: string
+    hidden: no
+    sql: ${TABLE}.products_in_solution ;;
+  }
+
+  dimension: pricing_model {
+    group_label: "Deal Details"
+    label: "Deal Pricing Model"
+    type: string
+    hidden: no
+    sql: ${TABLE}.pricing_model ;;
+  }
+
+  dimension: duration_days {
+    group_label: "Deal Details"
+    label: "Deal Duration in Days"
+    type: number
+    hidden: no
+    sql: ${TABLE}.duration_days ;;
+  }
+
+  dimension: sprint_type {
+    group_label: "Deal Details"
+    label: "Deal Sprint Type"
+    type: string
+    hidden: yes
+    sql: ${TABLE}.sprint_type ;;
   }
 
   dimension: salesperson {
@@ -586,7 +621,7 @@ view: deals {
     group_label: "Deal Details"
 
     type: yesno
-    hidden: yes
+    hidden: no
 
     sql: case when ${sales_opportunity_stage_sort_index} = 9 then false else true end;;
   }
@@ -1040,9 +1075,9 @@ view: deals {
   }
 
   dimension: partner_referral_type {
-    group_label: "Deals"
+    group_label: "Deal Details"
     group_item_label: "Referral Type"
-    label: "Deal Referral Type"
+    label: "Partner Channel"
     type: string
     sql: coalesce(${TABLE}.partner_referral_type,'Direct') ;;
   }
@@ -1055,7 +1090,7 @@ view: deals {
   }
 
   dimension: deal_type {
-    group_label: "Deals"
+    group_label: "Deal Details"
     group_item_label: "New or Existing Business"
     label: "New or Existing Business"
     type: string
