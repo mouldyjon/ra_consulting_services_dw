@@ -203,7 +203,7 @@ view: deals {
     label: "Deal Created"
     type: time
     timeframes: [
-      date
+      date,month
     ]
     sql: ${TABLE}.createdate ;;
   }

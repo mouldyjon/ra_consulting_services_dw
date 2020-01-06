@@ -335,7 +335,7 @@ view: harvest_invoices {
     type: sum
     value_format_name: gbp_0
 
-    sql: ${TABLE}.services_amount_billed ;;
+    sql: ifnull(${TABLE}.services_amount_billed,0) ;;
   }
 
   measure: expenses_amount_billed {
@@ -343,7 +343,7 @@ view: harvest_invoices {
     type: sum
     value_format_name: gbp_0
 
-    sql: ${TABLE}.expenses_amount_billed ;;
+    sql: ifnull(${TABLE}.expenses_amount_billed,0) ;;
   }
 
   measure: license_referral_fee_amount_billed {
@@ -351,7 +351,7 @@ view: harvest_invoices {
     type: sum
     value_format_name: gbp_0
 
-    sql: ${TABLE}.license_referral_fee_amount_billed ;;
+    sql: ifnull(${TABLE}.license_referral_fee_amount_billed,0) ;;
   }
 
   measure: tax_amount_billed {
@@ -359,7 +359,7 @@ view: harvest_invoices {
     type: sum
     value_format_name: gbp_0
 
-    sql: ${TABLE}.tax_billed ;;
+    sql: ifnull(${TABLE}.tax_billed,0) ;;
   }
 
   measure: support_amount_billed {
@@ -367,7 +367,37 @@ view: harvest_invoices {
     type: sum
     value_format_name: gbp_0
 
-    sql: ${TABLE}.support_amount_billed ;;
+    sql: ifnull(${TABLE}.support_amount_billed,0) ;;
+  }
+
+  measure: revenue_amount_billed {
+    group_label: "Project Invoicing"
+    type: sum
+    value_format_name: gbp_0
+
+    sql: ifnull(${TABLE}.support_amount_billed,0) + ifnull(license_referral_fee_amount_billed,0) + ifnull(services_amount_billed,0);;
+  }
+
+  measure: cumulative_revenue_amount_billed {
+    group_label: "Project Invoicing"
+    type: running_total
+    value_format_name: gbp_0
+
+    sql: ${revenue_amount_billed};;
+  }
+
+  measure: revenue_amount_monthly_target_2019 {
+    group_label: "Project Invoicing"
+    type: number
+    value_format_name: gbp_0
+    sql: 19000 ;;
+  }
+
+  measure: cumulative_revenue_amount_monthly_target_2019 {
+    group_label: "Project Invoicing"
+    type: running_total
+    value_format_name: gbp_0
+    sql: ${revenue_amount_monthly_target_2019} ;;
   }
 
   dimension: months_since_first_invoice {
