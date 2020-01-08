@@ -255,6 +255,7 @@ view: customer_events {
   }
 
   dimension_group: first_invoice_day_ts {
+    label: "Customer First Invoice"
     type: time
     hidden: no
     timeframes: [

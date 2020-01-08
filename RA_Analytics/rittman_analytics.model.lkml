@@ -31,17 +31,17 @@ explore: financial_results {
 
 explore: customer_master {
   label: "Rittman Analytics Operations"
-  view_label: "      Customer Success"
+  view_label: "      Customers & Prospects"
 
  join: customer_revenue {
-   view_label: "      Customer Success"
+  view_label: "      Customers & Prospects"
   type: left_outer
   relationship: one_to_one
   sql_on: ${customer_master.customer_id} = ${customer_revenue.customer_master_customer_id} ;;
  }
 
   join: customer_metrics {
-    view_label: "      Customer Success"
+    view_label: "      Customers & Prospects"
     sql_on: ${customer_master.customer_id}  = ${customer_metrics.customer_id}  ;;
     type: left_outer
     relationship: one_to_one
@@ -60,7 +60,7 @@ explore: customer_master {
 
 
   join: harvest_invoices {
-    view_label: "     Project Management"
+    view_label: "    Project Delivery"
 
     sql_on: ${customer_master.harvest_customer_id} = ${harvest_invoices.client_id}
     and ${customer_master.harvest_customer_id} is not null;;
@@ -73,7 +73,7 @@ explore: customer_master {
 
 
   join: customer_events {
-    view_label: "      Customer Success"
+    view_label: "      Customers & Prospects"
     sql_on: ${customer_master.customer_id} = ${customer_events.customer_id};;
     relationship: one_to_many
     type: left_outer
@@ -111,7 +111,7 @@ explore: customer_master {
     type: left_outer
   }
   join: contacts {
-    view_label: "      Customer Success"
+    view_label: "      Customers & Prospects"
     sql_on: ${contacts.associatedcompanyid} = ${bridge.associatedcompanyids} ;;
     relationship: one_to_many
     type: inner
@@ -142,7 +142,7 @@ explore: customer_master {
 
 
   join: timesheets{
-    view_label: "     Project Management"
+    view_label: "    Project Delivery"
     sql_on: ${customer_master.harvest_customer_id} = ${timesheets.client_id} ;;
     relationship: one_to_many
     type: left_outer
@@ -150,7 +150,7 @@ explore: customer_master {
 
 
   join: harvest_projects {
-    view_label: "     Project Management"
+    view_label: "    Project Delivery"
     sql_on: ${timesheets.project_id} = ${harvest_projects.id};;
     relationship: many_to_one
     type: inner
@@ -159,14 +159,14 @@ explore: customer_master {
 
 
   join: harvest_tasks {
-    view_label: "     Project Management"
+    view_label: "    Project Delivery"
     relationship: many_to_one
     sql_on: ${timesheets.task_id} = ${harvest_tasks.id} ;;
     type: left_outer
   }
 
   join: harvest_users {
-    view_label: "     Project Management"
+    view_label: "    Project Delivery"
     relationship: many_to_one
     sql_on: ${timesheets.user_id} = ${harvest_users.id} ;;
     type: inner
