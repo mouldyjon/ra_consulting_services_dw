@@ -393,11 +393,25 @@ view: harvest_invoices {
     sql: 19000 ;;
   }
 
+  measure: revenue_amount_monthly_target_2020 {
+    group_label: "Project Invoicing"
+    type: number
+    value_format_name: gbp_0
+    sql: 40000 ;;
+  }
+
   measure: cumulative_revenue_amount_monthly_target_2019 {
     group_label: "Project Invoicing"
     type: running_total
     value_format_name: gbp_0
     sql: ${revenue_amount_monthly_target_2019} ;;
+  }
+
+  measure: cumulative_revenue_amount_monthly_target_2020 {
+    group_label: "Project Invoicing"
+    type: running_total
+    value_format_name: gbp_0
+    sql: ${revenue_amount_monthly_target_2020} ;;
   }
 
   dimension: months_since_first_invoice {

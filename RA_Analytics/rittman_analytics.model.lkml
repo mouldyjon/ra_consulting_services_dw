@@ -6,7 +6,7 @@ aggregate_awareness:  yes
 
 
 
-
+explore: actuals_forecast {}
 
 explore: all_history {
   label: "Looker Benchmarking"
