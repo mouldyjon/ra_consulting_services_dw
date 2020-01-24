@@ -25,8 +25,9 @@ view: deal_revenue_forecast {
 
   measure: total_revenue_days {
     group_label: "Forecast Deal Revenue"
-    type: sum
+    type: sum_distinct
     hidden: no
+    sql_distinct_key: ${deal_id} ;;
     sql: ${revenue_days};;
   }
 
@@ -58,8 +59,9 @@ view: deal_revenue_forecast {
 
     label: "Allocated Weighted Revenue"
     value_format_name: gbp
-    type: sum
+    type: sum_distinct
     sql: case when ${deals.services_stage_group} = 'Open' then ${weighted_amount_monthly_forecast} else 0 end ;;
+    sql_distinct_key: ${deal_id} ;;
   }
 
 

@@ -13,6 +13,7 @@ view: tickets {
 
   dimension: id {
     hidden: yes
+    primary_key: yes
 
     type: string
     sql: ${TABLE}.id ;;
@@ -21,7 +22,7 @@ view: tickets {
   dimension_group: created {
     group_label: "Jira Tickets"
     type: time
-    timeframes: [date,time]
+    timeframes: [date, week, month]
     sql: ${TABLE}.created ;;
   }
 
@@ -47,38 +48,13 @@ view: tickets {
     sql: ${TABLE}.progress ;;
   }
 
-  dimension: total_progress {
-    hidden: yes
 
-    type: number
-    sql: ${TABLE}.total_progress ;;
-  }
 
-  dimension: aggregate_progress {
-    hidden: yes
 
-    type: number
-    sql: ${TABLE}.aggregate_progress ;;
-  }
-
-  dimension: estimated_hours {
+  measure: total {
     group_label: "Jira Tickets"
 
-    type: number
-    sql: ${TABLE}.estimated_hours ;;
-  }
-
-  dimension: remaining_hours_to_complete {
-    group_label: "Jira Tickets"
-
-    type: number
-    sql: ${TABLE}.remaining_hours_to_complete ;;
-  }
-
-  dimension: total {
-    group_label: "Jira Tickets"
-
-    type: number
+    type: count
     sql: ${TABLE}.total ;;
   }
 
@@ -106,12 +82,7 @@ view: tickets {
     sql: ${TABLE}.description ;;
   }
 
-  dimension: colourname {
-    hidden: yes
 
-    type: string
-    sql: ${TABLE}.colourname ;;
-  }
 
   dimension: statuscategory {
     group_label: "Jira Tickets"
@@ -163,19 +134,7 @@ view: tickets {
     sql: ${TABLE}.summary ;;
   }
 
-  dimension_group: lastviewed {
-    hidden: yes
 
-    type: time
-    sql: ${TABLE}.lastviewed ;;
-  }
-
-  dimension_group: updated {
-    hidden: yes
-
-    type: time
-    sql: ${TABLE}.updated ;;
-  }
 
   dimension_group: status_change_ts {
     group_label: "Jira Tickets"
@@ -241,7 +200,7 @@ view: tickets {
   }
 
   dimension: project_grouping {
-    hidden: yes
+    hidden: no
     type: string
     sql: ${TABLE}.project_grouping ;;
   }
