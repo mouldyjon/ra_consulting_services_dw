@@ -525,14 +525,31 @@ view: deals {
 
   dimension: services_stage_group {
     type: string
-    description: "For services only, pipeline stages grouped to open, won and lost"
+    label: "Delivery Pipeline Stage Group"
+    description: "For services only, pipeline stages grouped to deliverable, upcoming and pipeline"
+    group_label: "Deal Details"
+    hidden: no
+    order_by_field: services_stage_group_sort_index
+    sql: CASE
+      WHEN ${sales_opportunity_stage} in ('Closed Won and Scheduled','Verbally Won and Working at Risk') then 'Active Projects'
+      WHEN ${sales_opportunity_stage} in ('Closed Lost') then 'Lost'
+      when ${sales_opportunity_stage} in ('Closed Won and Delivered') then 'Delivered'
+      when ${sales_opportunity_stage} in ('Deal Agreed and Awaiting Sign-off','Proposal Sent') then 'About to Close'
+      else 'Pipeline' end ;;
+  }
+
+  dimension: services_stage_group_sort_index {
+    type: string
+    label: "Delivery Pipeline Stage Group"
+    description: "For services only, pipeline stages grouped to deliverable, upcoming and pipeline"
     group_label: "Deal Details"
     hidden: no
     sql: CASE
-      WHEN ${sales_opportunity_stage_sort_index} < 9 THEN 'Open'
-      WHEN ${sales_opportunity_stage_sort_index}= 9 THEN 'Won'
-      ELSE 'Lost'
-      END ;;
+      WHEN ${sales_opportunity_stage} in ('Closed Won and Scheduled','Verbally Won and Working at Risk') then 4
+      WHEN ${sales_opportunity_stage} in ('Closed Lost') then -2
+      when ${sales_opportunity_stage} in ('Closed Won and Delivered') then -1
+      when ${sales_opportunity_stage} in ('Deal Agreed and Awaiting Sign-off','Proposal Sent') then 3
+      else 2 end ;;
   }
 
   dimension: historic_services_stage_group {
@@ -541,10 +558,11 @@ view: deals {
     group_label: "Deal History"
     hidden: no
     sql: CASE
-      WHEN ${historic_sales_opportunity_stage_sort_index} < 9 THEN 'Open'
-      WHEN ${historic_sales_opportunity_stage_sort_index} = 9 THEN 'Won'
-      ELSE 'Lost'
-      END ;;
+      WHEN ${sales_opportunity_stage} in ('Closed Won and Scheduled','Verbally Won and Working at Risk') then 'Active Projects'
+      WHEN ${sales_opportunity_stage} in ('Closed Lost') then 'Lost'
+      when ${sales_opportunity_stage} in ('Closed Won and Delivered') then 'Delivered'
+      when ${sales_opportunity_stage} in ('Deal Agreed and Awaiting Sign-off','Proposal Sent') then 'About to Close'
+      else 'Pipeline' end ;;
   }
 
 
