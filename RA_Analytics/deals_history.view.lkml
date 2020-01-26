@@ -463,7 +463,7 @@ view: deals {
     group_label: "Deal Details"
     label: "Deal Sprint Type"
     type: string
-    hidden: yes
+    hidden: no
     sql: ${TABLE}.sprint_type ;;
   }
 
@@ -641,7 +641,7 @@ view: deals {
     type: yesno
     hidden: no
 
-    sql: case when ${sales_opportunity_stage_sort_index} = 9 then false else true end;;
+    sql: case when ${services_stage_group} in ('Active Projects','Delivered') then true else false end;;
   }
 
   filter: historic_closed_won_opportunity {
@@ -651,7 +651,7 @@ view: deals {
     type: yesno
     hidden: yes
 
-    sql: case when ${historic_sales_opportunity_stage_sort_index} = 9 then false else true end;;
+    sql: case when ${historic_services_stage_group} in ('Active Projects','Delivered') then true else false end;;
   }
 
 
@@ -660,7 +660,7 @@ view: deals {
     type: yesno
     hidden: yes
 
-    sql: case when ${sales_opportunity_stage_sort_index} = 10 then false else true end;;
+    sql: case when ${services_stage_group} = "Lost" then true else false end;;
   }
 
   filter: historic_closed_lost_opportunity {
@@ -668,7 +668,7 @@ view: deals {
     type: yesno
     hidden: yes
 
-    sql: case when ${historic_sales_opportunity_stage_sort_index} = 10 then false else true end;;
+    sql: case when ${historic_services_stage_group} = "Lost" then true else false end;;
   }
 
 
@@ -708,27 +708,17 @@ view: deals {
 
 
 
-  measure: services_open_deals_count {
-    group_label: "     Deal Counts"
-    type: count_distinct
-    sql: ${deal_id} ;;
 
-    description: "Count of open deals"
-    filters: {
-      field: services_stage_group
-      value: "Open"
-    }
-  }
 
   measure: services_won_deals_count {
     group_label: "     Deal Counts"
     type: count_distinct
     sql: ${deal_id} ;;
 
-    description: "Count of won deals"
+    description: "Count of Won and Delivered Deals"
     filters: {
       field: services_stage_group
-      value: "Won"
+      value: "Delivered"
     }
   }
 
@@ -767,7 +757,7 @@ view: deals {
     value_format_name: gbp_0
   }
 
-  measure: services_won_deals_total_amount {
+  measure: services_won_and_delivered_deals_total_amount {
     group_label: "    Total Deal Amounts"
     type: sum_distinct
     description: "Sum of total amount for won deals"
@@ -775,7 +765,7 @@ view: deals {
     sql_distinct_key: ${deal_id} ;;
     filters: {
       field: services_stage_group
-      value: "Won"
+      value: "Won and Delivered"
     }
     value_format_name: gbp_0
   }
