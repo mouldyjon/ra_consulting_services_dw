@@ -34,7 +34,7 @@ view: deal_revenue_forecast {
   dimension: weighted_amount_monthly_forecast {
     group_label: "Forecast Deal Revenue"
     type: number
-    hidden: yes
+    hidden: no
     sql: ${TABLE}.weighted_amount_monthly_forecast ;;
   }
 
@@ -42,7 +42,7 @@ view: deal_revenue_forecast {
     group_label: "Forecast Deal Revenue"
 
     type: number
-    hidden: yes
+    hidden: no
     sql: ${TABLE}.full_amount_monthly_forecast ;;
   }
 
@@ -50,7 +50,7 @@ view: deal_revenue_forecast {
     group_label: "Forecast Deal Revenue"
 
     type: number
-    hidden: yes
+    hidden: no
     sql: ${TABLE}.diff_amount_monthly_forecast ;;
   }
 
@@ -60,9 +60,20 @@ view: deal_revenue_forecast {
     label: "Allocated Weighted Revenue"
     value_format_name: gbp
     type: sum_distinct
-    sql: case when ${deals.services_stage_group} = 'Open' then ${weighted_amount_monthly_forecast} else 0 end ;;
+    sql: case when ${deals.services_stage_group} in ('Active Projects','About to Close') then ${weighted_amount_monthly_forecast} else 0 end ;;
     sql_distinct_key: ${deal_id} ;;
   }
+
+  measure: total_amount_monthly_forecast {
+    group_label: "Forecast Deal Revenue"
+
+    label: "Allocated Deal Revenue"
+    value_format_name: gbp
+    type: sum_distinct
+    sql: case when ${deals.services_stage_group} in ('Active Projects','About to Close') then ${full_amount_monthly_forecast} else 0 end ;;
+    sql_distinct_key: ${deal_id} ;;
+  }
+
 
 
 }
