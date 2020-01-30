@@ -1,6 +1,11 @@
 view: email_segment_membership_fact {
   sql_table_name: ra_data_warehouse_dbt_dev.email_segment_membership_fact ;;
 
+  dimension: primary_key {
+    primary_key: yes
+    sql: CONCAT(${TABLE}.list_member_id,${TABLE}.segment_id ${TABLE}.valid_from_raw) ;;
+  }
+
   dimension_group: _sdc_batched {
     type: time
     timeframes: [

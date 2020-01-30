@@ -1,6 +1,12 @@
 view: email_lists_dim {
   sql_table_name: ra_data_warehouse_dbt_dev.email_lists_dim ;;
 
+  dimension: list_id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.list_id ;;
+  }
+
   dimension_group: _sdc_batched {
     type: time
     timeframes: [
@@ -101,11 +107,6 @@ view: email_lists_dim {
       year
     ]
     sql: ${TABLE}.last_unsub_date ;;
-  }
-
-  dimension: list_id {
-    type: string
-    sql: ${TABLE}.list_id ;;
   }
 
   dimension_group: max_sdc_batched {

@@ -21,6 +21,7 @@ view: email_campaigns_dim {
   }
 
   dimension: campaign_id {
+    primary_key: yes
     type: string
     sql: ${TABLE}.campaign_id ;;
   }

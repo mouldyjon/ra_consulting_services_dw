@@ -15,6 +15,11 @@ view: email_list_membership_fact {
     sql: ${TABLE}._sdc_batched_at ;;
   }
 
+  dimension: primary_key {
+    primary_key: yes
+    sql: CONCAT(${TABLE}.list_member_id, ${TABLE}.valid_from_raw) ;;
+  }
+
   dimension: email_address {
     type: string
     sql: ${TABLE}.email_address ;;

@@ -15,6 +15,16 @@ view: email_contacts_dim {
     sql: ${TABLE}._sdc_batched_at ;;
   }
 
+  dimension: primary_key {
+    primary_key: yes
+    sql: CONCAT(${TABLE}.email_id, ${TABLE}.valid_from_raw) ;;
+  }
+
+  dimension: email_id {
+    type: string
+    sql: ${TABLE}.email_id ;;
+  }
+
   dimension: _sdc_table_version {
     type: number
     sql: ${TABLE}._sdc_table_version ;;
@@ -48,11 +58,6 @@ view: email_contacts_dim {
   dimension: email_address {
     type: string
     sql: ${TABLE}.email_address ;;
-  }
-
-  dimension: email_id {
-    type: string
-    sql: ${TABLE}.email_id ;;
   }
 
   dimension: forename {

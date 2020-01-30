@@ -1,6 +1,13 @@
 view: email_segments_dim {
   sql_table_name: ra_data_warehouse_dbt_dev.email_segments_dim ;;
 
+
+  dimension: segment_id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.segment_id ;;
+  }
+
   dimension_group: _sdc_batched {
     type: time
     timeframes: [
@@ -80,11 +87,6 @@ view: email_segments_dim {
   dimension: name {
     type: string
     sql: ${TABLE}.name ;;
-  }
-
-  dimension: segment_id {
-    type: string
-    sql: ${TABLE}.segment_id ;;
   }
 
   dimension_group: updated {
