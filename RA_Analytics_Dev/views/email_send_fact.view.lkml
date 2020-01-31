@@ -1,6 +1,13 @@
 view: email_send_fact {
   sql_table_name: ra_data_warehouse_dbt_dev.email_send_fact ;;
 
+
+  dimension: send_id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.send_id ;;
+  }
+
   dimension_group: _sdc_batched {
     type: time
     timeframes: [
@@ -122,11 +129,6 @@ view: email_send_fact {
   dimension: reply_to {
     type: string
     sql: ${TABLE}.reply_to ;;
-  }
-
-  dimension: send_id {
-    type: string
-    sql: ${TABLE}.send_id ;;
   }
 
   dimension_group: sent {
