@@ -2,13 +2,23 @@ view: harvest_invoices {
   sql_table_name: client_invoices ;;
 
   dimension: id {
-    primary_key: yes
+    primary_key: no
     hidden: no
     type: number
     group_label: "Harvest IDs"
     label: "Harvest Invoice ID"
     sql: ${TABLE}.id ;;
   }
+
+  dimension: project_id {
+    hidden: yes
+  }
+
+  dimension: pk {
+    primary_key: yes
+    hidden: yes
+  sql: concat(cast(${TABLE}.id as string),cast(${TABLE}.invoice_line_item_id as string)) ;;
+    }
 
 
   dimension_group: project_invoice_period_start {

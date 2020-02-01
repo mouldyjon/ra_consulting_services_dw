@@ -32,7 +32,7 @@ view: deals {
     group_label: "Deal Details"
     label: "Assigned Consultant"
     hidden: no
-    sql: ${TABLE}.assigned_consultant ;;
+    sql: ${TABLE}.current_assigned_consultant ;;
   }
 
 
@@ -300,6 +300,13 @@ view: deals {
     sql: ${TABLE}.current_hubspot_owner_id ;;
   }
 
+  dimension: harvest_project_id {
+    hidden: no
+
+    type: string
+    sql: ${TABLE}.current_harvest_project_id ;;
+  }
+
 
   dimension_group: last_contacted {
     label: "Last Contact"
@@ -440,7 +447,7 @@ view: deals {
     label: "Deal Products in Solution"
     type: string
     hidden: no
-    sql: ${TABLE}.products_in_solution ;;
+    sql: ${TABLE}.current_products_in_solution ;;
   }
 
   dimension: pricing_model {
@@ -464,8 +471,10 @@ view: deals {
     label: "Deal Sprint Type"
     type: string
     hidden: no
-    sql: ${TABLE}.sprint_type ;;
+    sql: ${TABLE}.current_sprint_type ;;
   }
+
+
 
   dimension: salesperson {
     group_label: "Deal Details"
@@ -1087,7 +1096,7 @@ view: deals {
     group_item_label: "Referral Type"
     label: "Partner Channel"
     type: string
-    sql: coalesce(${TABLE}.partner_referral_type,'Direct') ;;
+    sql: coalesce(${TABLE}.current_partner_referral_type,'Direct') ;;
   }
 
   dimension: deal_components {
@@ -1102,7 +1111,7 @@ view: deals {
     group_item_label: "New or Existing Business"
     label: "New or Existing Business"
     type: string
-    sql: ${TABLE}.deal_type ;;
+    sql: ${TABLE}.current_deal_type ;;
   }
 
   measure: count_services_component {
