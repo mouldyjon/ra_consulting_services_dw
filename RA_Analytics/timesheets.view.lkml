@@ -1,8 +1,6 @@
 view: timesheets {
-  derived_table: {
-    sql: SELECT * FROM `ra-development.ra_data_warehouse_dbt_prod.timesheets`
-      ;;
-  }
+ sql_table_name: timesheets ;;
+
 
 
 

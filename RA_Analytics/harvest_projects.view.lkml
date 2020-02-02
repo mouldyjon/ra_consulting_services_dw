@@ -1,5 +1,5 @@
 view: harvest_projects {
-  sql_table_name: harvest_projects  ;;
+  sql_table_name: projects  ;;
   view_label: "Client Delivery Projects"
 
 
@@ -23,6 +23,11 @@ view: harvest_projects {
     hidden: yes
     type: string
     sql: ${TABLE}.code ;;
+  }
+
+  dimension: project_total_timesheet_hours {
+    group_label: "Project Details"
+    type: number
   }
 
 
