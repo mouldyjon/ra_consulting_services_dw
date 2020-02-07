@@ -32,7 +32,7 @@ view: deals {
     group_label: "Deal Details"
     label: "Assigned Consultant"
     hidden: no
-    sql: ${TABLE}.assigned_consultant ;;
+    sql: ${TABLE}.current_assigned_consultant ;;
   }
 
 
@@ -300,6 +300,13 @@ view: deals {
     sql: ${TABLE}.current_hubspot_owner_id ;;
   }
 
+  dimension: harvest_project_id {
+    hidden: no
+
+    type: string
+    sql: ${TABLE}.current_harvest_project_id ;;
+  }
+
 
   dimension_group: last_contacted {
     label: "Last Contact"
@@ -440,7 +447,7 @@ view: deals {
     label: "Deal Products in Solution"
     type: string
     hidden: no
-    sql: ${TABLE}.products_in_solution ;;
+    sql: ${TABLE}.current_products_in_solution ;;
   }
 
   dimension: pricing_model {
@@ -463,9 +470,11 @@ view: deals {
     group_label: "Deal Details"
     label: "Deal Sprint Type"
     type: string
-    hidden: yes
-    sql: ${TABLE}.sprint_type ;;
+    hidden: no
+    sql: ${TABLE}.current_sprint_type ;;
   }
+
+
 
   dimension: salesperson {
     group_label: "Deal Details"
@@ -641,7 +650,7 @@ view: deals {
     type: yesno
     hidden: no
 
-    sql: case when ${sales_opportunity_stage_sort_index} = 9 then false else true end;;
+    sql: case when ${services_stage_group} in ('Active Projects','Delivered') then true else false end;;
   }
 
   filter: historic_closed_won_opportunity {
@@ -651,7 +660,7 @@ view: deals {
     type: yesno
     hidden: yes
 
-    sql: case when ${historic_sales_opportunity_stage_sort_index} = 9 then false else true end;;
+    sql: case when ${historic_services_stage_group} in ('Active Projects','Delivered') then true else false end;;
   }
 
 
@@ -660,7 +669,7 @@ view: deals {
     type: yesno
     hidden: yes
 
-    sql: case when ${sales_opportunity_stage_sort_index} = 10 then false else true end;;
+    sql: case when ${services_stage_group} = "Lost" then true else false end;;
   }
 
   filter: historic_closed_lost_opportunity {
@@ -668,7 +677,7 @@ view: deals {
     type: yesno
     hidden: yes
 
-    sql: case when ${historic_sales_opportunity_stage_sort_index} = 10 then false else true end;;
+    sql: case when ${historic_services_stage_group} = "Lost" then true else false end;;
   }
 
 
@@ -708,27 +717,17 @@ view: deals {
 
 
 
-  measure: services_open_deals_count {
-    group_label: "     Deal Counts"
-    type: count_distinct
-    sql: ${deal_id} ;;
 
-    description: "Count of open deals"
-    filters: {
-      field: services_stage_group
-      value: "Open"
-    }
-  }
 
   measure: services_won_deals_count {
     group_label: "     Deal Counts"
     type: count_distinct
     sql: ${deal_id} ;;
 
-    description: "Count of won deals"
+    description: "Count of Won and Delivered Deals"
     filters: {
       field: services_stage_group
-      value: "Won"
+      value: "Delivered"
     }
   }
 
@@ -767,7 +766,7 @@ view: deals {
     value_format_name: gbp_0
   }
 
-  measure: services_won_deals_total_amount {
+  measure: services_won_and_delivered_deals_total_amount {
     group_label: "    Total Deal Amounts"
     type: sum_distinct
     description: "Sum of total amount for won deals"
@@ -775,7 +774,7 @@ view: deals {
     sql_distinct_key: ${deal_id} ;;
     filters: {
       field: services_stage_group
-      value: "Won"
+      value: "Won and Delivered"
     }
     value_format_name: gbp_0
   }
@@ -1097,7 +1096,7 @@ view: deals {
     group_item_label: "Referral Type"
     label: "Partner Channel"
     type: string
-    sql: coalesce(${TABLE}.partner_referral_type,'Direct') ;;
+    sql: coalesce(${TABLE}.current_partner_referral_type,'Direct') ;;
   }
 
   dimension: deal_components {
@@ -1112,7 +1111,7 @@ view: deals {
     group_item_label: "New or Existing Business"
     label: "New or Existing Business"
     type: string
-    sql: ${TABLE}.deal_type ;;
+    sql: ${TABLE}.current_deal_type ;;
   }
 
   measure: count_services_component {

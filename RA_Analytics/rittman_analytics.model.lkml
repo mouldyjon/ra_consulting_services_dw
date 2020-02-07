@@ -63,7 +63,7 @@ explore: customer_master {
     view_label: "    Project Delivery"
 
     sql_on: ${customer_master.harvest_customer_id} = ${harvest_invoices.client_id}
-    and ${customer_master.harvest_customer_id} is not null;;
+    and ${harvest_invoices.project_id} = ${harvest_projects.id};;
 
     relationship: one_to_many
     type: left_outer
@@ -151,10 +151,18 @@ explore: customer_master {
 
   join: harvest_projects {
     view_label: "    Project Delivery"
-    sql_on: ${timesheets.project_id} = ${harvest_projects.id};;
+    sql_on: ${timesheets.project_id} = ${harvest_projects.id}
+      ;;
     relationship: many_to_one
     type: inner
 
+  }
+
+  join: project_deal_details {
+    view_label: "    Project Delivery"
+    sql_on: ${harvest_projects.code} = ${project_deal_details.harvest_project_id} ;;
+    relationship: one_to_one
+    type: left_outer
   }
 
 
