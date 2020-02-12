@@ -26,6 +26,8 @@ explore: financial_results {
   }
 }
 
+explore: qubit_merchandising {}
+
 
 
 
