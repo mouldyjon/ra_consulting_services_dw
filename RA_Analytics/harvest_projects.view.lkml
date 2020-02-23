@@ -20,7 +20,7 @@ view: harvest_projects {
 
   dimension: code {
     group_label: "Project Details"
-    hidden: yes
+    hidden: no
     type: string
     sql: ${TABLE}.code ;;
   }

@@ -15,7 +15,7 @@ view: timesheets {
     group_label: "Timesheets"
     label: "Timesheet"
     type: time
-    timeframes: [raw,date,day_of_week,day_of_year,week,week_of_year,month,month_num,quarter,quarter_of_year,year]
+    timeframes: [raw,date,time,day_of_week,day_of_year,week,week_of_year,month,month_num,quarter,quarter_of_year,year]
     sql: ${TABLE}.spent_date ;;
   }
 
@@ -93,7 +93,7 @@ view: timesheets {
 
   dimension: hours {
     group_label: "Timesheets"
-    hidden: yes
+    hidden: no
 
     type: number
     sql: ${TABLE}.hours ;;
@@ -106,6 +106,17 @@ measure: total_timesheet_hours {
   type: sum
   sql: ${TABLE}.hours ;;
 }
+  measure: total_timesheet_users {
+    hidden: no
+    type: count_distinct
+    sql: ${TABLE}.user_id ;;
+  }
+
+  measure: total_projects {
+    hidden: no
+    type: count_distinct
+    sql: ${TABLE}.project_id ;;
+  }
 
 
 
