@@ -1,5 +1,5 @@
 view: xero_profit_and_loss {
-  sql_table_name: ra_data_warehouse_dbt_prod.xero_profit_and_loss ;;
+  sql_table_name: xero_profit_and_loss ;;
   view_label: "Profit and Loss Report"
 
   dimension: account {
