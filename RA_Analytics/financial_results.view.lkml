@@ -1,5 +1,5 @@
 view: financial_results {
-  sql_table_name: ra_data_warehouse_dbt_prod.financial_results ;;
+  sql_table_name: financial_results ;;
   view_label: "Monthly Financial KPIs"
 
   measure: total_cogs {
