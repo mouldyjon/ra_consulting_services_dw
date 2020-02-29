@@ -17,6 +17,8 @@ explore: all_history {
   }
 }
 
+explore: pageviews_sessionized {}
+
 explore: financial_results {
   label: "Company Finances"
   join: xero_profit_and_loss {
