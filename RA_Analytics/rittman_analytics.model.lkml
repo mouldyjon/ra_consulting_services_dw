@@ -4,7 +4,7 @@ label: "Rittman Analytics"
 include: "*.view.lkml"                       # include all views in this project
 aggregate_awareness:  yes
 
-
+explore: usage_stats {}
 
 explore: actuals_forecast {}
 

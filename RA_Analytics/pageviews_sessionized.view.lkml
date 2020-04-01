@@ -9,6 +9,12 @@ view: pageviews_sessionized {
     type: count
   }
 
+  measure: count_visitors {
+    label: "Unique Visitors"
+    sql: ${anonymous_id} ;;
+    type: count_distinct
+  }
+
 
 
   dimension_group: session_start_ts {
@@ -65,18 +71,18 @@ view: pageviews_sessionized {
     sql: ${TABLE}.ra_blog_page_views_in_session ;;
   }
 
-  measure: avg_ra_page_views_in_session {
+  measure: avg_ra_blog_page_views_in_session {
     type: average
     hidden: no
 
-    sql: ${TABLE}.ra_page_views_in_session ;;
+    sql: ${TABLE}.ra_blog_page_views_in_session ;;
   }
 
-  measure: total_ra_page_views_in_session {
+  measure: total_ra_blog_page_views_in_session {
     type: sum
     hidden: no
 
-    sql: ${TABLE}.ra_page_views_in_session ;;
+    sql: ${TABLE}.ra_blog_page_views_in_session ;;
   }
 
   dimension: ra_commercial_page_views_in_session {
